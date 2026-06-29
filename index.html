@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl"><head>
-  
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tehreek-e-Iman Prayer Times</title>
   <style>
@@ -48,8 +49,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 14px;
       padding: 26px 22px;
       direction: ltr;
+    }
+
+    .site-logo {
+      width: clamp(128px, 15vw, 150px);
+      height: clamp(128px, 15vw, 150px);
+      flex: 0 0 auto;
+      border: 5px solid var(--gold);
+      border-radius: 50%;
+      background: var(--white);
+      object-fit: cover;
+      object-position: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
     }
 
     .header-text {
@@ -68,7 +82,8 @@
     .tagline {
       margin: 6px 0 0;
       color: rgba(255, 255, 255, 0.88);
-      font-size: 20px;
+      font-size: clamp(24px, 4vw, 30px);
+      font-weight: 700;
       text-align: right;
     }
 
@@ -321,7 +336,7 @@
   <main class="app">
     <header class="hero">
       <div class="hero-inner">
-        <img src="Logo.png" alt="Logo" style="height:90px; margin-right:12px; vertical-align:middle; filter: brightness(0) invert(1);">
+        <img class="site-logo" src="./logo.png" alt="Tehreek-e-Iman Logo">
         <div class="header-text">
           <h1 class="brand">تحریکِ ایمان</h1>
           <p class="tagline">نماز کے اوقات</p>
@@ -753,8 +768,6 @@
     fillCityList();
     loadCity(cityInput.value);
   </script>
-<header style="padding: 20px; text-align: center;">
-  <img src="Logo.png" style="height: 80px;">
-</header>
+
 
 </body></html>
