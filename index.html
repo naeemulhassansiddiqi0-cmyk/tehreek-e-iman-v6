@@ -18,9 +18,7 @@
       --radius: 22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -30,305 +28,98 @@
       font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Segoe UI", Arial, sans-serif;
     }
 
-    .app {
-      width: min(980px, 100%);
-      margin: 0 auto;
-      padding: 18px;
+   .app { width: min(980px, 100%); margin: 0 auto; padding: 18px; }
+
+   .hero {
+      overflow: hidden; border-radius: var(--radius); background: var(--header-green);
+      color: var(--white); box-shadow: var(--shadow); text-align: center;
     }
 
-    .hero {
-      overflow: hidden;
-      border-radius: var(--radius);
-      background: var(--header-green);
-      color: var(--white);
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
+   .hero-inner { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 26px 22px; direction: ltr; }
 
-    .hero-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 26px 22px;
-      direction: ltr;
-    }
-
-    .site-logo {
-      width: clamp(128px, 15vw, 150px);
-      height: clamp(128px, 15vw, 150px);
-      flex: 0 0 auto;
-      border: 5px solid var(--gold);
-      border-radius: 50%;
-      background: var(--white);
-      object-fit: cover;
-      object-position: center;
+   .site-logo {
+      width: clamp(128px, 15vw, 150px); height: clamp(128px, 15vw, 150px);
+      flex: 0 0 auto; border: 5px solid var(--gold); border-radius: 50%;
+      background: var(--white); object-fit: cover; object-position: center;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
     }
 
-    .header-text {
-      direction: rtl;
-      text-align: right;
-    }
+   .header-text { direction: rtl; text-align: right; }
+   .brand { margin: 0; font-size: clamp(32px, 7vw, 52px); line-height: 1.15; text-align: right; }
+   .tagline { margin: 6px 0 0; color: rgba(255, 255, 255, 0.88); font-size: clamp(24px, 4vw, 30px); font-weight: 700; text-align: right; }
 
-    .brand {
-      margin: 0;
-      font-size: clamp(32px, 7vw, 52px);
-      line-height: 1.15;
-      letter-spacing: 0;
-      text-align: right;
-    }
+   .panel { margin-top: 18px; padding: 18px; border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); }
 
-    .tagline {
-      margin: 6px 0 0;
-      color: rgba(255, 255, 255, 0.88);
-      font-size: clamp(24px, 4vw, 30px);
-      font-weight: 700;
-      text-align: right;
-    }
+   .search-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
 
-    .panel {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: var(--radius);
-      background: var(--white);
-      box-shadow: var(--shadow);
-    }
-
-    .search-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--deep-green);
-      font-size: 15px;
-      font-weight: 700;
-    }
+    label { display: block; margin-bottom: 8px; color: var(--deep-green); font-size: 15px; font-weight: 700; }
 
     input {
-      width: 100%;
-      min-height: 52px;
-      padding: 0 15px;
-      border: 1px solid #cfe6d6;
-      border-radius: 16px;
-      outline: none;
-      color: var(--text);
-      background: #fbfffc;
-      font-size: 17px;
-      font-family: inherit;
+      width: 100%; min-height: 52px; padding: 0 15px; border: 1px solid #cfe6d6;
+      border-radius: 16px; outline: none; color: var(--text); background: #fbfffc;
+      font-size: 17px; font-family: inherit;
     }
-
-    input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 4px rgba(15, 122, 59, 0.12);
-    }
+    input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(15, 122, 59, 0.12); }
 
     button {
-      min-height: 52px;
-      border: 0;
-      border-radius: 16px;
-      padding: 0 16px;
-      color: var(--white);
-      background: var(--green);
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 800;
-      font-family: inherit;
+      min-height: 52px; border: 0; border-radius: 16px; padding: 0 16px;
+      color: var(--white); background: var(--green); cursor: pointer;
+      font-size: 15px; font-weight: 800; font-family: inherit;
       transition: transform 0.2s ease, background 0.2s ease;
     }
+    button:hover { background: var(--deep-green); transform: translateY(-1px); }
+    button:disabled { cursor: wait; opacity: 0.72; transform: none; }
+    button.active { background: var(--gold); color: var(--deep-green); }
 
-    button:hover {
-      background: var(--deep-green);
-      transform: translateY(-1px);
-    }
+   .location-button { width: 100%; margin-top: 12px; background: var(--gold); color: var(--deep-green); }
+   .location-button:hover { background: #c9a52f; }
 
-    button:disabled {
-      cursor: wait;
-      opacity: 0.72;
-      transform: none;
-    }
+   .status { min-height: 24px; margin: 12px 0 0; color: var(--muted); font-size: 14px; text-align: center; }
 
-    .location-button {
-      width: 100%;
-      margin-top: 12px;
-      background: var(--gold);
-      color: var(--deep-green);
-    }
+   .summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
 
-    .location-button:hover {
-      background: #c9a52f;
-    }
+   .summary-card { padding: 16px; border-radius: 18px; background: #f8fcf9; border: 1px solid #dceee2; }
+   .summary-card span { display: block; color: var(--muted); font-size: 13px; }
+   .summary-card strong { display: block; margin-top: 5px; color: var(--deep-green); font-size: 22px; line-height: 1.3; }
 
-    .status {
-      min-height: 24px;
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
-    }
+   .countdown-card { margin-top: 18px; padding: 18px; border-radius: 20px; background: var(--deep-green); color: var(--white); text-align: center; }
+   .countdown-card span { display: block; color: rgba(255, 255, 255, 0.76); font-size: 14px; }
+   .countdown-card strong { display: block; margin-top: 8px; font-size: clamp(34px, 10vw, 54px); line-height: 1; direction: ltr; }
 
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
+   .times-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
 
-    .summary-card {
-      padding: 16px;
-      border-radius: 18px;
-      background: #f8fcf9;
-      border: 1px solid #dceee2;
-    }
+   .time-card { padding: 16px; border-radius: 18px; background: var(--white); border: 1px solid #dceee2; box-shadow: 0 8px 20px rgba(7, 93, 43, 0.08); }
+   .time-card.next { border-color: var(--gold); box-shadow: 0 10px 26px rgba(212, 175, 55, 0.24); }
 
-    .summary-card span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-    }
+   .time-name { display: block; color: var(--muted); font-size: 14px; }
+   .time-value { display: block; margin-top: 6px; color: var(--deep-green); font-size: 25px; font-weight: 900; direction: ltr; text-align: right; }
 
-    .summary-card strong {
-      display: block;
-      margin-top: 5px;
-      color: var(--deep-green);
-      font-size: 22px;
-      line-height: 1.3;
-    }
+    /* Alarm buttons style */
+   .alarm-row { display: flex; gap: 6px; margin-top: 10px; }
+   .alarm-btn { min-height: 32px; font-size: 12px; font-weight: 700; padding: 0 10px; flex: 1; border-radius: 10px; }
 
-    .countdown-card {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 20px;
-      background: var(--deep-green);
-      color: var(--white);
-      text-align: center;
-    }
+   .section-title { margin: 24px 0 0; color: var(--deep-green); font-size: 24px; text-align: center; }
 
-    .countdown-card span {
-      display: block;
-      color: rgba(255, 255, 255, 0.76);
-      font-size: 14px;
-    }
+   .extra-time-name { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 15px; }
+   .extra-time-icon { font-size: 22px; line-height: 1; }
 
-    .countdown-card strong {
-      display: block;
-      margin-top: 8px;
-      font-size: clamp(34px, 10vw, 54px);
-      line-height: 1;
-      direction: ltr;
-    }
+   .azan-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
+   .azan-button { background: var(--deep-green); }
 
-    .times-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
+   .footer-note { margin: 16px 0 0; color: var(--muted); font-size: 13px; text-align: center; line-height: 1.7; }
 
-    .time-card {
-      padding: 16px;
-      border-radius: 18px;
-      background: var(--white);
-      border: 1px solid #dceee2;
-      box-shadow: 0 8px 20px rgba(7, 93, 43, 0.08);
-    }
-
-    .time-card.next {
-      border-color: var(--gold);
-      box-shadow: 0 10px 26px rgba(212, 175, 55, 0.24);
-    }
-
-    .time-name {
-      display: block;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .time-value {
-      display: block;
-      margin-top: 6px;
-      color: var(--deep-green);
-      font-size: 25px;
-      font-weight: 900;
-      direction: ltr;
-      text-align: right;
-    }
-
-    .section-title {
-      margin: 24px 0 0;
-      color: var(--deep-green);
-      font-size: 24px;
-      text-align: center;
-    }
-
-    .extra-time-name {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    .extra-time-icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .azan-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .azan-button {
-      background: var(--deep-green);
-    }
-
-    .footer-note {
-      margin: 16px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      text-align: center;
-      line-height: 1.7;
-    }
-
-    .site-footer {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: var(--radius);
-      background: #eeeeee;
-      color: #0f7a2e;
-      text-align: center;
-      font-size: 22px;
-      font-weight: 800;
-      box-shadow: 0 8px 20px rgba(23, 51, 34, 0.08);
+   .site-footer {
+      margin-top: 18px; padding: 18px; border-radius: var(--radius);
+      background: #eeeeee; color: #0f7a2e; text-align: center;
+      font-size: 22px; font-weight: 800; box-shadow: 0 8px 20px rgba(23, 51, 34, 0.08);
     }
 
     @media (max-width: 650px) {
-      .app {
-        padding: 12px;
-      }
-
-      .search-row,
-      .summary,
-      .times-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-inner,
-      .panel {
-        padding: 16px;
-      }
-
-      button {
-        width: 100%;
-      }
+     .app { padding: 12px; }
+     .search-row,.summary,.times-grid { grid-template-columns: 1fr; }
+     .hero-inner,.panel { padding: 16px; }
+      button { width: 100%; }
+     .alarm-btn { width: auto; }
     }
   </style>
 </head>
@@ -372,17 +163,17 @@
         <strong id="countdown">01:44:45</strong>
       </div>
 
-      <div id="timesGrid" class="times-grid"><article class="time-card next" data-prayer="Fajr"><span class="time-name">Fajr / فجر</span><span class="time-value">04:16</span></article><article class="time-card" data-prayer="Dhuhr"><span class="time-name">Dhuhr / ظہر</span><span class="time-value">12:35</span></article><article class="time-card" data-prayer="AsrHanafi"><span class="time-name">Asr Hanafi / عصر حنفی</span><span class="time-value">17:18</span></article><article class="time-card" data-prayer="AsrShafi"><span class="time-name">Asr Shafi / عصر شافعی</span><span class="time-value">15:57</span></article><article class="time-card" data-prayer="Maghrib"><span class="time-name">Maghrib / مغرب</span><span class="time-value">19:25</span></article><article class="time-card" data-prayer="Isha"><span class="time-name">Isha / عشاء</span><span class="time-value">20:54</span></article></div>
+      <div id="timesGrid" class="times-grid"></div>
 
       <h2 class="section-title">اضافی اوقات</h2>
-      <div id="extraTimesGrid" class="times-grid"><article class="time-card"><span class="extra-time-name"><span>طلوع آفتاب</span><span class="extra-time-icon">🌅</span></span><span class="time-value">05:45</span></article><article class="time-card"><span class="extra-time-name"><span>اشراق</span><span class="extra-time-icon">🌅</span></span><span class="time-value">06:05</span></article><article class="time-card"><span class="extra-time-name"><span>چاشت</span><span class="extra-time-icon">☀️</span></span><span class="time-value">07:45</span></article><article class="time-card"><span class="extra-time-name"><span>زوال</span><span class="extra-time-icon">☀️</span></span><span class="time-value">12:25</span></article><article class="time-card"><span class="extra-time-name"><span>اوابین</span><span class="extra-time-icon">🌙</span></span><span class="time-value">19:50</span></article><article class="time-card"><span class="extra-time-name"><span>تہجد</span><span class="extra-time-icon">🌙</span></span><span class="time-value">02:18</span></article><article class="time-card"><span class="extra-time-name"><span>سحری ختم</span><span class="extra-time-icon">🌙</span></span><span class="time-value">04:06</span></article><article class="time-card"><span class="extra-time-name"><span>افطار</span><span class="extra-time-icon">🌙</span></span><span class="time-value">19:25</span></article></div>
+      <div id="extraTimesGrid" class="times-grid"></div>
 
       <div class="azan-row">
         <button id="azanButton" class="azan-button" type="button">Azan Suno</button>
       </div>
 
       <p class="footer-note">
-        اوقات Aladhan API سے آتے ہیں۔ API Key کی ضرورت نہیں۔
+        اوقات Aladhan API سے آتے ہیں۔ API Key کی ضرورت نہیں۔ Alarm کے لیے Browser Notification ON کرنا ہو گی۔
       </p>
     </section>
 
@@ -454,6 +245,14 @@
     const azanAudio = new Audio("./azan.mp3");
     azanAudio.preload = "none";
 
+    // Alarm system
+    const alarmTimers = {};
+    const alarmSettings = JSON.parse(localStorage.getItem('namazAlarms') || '{}');
+
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
     function fillCityList() {
       cityList.innerHTML = "";
       cities.forEach((city) => {
@@ -463,9 +262,7 @@
       });
     }
 
-    function cleanCityName(value) {
-      return value.trim();
-    }
+    function cleanCityName(value) { return value.trim(); }
 
     function findCity(value) {
       const cityName = cleanCityName(value).toLowerCase();
@@ -475,7 +272,7 @@
     function setLoading(isLoading) {
       searchButton.disabled = isLoading;
       locationButton.disabled = isLoading;
-      searchButton.textContent = isLoading ? "Loading..." : "Times Dekho";
+      searchButton.textContent = isLoading? "Loading..." : "Times Dekho";
     }
 
     function buildApiUrl(cityName, method, school) {
@@ -490,20 +287,9 @@
     async function getPrayerTimes(cityName) {
       const shafiUrl = buildApiUrl(cityName, "1", "0");
       const hanafiUrl = buildApiUrl(cityName, "2", "1");
-      const [shafiResponse, hanafiResponse] = await Promise.all([
-        fetch(shafiUrl),
-        fetch(hanafiUrl)
-      ]);
-
-      if (!shafiResponse.ok || !hanafiResponse.ok) {
-        throw new Error("API response failed");
-      }
-
-      const [shafiData, hanafiData] = await Promise.all([
-        shafiResponse.json(),
-        hanafiResponse.json()
-      ]);
-
+      const [shafiResponse, hanafiResponse] = await Promise.all([ fetch(shafiUrl), fetch(hanafiUrl) ]);
+      if (!shafiResponse.ok ||!hanafiResponse.ok) { throw new Error("API response failed"); }
+      const [shafiData, hanafiData] = await Promise.all([ shafiResponse.json(), hanafiResponse.json() ]);
       return {
         date: shafiData.data.date.readable,
         timings: {
@@ -527,9 +313,7 @@
       };
     }
 
-    function formatTime(rawTime) {
-      return rawTime.replace(/\s*\(.+\)/, "");
-    }
+    function formatTime(rawTime) { return rawTime.replace(/\s*\(.+\)/, ""); }
 
     function renderTimes() {
       timesGrid.innerHTML = "";
@@ -546,10 +330,30 @@
         value.className = "time-value";
         value.textContent = formatTime(currentTimes.timings[prayer.key]);
 
+        const alarmRow = document.createElement("div");
+        alarmRow.className = "alarm-row";
+
+        const btn10 = document.createElement("button");
+        btn10.className = "alarm-btn";
+        btn10.textContent = "10 منٹ";
+        btn10.onclick = () => toggleAlarm(prayer.key, 10, btn10);
+        if (alarmSettings[prayer.key]?.includes(10)) btn10.classList.add('active');
+
+        const btn15 = document.createElement("button");
+        btn15.className = "alarm-btn";
+        btn15.textContent = "15 منٹ";
+        btn15.onclick = () => toggleAlarm(prayer.key, 15, btn15);
+        if (alarmSettings[prayer.key]?.includes(15)) btn15.classList.add('active');
+
+        alarmRow.appendChild(btn10);
+        alarmRow.appendChild(btn15);
+
         card.appendChild(name);
         card.appendChild(value);
+        card.appendChild(alarmRow);
         timesGrid.appendChild(card);
       });
+      setupAlarms();
     }
 
     function renderExtraTimes() {
@@ -557,21 +361,16 @@
       extraTimes.forEach((time) => {
         const card = document.createElement("article");
         card.className = "time-card";
-
         const name = document.createElement("span");
         name.className = "extra-time-name";
-
         const label = document.createElement("span");
         label.textContent = time.label;
-
         const icon = document.createElement("span");
         icon.className = "extra-time-icon";
         icon.textContent = time.icon;
-
         const value = document.createElement("span");
         value.className = "time-value";
         value.textContent = formatTime(currentTimes.extra[time.key]);
-
         name.appendChild(label);
         name.appendChild(icon);
         card.appendChild(name);
@@ -593,33 +392,19 @@
       const [hour, minute] = cleanTime.split(":").map(Number);
       const date = new Date();
       date.setHours(hour, minute, 0, 0);
-
-      if (addOneDay) {
-        date.setDate(date.getDate() + 1);
-      }
-
+      if (addOneDay) { date.setDate(date.getDate() + 1); }
       return date;
     }
 
     function getNextPrayer() {
       const now = new Date();
       const todayPrayers = prayers.map((prayer) => ({
-        key: prayer.key,
-        label: prayer.label,
+        key: prayer.key, label: prayer.label,
         date: timeToDate(currentTimes.timings[prayer.key])
       }));
-
       const nextTodayPrayer = todayPrayers.find((prayer) => prayer.date > now);
-
-      if (nextTodayPrayer) {
-        return nextTodayPrayer;
-      }
-
-      return {
-        key: "Fajr",
-        label: "Fajr / فجر",
-        date: timeToDate(currentTimes.timings.Fajr, true)
-      };
+      if (nextTodayPrayer) { return nextTodayPrayer; }
+      return { key: "Fajr", label: "Fajr / فجر", date: timeToDate(currentTimes.timings.Fajr, true) };
     }
 
     function formatCountdown(milliseconds) {
@@ -631,15 +416,11 @@
     }
 
     function updateNextPrayer() {
-      if (!currentTimes) {
-        return;
-      }
-
+      if (!currentTimes) { return; }
       const nextPrayer = getNextPrayer();
       const remaining = nextPrayer.date - new Date();
       nextPrayerLabel.textContent = `Next Prayer: ${nextPrayer.label}`;
       countdown.textContent = formatCountdown(remaining);
-
       document.querySelectorAll(".time-card").forEach((card) => {
         card.classList.toggle("next", card.dataset.prayer === nextPrayer.key);
       });
@@ -651,14 +432,52 @@
       countdownTimer = setInterval(updateNextPrayer, 1000);
     }
 
+    // Alarm Functions
+    function toggleAlarm(prayerKey, minutesBefore, btn) {
+      if (!alarmSettings[prayerKey]) alarmSettings[prayerKey] = [];
+      const idx = alarmSettings[prayerKey].indexOf(minutesBefore);
+      if (idx > -1) {
+        alarmSettings[prayerKey].splice(idx, 1);
+        btn.classList.remove('active');
+      } else {
+        alarmSettings[prayerKey].push(minutesBefore);
+        btn.classList.add('active');
+      }
+      localStorage.setItem('namazAlarms', JSON.stringify(alarmSettings));
+      setupAlarms();
+    }
+
+    function setupAlarms() {
+      Object.values(alarmTimers).forEach(clearTimeout);
+      if (!currentTimes) return;
+
+      prayers.forEach(prayer => {
+        const mins = alarmSettings[prayer.key] || [];
+        mins.forEach(minBefore => {
+          const prayerTime = timeToDate(currentTimes.timings[prayer.key]);
+          const alarmTime = new Date(prayerTime.getTime() - minBefore * 60000);
+          const delay = alarmTime - new Date();
+          if (delay > 0) {
+            const key = `${prayer.key}-${minBefore}`;
+            alarmTimers[key] = setTimeout(() => fireAlarm(prayer.label, minBefore), delay);
+          }
+        });
+      });
+    }
+
+    function fireAlarm(label, minBefore) {
+      const msg = `${label} ${minBefore} منٹ میں ہے!`;
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('نماز کا وقت قریب ہے', { body: msg, icon: './logo.png' });
+      }
+      statusText.textContent = msg;
+      azanAudio.currentTime = 0;
+      azanAudio.play().catch(() => {});
+    }
+
     async function loadCity(cityName) {
       const city = findCity(cityName);
-
-      if (!city) {
-        statusText.textContent = "براہ کرم list میں سے Pakistan کا شہر منتخب کریں۔";
-        return;
-      }
-
+      if (!city) { statusText.textContent = "براہ کرم list میں سے Pakistan کا شہر منتخب کریں۔"; return; }
       try {
         setLoading(true);
         statusText.textContent = "Prayer times load ہو رہے ہیں...";
@@ -670,10 +489,8 @@
         startCountdown();
         statusText.textContent = "نماز کے اوقات کامیابی سے load ہو گئے۔";
       } catch (error) {
-        statusText.textContent = "API سے اوقات نہیں آ سکے۔ Internet check کر کے دوبارہ کوشش کریں۔";
-      } finally {
-        setLoading(false);
-      }
+        statusText.textContent = "API سے اوقات نہیں آ سکے۔ Internet check کر کے دوبارہ کوش کریں۔";
+      } finally { setLoading(false); }
     }
 
     function distanceInKm(firstPoint, secondPoint) {
@@ -682,32 +499,24 @@
       const lonDifference = toRadians(secondPoint.lon - firstPoint.lon);
       const firstLat = toRadians(firstPoint.lat);
       const secondLat = toRadians(secondPoint.lat);
-      const halfChord =
-        Math.sin(latDifference / 2) ** 2 +
-        Math.cos(firstLat) * Math.cos(secondLat) * Math.sin(lonDifference / 2) ** 2;
+      const halfChord = Math.sin(latDifference / 2) ** 2 + Math.cos(firstLat) * Math.cos(secondLat) * Math.sin(lonDifference / 2) ** 2;
       const angularDistance = 2 * Math.atan2(Math.sqrt(halfChord), Math.sqrt(1 - halfChord));
       return earthRadius * angularDistance;
     }
 
-    function toRadians(degrees) {
-      return degrees * Math.PI / 180;
-    }
+    function toRadians(degrees) { return degrees * Math.PI / 180; }
 
     function findNearestCity(latitude, longitude) {
       const userPoint = { lat: latitude, lon: longitude };
       return cities.reduce((nearestCity, city) => {
         const currentDistance = distanceInKm(userPoint, city);
         const nearestDistance = distanceInKm(userPoint, nearestCity);
-        return currentDistance < nearestDistance ? city : nearestCity;
+        return currentDistance < nearestDistance? city : nearestCity;
       }, cities[0]);
     }
 
     function useCurrentLocation() {
-      if (!navigator.geolocation) {
-        statusText.textContent = "آپ کے browser میں GPS support موجود نہیں۔";
-        return;
-      }
-
+      if (!navigator.geolocation) { statusText.textContent = "آپ کے browser میں GPS support موجود نہیں۔"; return; }
       statusText.textContent = "Location permission کا انتظار ہے...";
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -716,14 +525,8 @@
           statusText.textContent = `Nearest city: ${nearestCity.name}`;
           loadCity(nearestCity.name);
         },
-        () => {
-          statusText.textContent = "Location permission نہیں ملی، city manually select کریں۔";
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 12000,
-          maximumAge: 300000
-        }
+        () => { statusText.textContent = "Location permission نہیں ملی، city manually select کریں۔"; },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
       );
     }
 
@@ -736,11 +539,7 @@
     }
 
     async function toggleAzanSound() {
-      if (isAzanPlaying) {
-        stopAzanSound();
-        return;
-      }
-
+      if (isAzanPlaying) { stopAzanSound(); return; }
       try {
         azanAudio.currentTime = 0;
         await azanAudio.play();
@@ -759,15 +558,10 @@
     locationButton.addEventListener("click", useCurrentLocation);
     azanButton.addEventListener("click", toggleAzanSound);
     azanAudio.addEventListener("ended", stopAzanSound);
-    cityInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        loadCity(cityInput.value);
-      }
-    });
+    cityInput.addEventListener("keydown", (event) => { if (event.key === "Enter") { loadCity(cityInput.value); } });
 
     fillCityList();
     loadCity(cityInput.value);
   </script>
-
-
-</body></html>
+</body>
+</html>
