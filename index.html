@@ -3,39 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تحریکِ ایمان V6</title>
+<title>تحریک ایمان — نماز کے اوقات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/adhan@4.4.3/lib/bundle.js"></script>
 <style>
-body{font-family:'Jameel Noori Nastaleeq',Arial,sans-serif;background:#f0f0f0;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh}
-.card{background:#004d40;color:white;padding:30px;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,0.3);text-align:center;max-width:400px;width:90%}
-.card h1{color:gold;margin:0 0 10px;font-size:28px}
-.date{margin-bottom:20px;font-size:16px;opacity:0.9}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.box{background:#00695c;padding:15px;border-radius:12px}
-.box .name{font-size:18px;font-weight:bold;display:block}
-.box .time{font-size:22px;margin-top:5px;display:block}
-.btn{display:block;background:#c62828;color:white;text-decoration:none;padding:14px;margin-top:20px;border-radius:10px;font-size:17px;font-weight:bold}
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --green-dark:#0f5c1e; --green-main:#1a7a2a; --green-light:#e8f5e9;
+    --gold:#c9a227; --gold-light:#f5e9c0; --text-dark:#1a2a1a;
+    --text-mid:#555; --text-soft:#999; --white:#ffffff;
+    --shadow:0 2px 12px rgba(0,0,0,0.09); --radius:14px;
+    --font-ur:'Noto Nastaliq Urdu',serif; --font-mono:'Courier New',Courier,monospace;
+  }
+  body { font-family:var(--font-ur); background:var(--green-light); min-height:100vh; direction:rtl; }
+  .wrap { max-width:680px; margin:0 auto; padding-bottom:30px; }
+
+  /* HEADER */
+  .header { background:var(--green-main); padding:16px 20px; display:flex; align-items:center; justify-content:center; gap:16px; }
+  .header img { width:72px; height:72px; border-radius:50%; border:2.5px solid var(--gold); object-fit:cover; flex-shrink:0; }
+  .header-text { text-align:right; }
+  .header-text h1 { font-size:clamp(22px,5vw,30px); color:var(--white); line-height:1.3; }
+  .header-text p { font-size:clamp(13px,3vw,16px); color:var(--gold); margin-top:2px; }
+
+  /* BODY */
+  .body { padding:14px 14px 0; }
+
+  /* CARD */
+  .card { background:var(--white); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow); margin-bottom:12px; }
+  .card-label { font-size:12px; color:var(--text-soft); text-align:right; margin-bottom:8px; }
+
+  /* CITY SELECTOR */
+  .selector-row { display:flex; gap:8px; align-items:center; }
+  .selector-row select { flex:1; padding:10px 12px; border:1.5px solid #ddd; border-radius:10px; font-family:var(--font-ur); font-size:14px; direction:rtl; background:var(--white); color:var(--text-dark); appearance:none; cursor:pointer; outline:none; }
+  .selector-row select:focus { border-color:var(--green-main); }
+  .btn-green { background:var(--green-main); color:var(--white); border:none; padding:10px 16px; border-radius:10px; font-family:var(--font-ur); font-size:13px; cursor:pointer; white-space:nowrap; }
+  .btn-green:hover { background:var(--green-dark); }
+
+  /* LOCATION BUTTON */
+  .btn-location { display:block; width:100%; background:var(--gold); color:var(--white); border:none; padding:13px 20px; border-radius:var(--radius); font-family:var(--font-ur); font-size:15px; cursor:pointer; margin-bottom:12px; }
+  .btn-location:hover { background:#b08c1e; }
+
+  #statusText { text-align:center; font-size:12px; color:var(--text-soft); min-height:18px; margin-bottom:10px; }
+
+  /* DATE ROW */
+  .date-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+  .date-card { background:var(--white); border-radius:var(--radius); padding:12px 14px; box-shadow:var(--shadow); text-align:right; }
+  .date-card .lbl { font-size:11px; color:var(--text-soft); font-family:Arial,sans-serif; direction:ltr; text-align:left; }
+  .date-card .val { font-size:15px; font-weight:700; margin-top:3px; }
+  #todayDate { color:var(--gold); }
+  #cityDisplay { color:var(--green-main); }
+
+  /* HIJRI */
+  .hijri-card { background:var(--green-main); color:var(--gold-light); border-radius:var(--radius); padding:10px 16px; text-align:center; font-size:14px; margin-bottom:12px; box-shadow:var(--shadow); }
+
+  /* COUNTDOWN */
+  .countdown-card { background:var(--green-dark); border-radius:var(--radius); padding:22px 20px; margin-bottom:12px; text-align:center; box-shadow:0 4px 16px rgba(15,92,30,0.35); }
+  #nextPrayerLabel { color:var(--gold); font-size:13px; margin-bottom:6px; }
+  #countdownTimer { color:var(--white); font-size:clamp(34px,10vw,48px); font-family:var(--font-mono); font-weight:700; letter-spacing:3px; }
+
+  /* PRAYER GRID */
+  .prayer-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+  .p-card { background:var(--white); border-radius:var(--radius); padding:14px 15px; box-shadow:var(--shadow); border:1.5px solid transparent; transition:border-color .3s,background .3s; }
+  .p-card.is-next { border-color:var(--green-main); background:#f0faf1; }
+  .p-card.is-past { opacity:.55; }
+  .p-card .en { font-size:10px; color:var(--text-soft); font-family:Arial,sans-serif; direction:ltr; text-align:left; }
+  .p-card .ur { font-size:14px; color:var(--text-mid); text-align:right; }
+  .p-card .pt { font-size:clamp(18px,5vw,24px); font-weight:700; color:var(--green-main); text-align:right; margin-top:4px; font-family:var(--font-mono); letter-spacing:1px; }
+  .p-card.full { grid-column:1 / -1; }
+
+  /* FOOTER */
+  .footer { text-align:center; font-size:11px; color:var(--text-soft); padding:10px 0 0; font-family:Arial,sans-serif; direction:ltr; }
+
+  @media (max-width:360px) {
+    .date-row { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>کراچی - نماز کے اوقات</h1>
-  <div class="date" id="date"></div>
-  <div class="grid" id="times">لوڈ ہو رہا ہے...</div>
-  <a class="btn" href="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/cities.html" target="_blank">📍 پاکستان کے تمام شہر</a>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-text">
+      <h1>تحریک ایمان</h1>
+      <p>نماز کے اوقات</p>
+    </div>
+    <img src="logo.png" alt="تحریک ایمان" onerror="this.style.display='none'">
+  </div>
+
+  <div class="body">
+
+    <div class="card">
+      <div class="card-label">اپنا شہر چنیں</div>
+      <div class="selector-row">
+        <button class="btn-green" onclick="loadCity()">Times Dekho</button>
+        <select id="citySelect" onchange="loadCity()">
+          <option value="karachi">کراچی</option>
+          <option value="lahore">لاہور</option>
+          <option value="islamabad">اسلام آباد</option>
+          <option value="rawalpindi">راولپنڈی</option>
+          <option value="peshawar">پشاور</option>
+          <option value="quetta">کوئٹہ</option>
+          <option value="multan">ملتان</option>
+          <option value="faisalabad">فیصل آباد</option>
+          <option value="hyderabad">حیدرآباد</option>
+          <option value="sialkot">سیالکوٹ</option>
+          <option value="gujranwala">گوجرانوالہ</option>
+          <option value="sukkur">سکھر</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-location" onclick="useLocation()">📍 Mera Location Use Karo</button>
+    <div id="statusText">نماز کے اوقات load ہو رہے ہیں…</div>
+
+    <div class="date-row">
+      <div class="date-card">
+        <div class="lbl">Today</div>
+        <div class="val" id="todayDate">—</div>
+      </div>
+      <div class="date-card">
+        <div class="lbl">Selected City</div>
+        <div class="val" id="cityDisplay">کراچی</div>
+      </div>
+    </div>
+
+    <div class="hijri-card" id="hijriDate">—</div>
+
+    <div class="countdown-card">
+      <div id="nextPrayerLabel">Next Prayer / ظہر</div>
+      <div id="countdownTimer">00:00:00</div>
+    </div>
+
+    <div class="prayer-grid">
+      <div class="p-card" id="pc-fajr">
+        <div class="en">Fajr</div><div class="ur">فجر</div>
+        <div class="pt" id="t-fajr">--:--</div>
+      </div>
+      <div class="p-card" id="pc-sunrise">
+        <div class="en">Sunrise</div><div class="ur">طلوعِ آفتاب</div>
+        <div class="pt" id="t-sunrise">--:--</div>
+      </div>
+      <div class="p-card" id="pc-dhuhr">
+        <div class="en">Dhuhr</div><div class="ur">ظہر</div>
+        <div class="pt" id="t-dhuhr">--:--</div>
+      </div>
+      <div class="p-card" id="pc-asr-h">
+        <div class="en">Asr Hanafi</div><div class="ur">عصر حنفی</div>
+        <div class="pt" id="t-asr-h">--:--</div>
+      </div>
+      <div class="p-card" id="pc-asr-s">
+        <div class="en">Asr Shafi</div><div class="ur">عصر شافعی</div>
+        <div class="pt" id="t-asr-s">--:--</div>
+      </div>
+      <div class="p-card" id="pc-maghrib">
+        <div class="en">Maghrib</div><div class="ur">مغرب</div>
+        <div class="pt" id="t-maghrib">--:--</div>
+      </div>
+      <div class="p-card full" id="pc-isha">
+        <div class="en">Isha</div><div class="ur">عشاء</div>
+        <div class="pt" id="t-isha">--:--</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      تحریک ایمان &nbsp;|&nbsp; University of Islamic Sciences, Karachi &nbsp;|&nbsp; Hanafi Asr
+    </div>
+
+  </div>
 </div>
+
 <script>
-document.getElementById('date').textContent=new Date().toLocaleDateString('ur-PK',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-function to12(t){const[h,m]=t.split(':');const H=+h;return`${H%12||12}:${m} ${H>=12?'PM':'AM'}`}
-fetch(`https://api.aladhan.com/v1/timings/${new Date().toISOString().split('T')[0]}?latitude=24.8607&longitude=67.0011&method=1`)
-.then(r=>r.json()).then(d=>{const t=d.data.timings;
-document.getElementById('times').innerHTML=`
-<div class="box"><span class="name">فجر</span><span class="time">${to12(t.Fajr)}</span></div>
-<div class="box"><span class="name">ظہر</span><span class="time">${to12(t.Dhuhr)}</span></div>
-<div class="box"><span class="name">عصر</span><span class="time">${to12(t.Asr)}</span></div>
-<div class="box"><span class="name">مغرب</span><span class="time">${to12(t.Maghrib)}</span></div>
-<div class="box"><span class="name">عشاء</span><span class="time">${to12(t.Isha)}</span></div>
-<div class="box"><span class="name">اشراق</span><span class="time">${to12(t.Sunrise)}</span></div>`;})
-.catch(()=>{document.getElementById('times').innerHTML='انٹرنیٹ چیک کریں';});
+const CITIES = {
+  karachi:    {ur:'کراچی',       lat:24.8607,lng:67.0011},
+  lahore:     {ur:'لاہور',       lat:31.5204,lng:74.3587},
+  islamabad:  {ur:'اسلام آباد', lat:33.6844,lng:73.0479},
+  rawalpindi: {ur:'راولپنڈی',   lat:33.5651,lng:73.0169},
+  peshawar:   {ur:'پشاور',       lat:34.0151,lng:71.5249},
+  quetta:     {ur:'کوئٹہ',       lat:30.1798,lng:66.9750},
+  multan:     {ur:'ملتان',       lat:30.1575,lng:71.5249},
+  faisalabad: {ur:'فیصل آباد',  lat:31.4504,lng:73.1350},
+  hyderabad:  {ur:'حیدرآباد',   lat:25.3960,lng:68.3578},
+  sialkot:    {ur:'سیالکوٹ',    lat:32.4945,lng:74.5229},
+  gujranwala: {ur:'گوجرانوالہ', lat:32.1877,lng:74.1945},
+  sukkur:     {ur:'سکھر',        lat:27.7052,lng:68.8574},
+};
+
+let times={}, nextTime=null;
+
+function fmt(d){
+  if(!d) return '--:--';
+  let h=d.getHours(), m=d.getMinutes();
+  const ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  return `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+function hijriDate(){
+  try {
+    return new Intl.DateTimeFormat('ar-SA-u-ca-islamic',
+      {day:'numeric',month:'long',year:'numeric'}).format(new Date());
+  } catch(e){return '';}
+}
+
+function calcTimes(lat,lng){
+  const date=new Date(), coords=new adhan.Coordinates(lat,lng);
+  const pH=adhan.CalculationMethod.Karachi(); pH.madhab=adhan.Madhab.Hanafi;
+  const tH=new adhan.PrayerTimes(coords,date,pH);
+  const pS=adhan.CalculationMethod.Karachi(); pS.madhab=adhan.Madhab.Shafi;
+  const tS=new adhan.PrayerTimes(coords,date,pS);
+  return {fajr:tH.fajr,sunrise:tH.sunrise,dhuhr:tH.dhuhr,
+          asrH:tH.asr,asrS:tS.asr,maghrib:tH.maghrib,isha:tH.isha};
+}
+
+function render(lat,lng,label){
+  try { times=calcTimes(lat,lng); } catch(e){
+    document.getElementById('statusText').textContent='خرابی آئی — دوبارہ کوشش کریں'; return;
+  }
+  const now=new Date();
+  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('todayDate').textContent=`${M[now.getMonth()]} ${now.getFullYear()} ${now.getDate()}`;
+  document.getElementById('cityDisplay').textContent=label;
+  document.getElementById('hijriDate').textContent=hijriDate();
+  document.getElementById('t-fajr').textContent=fmt(times.fajr);
+  document.getElementById('t-sunrise').textContent=fmt(times.sunrise);
+  document.getElementById('t-dhuhr').textContent=fmt(times.dhuhr);
+  document.getElementById('t-asr-h').textContent=fmt(times.asrH);
+  document.getElementById('t-asr-s').textContent=fmt(times.asrS);
+  document.getElementById('t-maghrib').textContent=fmt(times.maghrib);
+  document.getElementById('t-isha').textContent=fmt(times.isha);
+  document.getElementById('statusText').textContent='';
+  markPrayers();
+}
+
+const SEQ=[
+  {id:'fajr',   ur:'فجر',  key:'fajr'},
+  {id:'dhuhr',  ur:'ظہر',  key:'dhuhr'},
+  {id:'asr-h',  ur:'عصر',  key:'asrH'},
+  {id:'maghrib',ur:'مغرب', key:'maghrib'},
+  {id:'isha',   ur:'عشاء', key:'isha'},
+];
+
+function markPrayers(){
+  const now=new Date();
+  document.querySelectorAll('.p-card').forEach(c=>c.classList.remove('is-next','is-past'));
+  nextTime=null; let found=false;
+  for(const p of SEQ){
+    const t=times[p.key], card=document.getElementById(`pc-${p.id}`);
+    if(!t) continue;
+    if(!found && t>now){
+      card.classList.add('is-next');
+      document.getElementById('nextPrayerLabel').textContent=`Next Prayer / ${p.ur}`;
+      nextTime=t; found=true;
+    } else if(t<=now){ card.classList.add('is-past'); }
+  }
+  if(!found) document.getElementById('nextPrayerLabel').textContent='اگلی نماز / فجر (کل)';
+}
+
+function tick(){
+  if(!nextTime){document.getElementById('countdownTimer').textContent='--:--:--';return;}
+  let diff=nextTime-new Date();
+  if(diff<=0){markPrayers();return;}
+  const h=Math.floor(diff/3600000); diff-=h*3600000;
+  const m=Math.floor(diff/60000);   diff-=m*60000;
+  const s=Math.floor(diff/1000);
+  document.getElementById('countdownTimer').textContent=
+    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function loadCity(){
+  const c=CITIES[document.getElementById('citySelect').value];
+  if(c) render(c.lat,c.lng,c.ur);
+}
+
+function useLocation(){
+  if(!navigator.geolocation){
+    document.getElementById('statusText').textContent='براؤزر location support نہیں کرتا'; return;
+  }
+  document.getElementById('statusText').textContent='📍 location تلاش ہو رہی ہے…';
+  navigator.geolocation.getCurrentPosition(
+    p=>render(p.coords.latitude,p.coords.longitude,'آپ کی Location'),
+    ()=>{document.getElementById('statusText').textContent='Location نہیں ملی — شہر منتخب کریں';}
+  );
+}
+
+window.addEventListener('load',()=>{
+  loadCity();
+  setInterval(tick,1000);
+  setInterval(loadCity,60000);
+});
 </script>
 </body>
 </html>
