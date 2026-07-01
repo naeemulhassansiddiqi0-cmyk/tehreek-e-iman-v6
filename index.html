@@ -1,567 +1,95 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tehreek-e-Iman Prayer Times</title>
-  <style>
-    :root {
-      --green: #0f7a3b;
-      --light-green: #eaf7ee;
-      --deep-green: #075d2b;
-      --header-green: #1B5E20;
-      --gold: #d4af37;
-      --white: #ffffff;
-      --text: #173322;
-      --muted: #5f7568;
-      --shadow: 0 16px 38px rgba(7, 93, 43, 0.14);
-      --radius: 22px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--light-green);
-      color: var(--text);
-      font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Segoe UI", Arial, sans-serif;
-    }
-
-   .app { width: min(980px, 100%); margin: 0 auto; padding: 18px; }
-
-   .hero {
-      overflow: hidden; border-radius: var(--radius); background: var(--header-green);
-      color: var(--white); box-shadow: var(--shadow); text-align: center;
-    }
-
-   .hero-inner { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 26px 22px; direction: ltr; }
-
-   .site-logo {
-      width: clamp(128px, 15vw, 150px); height: clamp(128px, 15vw, 150px);
-      flex: 0 0 auto; border: 5px solid var(--gold); border-radius: 50%;
-      background: var(--white); object-fit: cover; object-position: center;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    }
-
-   .header-text { direction: rtl; text-align: right; }
-   .brand { margin: 0; font-size: clamp(32px, 7vw, 52px); line-height: 1.15; text-align: right; }
-   .tagline { margin: 6px 0 0; color: rgba(255, 255, 255, 0.88); font-size: clamp(24px, 4vw, 30px); font-weight: 700; text-align: right; }
-
-   .panel { margin-top: 18px; padding: 18px; border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); }
-
-   .search-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
-
-    label { display: block; margin-bottom: 8px; color: var(--deep-green); font-size: 15px; font-weight: 700; }
-
-    input {
-      width: 100%; min-height: 52px; padding: 0 15px; border: 1px solid #cfe6d6;
-      border-radius: 16px; outline: none; color: var(--text); background: #fbfffc;
-      font-size: 17px; font-family: inherit;
-    }
-    input:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(15, 122, 59, 0.12); }
-
-    button {
-      min-height: 52px; border: 0; border-radius: 16px; padding: 0 16px;
-      color: var(--white); background: var(--green); cursor: pointer;
-      font-size: 15px; font-weight: 800; font-family: inherit;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-    button:hover { background: var(--deep-green); transform: translateY(-1px); }
-    button:disabled { cursor: wait; opacity: 0.72; transform: none; }
-    button.active { background: var(--gold); color: var(--deep-green); }
-
-   .location-button { width: 100%; margin-top: 12px; background: var(--gold); color: var(--deep-green); }
-   .location-button:hover { background: #c9a52f; }
-
-   .status { min-height: 24px; margin: 12px 0 0; color: var(--muted); font-size: 14px; text-align: center; }
-
-   .summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
-
-   .summary-card { padding: 16px; border-radius: 18px; background: #f8fcf9; border: 1px solid #dceee2; }
-   .summary-card span { display: block; color: var(--muted); font-size: 13px; }
-   .summary-card strong { display: block; margin-top: 5px; color: var(--deep-green); font-size: 22px; line-height: 1.3; }
-
-   .countdown-card { margin-top: 18px; padding: 18px; border-radius: 20px; background: var(--deep-green); color: var(--white); text-align: center; }
-   .countdown-card span { display: block; color: rgba(255, 255, 255, 0.76); font-size: 14px; }
-   .countdown-card strong { display: block; margin-top: 8px; font-size: clamp(34px, 10vw, 54px); line-height: 1; direction: ltr; }
-
-   .times-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
-
-   .time-card { padding: 16px; border-radius: 18px; background: var(--white); border: 1px solid #dceee2; box-shadow: 0 8px 20px rgba(7, 93, 43, 0.08); }
-   .time-card.next { border-color: var(--gold); box-shadow: 0 10px 26px rgba(212, 175, 55, 0.24); }
-
-   .time-name { display: block; color: var(--muted); font-size: 14px; }
-   .time-value { display: block; margin-top: 6px; color: var(--deep-green); font-size: 25px; font-weight: 900; direction: ltr; text-align: right; }
-
-    /* Alarm buttons style */
-   .alarm-row { display: flex; gap: 6px; margin-top: 10px; }
-   .alarm-btn { min-height: 32px; font-size: 12px; font-weight: 700; padding: 0 10px; flex: 1; border-radius: 10px; }
-
-   .section-title { margin: 24px 0 0; color: var(--deep-green); font-size: 24px; text-align: center; }
-
-   .extra-time-name { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 15px; }
-   .extra-time-icon { font-size: 22px; line-height: 1; }
-
-   .azan-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
-   .azan-button { background: var(--deep-green); }
-
-   .footer-note { margin: 16px 0 0; color: var(--muted); font-size: 13px; text-align: center; line-height: 1.7; }
-
-   .site-footer {
-      margin-top: 18px; padding: 18px; border-radius: var(--radius);
-      background: #eeeeee; color: #0f7a2e; text-align: center;
-      font-size: 22px; font-weight: 800; box-shadow: 0 8px 20px rgba(23, 51, 34, 0.08);
-    }
-
-    @media (max-width: 650px) {
-     .app { padding: 12px; }
-     .search-row,.summary,.times-grid { grid-template-columns: 1fr; }
-     .hero-inner,.panel { padding: 16px; }
-      button { width: 100%; }
-     .alarm-btn { width: auto; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کراچی نماز اوقات</title>
+<style>
+  body { font-family: 'Jameel Noori Nastaleeq', Arial; background: #e8f5e9; margin: 0; padding: 20px; text-align: center; }
+ .poster {
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+    background: linear-gradient(135deg, #004d40, #00695c);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+ .poster h1 { margin: 0 0 10px 0; font-size: 28px; color: gold; }
+ .date { font-size: 16px; margin-bottom: 20px; opacity: 0.9; }
+ .loading { font-size: 16px; opacity: 0.8; }
+ .times { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 20px; }
+ .time-box { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px; }
+ .time-box span { display: block; font-size: 14px; opacity: 0.8; }
+ .link-box {
+    max-width: 500px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px #ccc;
+  }
+ .link-box a {
+    display: block;
+    background: #c62828;
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+ .link-box a:hover { background: #b71c1c; }
+ .note { font-size: 14px; color: #555; margin-top: 10px; }
+</style>
 </head>
 <body>
-  <main class="app">
-    <header class="hero">
-      <div class="hero-inner">
-        <img class="site-logo" src="./logo.png" alt="Tehreek-e-Iman Logo">
-        <div class="header-text">
-          <h1 class="brand">تحریکِ ایمان</h1>
-          <p class="tagline">نماز کے اوقات</p>
+
+  <!-- اوپر: کراچی کا Auto Poster -->
+  <div class="poster">
+    <h1>کراچی - نماز کے اوقات</h1>
+    <div class="date" id="today-date">لوڈ ہو رہا ہے...</div>
+    <div id="times-area"><div class="loading">اوقات لائے جا رہے ہیں...</div></div>
+  </div>
+
+  <!-- نیچے: سارے پاکستان کا Link -->
+  <div class="link-box">
+    <a href="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/" target="_blank">
+      📍 پاکستان کے تمام شہروں کے اوقات دیکھیں
+    </a>
+    <p class="note">اوپر کلک کریں اور اپنا شہر سلیکٹ کریں</p>
+  </div>
+
+<script>
+  // 1. آج کی تاریخ اردو میں
+  const dateEl = document.getElementById('today-date');
+  const today = new Date().toLocaleDateString('ur-PK', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  dateEl.textContent = today;
+
+  // 2. کراچی کے اوقات API سے لانا - روز خودبخود
+  const lat = 24.8607; // کراچی کا Latitude
+  const lon = 67.0011; // کراچی کا Longitude
+  const todayStr = new Date().toISOString().split('T')[0]; // 2026-04-05 فارمیٹ
+
+  fetch(`https://api.aladhan.com/v1/timings/${todayStr}?latitude=${lat}&longitude=${lon}&method=1`)
+   .then(res => res.json())
+   .then(data => {
+      const t = data.data.timings;
+      document.getElementById('times-area').innerHTML = `
+        <div class="times">
+          <div class="time-box"><span>فجر</span> <b>${t.Fajr}</b></div>
+          <div class="time-box"><span>ظہر</span> <b>${t.Dhuhr}</b></div>
+          <div class="time-box"><span>عصر</span> <b>${t.Asr}</b></div>
+          <div class="time-box"><span>مغرب</span> <b>${t.Maghrib}</b></div>
+          <div class="time-box"><span>عشاء</span> <b>${t.Isha}</b></div>
+          <div class="time-box"><span>اشراق</span> <b>${t.Sunrise}</b></div>
         </div>
-      </div>
-    </header>
+      `;
+    })
+   .catch(err => {
+      document.getElementById('times-area').innerHTML = `<p>اوقات لوڈ نہیں ہو سکے۔ انٹرنیٹ چیک کریں۔</p>`;
+    });
+</script>
 
-    <section class="panel" aria-label="Prayer time search">
-      <label for="cityInput">اپنا شہر منتخب کریں</label>
-      <div class="search-row">
-        <input id="cityInput" list="cityList" type="search" value="Karachi" autocomplete="off" placeholder="مثلاً Karachi">
-        <button id="searchButton" type="button">Times Dekho</button>
-      </div>
-
-      <datalist id="cityList"><option value="Karachi"></option><option value="Lahore"></option><option value="Islamabad"></option><option value="Peshawar"></option><option value="Quetta"></option><option value="Multan"></option><option value="Faisalabad"></option><option value="Sialkot"></option><option value="Bahawalpur"></option><option value="Sukkur"></option><option value="Larkana"></option><option value="Hyderabad"></option><option value="Rawalpindi"></option><option value="Gujranwala"></option><option value="Sargodha"></option><option value="Bahawalpur"></option><option value="Mardan"></option><option value="Swat"></option><option value="Abbottabad"></option><option value="Mirpur"></option></datalist>
-
-      <button id="locationButton" class="location-button" type="button">Mera Location Use Karo</button>
-      <p id="status" class="status">Audio play نہیں ہو سکی۔ azan.mp3 فائل یا browser permission check کریں۔</p>
-
-      <div class="summary">
-        <div class="summary-card">
-          <span>Selected City</span>
-          <strong id="selectedCity">Karachi</strong>
-        </div>
-        <div class="summary-card">
-          <span>Today</span>
-          <strong id="todayDate">29 Jun 2026</strong>
-        </div>
-      </div>
-
-      <div class="countdown-card">
-        <span id="nextPrayerLabel">Next Prayer: Fajr / فجر</span>
-        <strong id="countdown">01:44:45</strong>
-      </div>
-
-      <div id="timesGrid" class="times-grid"></div>
-
-      <h2 class="section-title">اضافی اوقات</h2>
-      <div id="extraTimesGrid" class="times-grid"></div>
-
-      <div class="azan-row">
-        <button id="azanButton" class="azan-button" type="button">Azan Suno</button>
-      </div>
-
-      <p class="footer-note">
-        اوقات Aladhan API سے آتے ہیں۔ API Key کی ضرورت نہیں۔ Alarm کے لیے Browser Notification ON کرنا ہو گی۔
-      </p>
-    </section>
-
-    <footer class="site-footer">
-      تیار کردہ: Naeemul Hasan Siddiqui
-    </footer>
-  </main>
-
-  <script>
-    const cities = [
-      { name: "Karachi", lat: 24.8607, lon: 67.0011 },
-      { name: "Lahore", lat: 31.5204, lon: 74.3587 },
-      { name: "Islamabad", lat: 33.6844, lon: 73.0479 },
-      { name: "Peshawar", lat: 34.0151, lon: 71.5249 },
-      { name: "Quetta", lat: 30.1798, lon: 66.9750 },
-      { name: "Multan", lat: 30.1575, lon: 71.5249 },
-      { name: "Faisalabad", lat: 31.4504, lon: 73.1350 },
-      { name: "Sialkot", lat: 32.4945, lon: 74.5229 },
-      { name: "Bahawalpur", lat: 29.3956, lon: 71.6836 },
-      { name: "Sukkur", lat: 27.7052, lon: 68.8574 },
-      { name: "Larkana", lat: 27.5570, lon: 68.2028 },
-      { name: "Hyderabad", lat: 25.3960, lon: 68.3578 },
-      { name: "Rawalpindi", lat: 33.5651, lon: 73.0169 },
-      { name: "Gujranwala", lat: 32.1877, lon: 74.1945 },
-      { name: "Sargodha", lat: 32.0836, lon: 72.6711 },
-      { name: "Bahawalpur", lat: 29.3956, lon: 71.6836 },
-      { name: "Mardan", lat: 34.1986, lon: 72.0404 },
-      { name: "Swat", lat: 35.2227, lon: 72.4258 },
-      { name: "Abbottabad", lat: 34.1688, lon: 73.2215 },
-      { name: "Mirpur", lat: 33.1484, lon: 73.7518 }
-    ];
-
-    const prayers = [
-      { key: "Fajr", label: "Fajr / فجر" },
-      { key: "Dhuhr", label: "Dhuhr / ظہر" },
-      { key: "AsrHanafi", label: "Asr Hanafi / عصر حنفی" },
-      { key: "AsrShafi", label: "Asr Shafi / عصر شافعی" },
-      { key: "Maghrib", label: "Maghrib / مغرب" },
-      { key: "Isha", label: "Isha / عشاء" }
-    ];
-
-    const extraTimes = [
-      { key: "Sunrise", label: "طلوع آفتاب", icon: "🌅" },
-      { key: "Ishraq", label: "اشراق", icon: "🌅" },
-      { key: "Chasht", label: "چاشت", icon: "☀️" },
-      { key: "Zawal", label: "زوال", icon: "☀️" },
-      { key: "Awwabin", label: "اوابین", icon: "🌙" },
-      { key: "Tahajjud", label: "تہجد", icon: "🌙" },
-      { key: "SehriEnd", label: "سحری ختم", icon: "🌙" },
-      { key: "Iftar", label: "افطار", icon: "🌙" }
-    ];
-
-    const cityInput = document.getElementById("cityInput");
-    const cityList = document.getElementById("cityList");
-    const searchButton = document.getElementById("searchButton");
-    const locationButton = document.getElementById("locationButton");
-    const statusText = document.getElementById("status");
-    const selectedCity = document.getElementById("selectedCity");
-    const todayDate = document.getElementById("todayDate");
-    const nextPrayerLabel = document.getElementById("nextPrayerLabel");
-    const countdown = document.getElementById("countdown");
-    const timesGrid = document.getElementById("timesGrid");
-    const extraTimesGrid = document.getElementById("extraTimesGrid");
-    const azanButton = document.getElementById("azanButton");
-
-    let currentTimes = null;
-    let countdownTimer = null;
-    let isAzanPlaying = false;
-    const azanAudio = new Audio("./azan.mp3");
-    azanAudio.preload = "none";
-
-    // Alarm system
-    const alarmTimers = {};
-    const alarmSettings = JSON.parse(localStorage.getItem('namazAlarms') || '{}');
-
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-
-    function fillCityList() {
-      cityList.innerHTML = "";
-      cities.forEach((city) => {
-        const option = document.createElement("option");
-        option.value = city.name;
-        cityList.appendChild(option);
-      });
-    }
-
-    function cleanCityName(value) { return value.trim(); }
-
-    function findCity(value) {
-      const cityName = cleanCityName(value).toLowerCase();
-      return cities.find((city) => city.name.toLowerCase() === cityName);
-    }
-
-    function setLoading(isLoading) {
-      searchButton.disabled = isLoading;
-      locationButton.disabled = isLoading;
-      searchButton.textContent = isLoading? "Loading..." : "Times Dekho";
-    }
-
-    function buildApiUrl(cityName, method, school) {
-      const url = new URL("https://api.aladhan.com/v1/timingsByCity");
-      url.searchParams.set("city", cityName);
-      url.searchParams.set("country", "Pakistan");
-      url.searchParams.set("method", method);
-      url.searchParams.set("school", school);
-      return url.toString();
-    }
-
-    async function getPrayerTimes(cityName) {
-      const shafiUrl = buildApiUrl(cityName, "1", "0");
-      const hanafiUrl = buildApiUrl(cityName, "2", "1");
-      const [shafiResponse, hanafiResponse] = await Promise.all([ fetch(shafiUrl), fetch(hanafiUrl) ]);
-      if (!shafiResponse.ok ||!hanafiResponse.ok) { throw new Error("API response failed"); }
-      const [shafiData, hanafiData] = await Promise.all([ shafiResponse.json(), hanafiResponse.json() ]);
-      return {
-        date: shafiData.data.date.readable,
-        timings: {
-          Fajr: shafiData.data.timings.Fajr,
-          Dhuhr: shafiData.data.timings.Dhuhr,
-          AsrHanafi: hanafiData.data.timings.Asr,
-          AsrShafi: shafiData.data.timings.Asr,
-          Maghrib: shafiData.data.timings.Maghrib,
-          Isha: shafiData.data.timings.Isha
-        },
-        extra: {
-          Sunrise: shafiData.data.timings.Sunrise,
-          Ishraq: addMinutesToTime(shafiData.data.timings.Sunrise, 20),
-          Chasht: addMinutesToTime(shafiData.data.timings.Sunrise, 120),
-          Zawal: addMinutesToTime(shafiData.data.timings.Dhuhr, -10),
-          Awwabin: addMinutesToTime(shafiData.data.timings.Maghrib, 25),
-          Tahajjud: shafiData.data.timings.Lastthird,
-          SehriEnd: shafiData.data.timings.Imsak || shafiData.data.timings.Fajr,
-          Iftar: shafiData.data.timings.Maghrib
-        }
-      };
-    }
-
-    function formatTime(rawTime) { return rawTime.replace(/\s*\(.+\)/, ""); }
-
-    function renderTimes() {
-      timesGrid.innerHTML = "";
-      prayers.forEach((prayer) => {
-        const card = document.createElement("article");
-        card.className = "time-card";
-        card.dataset.prayer = prayer.key;
-
-        const name = document.createElement("span");
-        name.className = "time-name";
-        name.textContent = prayer.label;
-
-        const value = document.createElement("span");
-        value.className = "time-value";
-        value.textContent = formatTime(currentTimes.timings[prayer.key]);
-
-        const alarmRow = document.createElement("div");
-        alarmRow.className = "alarm-row";
-
-        const btn10 = document.createElement("button");
-        btn10.className = "alarm-btn";
-        btn10.textContent = "10 منٹ";
-        btn10.onclick = () => toggleAlarm(prayer.key, 10, btn10);
-        if (alarmSettings[prayer.key]?.includes(10)) btn10.classList.add('active');
-
-        const btn15 = document.createElement("button");
-        btn15.className = "alarm-btn";
-        btn15.textContent = "15 منٹ";
-        btn15.onclick = () => toggleAlarm(prayer.key, 15, btn15);
-        if (alarmSettings[prayer.key]?.includes(15)) btn15.classList.add('active');
-
-        alarmRow.appendChild(btn10);
-        alarmRow.appendChild(btn15);
-
-        card.appendChild(name);
-        card.appendChild(value);
-        card.appendChild(alarmRow);
-        timesGrid.appendChild(card);
-      });
-      setupAlarms();
-    }
-
-    function renderExtraTimes() {
-      extraTimesGrid.innerHTML = "";
-      extraTimes.forEach((time) => {
-        const card = document.createElement("article");
-        card.className = "time-card";
-        const name = document.createElement("span");
-        name.className = "extra-time-name";
-        const label = document.createElement("span");
-        label.textContent = time.label;
-        const icon = document.createElement("span");
-        icon.className = "extra-time-icon";
-        icon.textContent = time.icon;
-        const value = document.createElement("span");
-        value.className = "time-value";
-        value.textContent = formatTime(currentTimes.extra[time.key]);
-        name.appendChild(label);
-        name.appendChild(icon);
-        card.appendChild(name);
-        card.appendChild(value);
-        extraTimesGrid.appendChild(card);
-      });
-    }
-
-    function addMinutesToTime(timeText, minutesToAdd) {
-      const cleanTime = formatTime(timeText);
-      const [hour, minute] = cleanTime.split(":").map(Number);
-      const date = new Date();
-      date.setHours(hour, minute + minutesToAdd, 0, 0);
-      return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-    }
-
-    function timeToDate(timeText, addOneDay = false) {
-      const cleanTime = formatTime(timeText);
-      const [hour, minute] = cleanTime.split(":").map(Number);
-      const date = new Date();
-      date.setHours(hour, minute, 0, 0);
-      if (addOneDay) { date.setDate(date.getDate() + 1); }
-      return date;
-    }
-
-    function getNextPrayer() {
-      const now = new Date();
-      const todayPrayers = prayers.map((prayer) => ({
-        key: prayer.key, label: prayer.label,
-        date: timeToDate(currentTimes.timings[prayer.key])
-      }));
-      const nextTodayPrayer = todayPrayers.find((prayer) => prayer.date > now);
-      if (nextTodayPrayer) { return nextTodayPrayer; }
-      return { key: "Fajr", label: "Fajr / فجر", date: timeToDate(currentTimes.timings.Fajr, true) };
-    }
-
-    function formatCountdown(milliseconds) {
-      const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
-      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
-      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
-      const seconds = String(totalSeconds % 60).padStart(2, "0");
-      return `${hours}:${minutes}:${seconds}`;
-    }
-
-    function updateNextPrayer() {
-      if (!currentTimes) { return; }
-      const nextPrayer = getNextPrayer();
-      const remaining = nextPrayer.date - new Date();
-      nextPrayerLabel.textContent = `Next Prayer: ${nextPrayer.label}`;
-      countdown.textContent = formatCountdown(remaining);
-      document.querySelectorAll(".time-card").forEach((card) => {
-        card.classList.toggle("next", card.dataset.prayer === nextPrayer.key);
-      });
-    }
-
-    function startCountdown() {
-      clearInterval(countdownTimer);
-      updateNextPrayer();
-      countdownTimer = setInterval(updateNextPrayer, 1000);
-    }
-
-    // Alarm Functions
-    function toggleAlarm(prayerKey, minutesBefore, btn) {
-      if (!alarmSettings[prayerKey]) alarmSettings[prayerKey] = [];
-      const idx = alarmSettings[prayerKey].indexOf(minutesBefore);
-      if (idx > -1) {
-        alarmSettings[prayerKey].splice(idx, 1);
-        btn.classList.remove('active');
-      } else {
-        alarmSettings[prayerKey].push(minutesBefore);
-        btn.classList.add('active');
-      }
-      localStorage.setItem('namazAlarms', JSON.stringify(alarmSettings));
-      setupAlarms();
-    }
-
-    function setupAlarms() {
-      Object.values(alarmTimers).forEach(clearTimeout);
-      if (!currentTimes) return;
-
-      prayers.forEach(prayer => {
-        const mins = alarmSettings[prayer.key] || [];
-        mins.forEach(minBefore => {
-          const prayerTime = timeToDate(currentTimes.timings[prayer.key]);
-          const alarmTime = new Date(prayerTime.getTime() - minBefore * 60000);
-          const delay = alarmTime - new Date();
-          if (delay > 0) {
-            const key = `${prayer.key}-${minBefore}`;
-            alarmTimers[key] = setTimeout(() => fireAlarm(prayer.label, minBefore), delay);
-          }
-        });
-      });
-    }
-
-    function fireAlarm(label, minBefore) {
-      const msg = `${label} ${minBefore} منٹ میں ہے!`;
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('نماز کا وقت قریب ہے', { body: msg, icon: './logo.png' });
-      }
-      statusText.textContent = msg;
-      azanAudio.currentTime = 0;
-      azanAudio.play().catch(() => {});
-    }
-
-    async function loadCity(cityName) {
-      const city = findCity(cityName);
-      if (!city) { statusText.textContent = "براہ کرم list میں سے Pakistan کا شہر منتخب کریں۔"; return; }
-      try {
-        setLoading(true);
-        statusText.textContent = "Prayer times load ہو رہے ہیں...";
-        currentTimes = await getPrayerTimes(city.name);
-        selectedCity.textContent = city.name;
-        todayDate.textContent = currentTimes.date;
-        renderTimes();
-        renderExtraTimes();
-        startCountdown();
-        statusText.textContent = "نماز کے اوقات کامیابی سے load ہو گئے۔";
-      } catch (error) {
-        statusText.textContent = "API سے اوقات نہیں آ سکے۔ Internet check کر کے دوبارہ کوش کریں۔";
-      } finally { setLoading(false); }
-    }
-
-    function distanceInKm(firstPoint, secondPoint) {
-      const earthRadius = 6371;
-      const latDifference = toRadians(secondPoint.lat - firstPoint.lat);
-      const lonDifference = toRadians(secondPoint.lon - firstPoint.lon);
-      const firstLat = toRadians(firstPoint.lat);
-      const secondLat = toRadians(secondPoint.lat);
-      const halfChord = Math.sin(latDifference / 2) ** 2 + Math.cos(firstLat) * Math.cos(secondLat) * Math.sin(lonDifference / 2) ** 2;
-      const angularDistance = 2 * Math.atan2(Math.sqrt(halfChord), Math.sqrt(1 - halfChord));
-      return earthRadius * angularDistance;
-    }
-
-    function toRadians(degrees) { return degrees * Math.PI / 180; }
-
-    function findNearestCity(latitude, longitude) {
-      const userPoint = { lat: latitude, lon: longitude };
-      return cities.reduce((nearestCity, city) => {
-        const currentDistance = distanceInKm(userPoint, city);
-        const nearestDistance = distanceInKm(userPoint, nearestCity);
-        return currentDistance < nearestDistance? city : nearestCity;
-      }, cities[0]);
-    }
-
-    function useCurrentLocation() {
-      if (!navigator.geolocation) { statusText.textContent = "آپ کے browser میں GPS support موجود نہیں۔"; return; }
-      statusText.textContent = "Location permission کا انتظار ہے...";
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const nearestCity = findNearestCity(position.coords.latitude, position.coords.longitude);
-          cityInput.value = nearestCity.name;
-          statusText.textContent = `Nearest city: ${nearestCity.name}`;
-          loadCity(nearestCity.name);
-        },
-        () => { statusText.textContent = "Location permission نہیں ملی، city manually select کریں۔"; },
-        { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
-      );
-    }
-
-    function stopAzanSound() {
-      azanAudio.pause();
-      azanAudio.currentTime = 0;
-      isAzanPlaying = false;
-      azanButton.textContent = "Azan Suno";
-      statusText.textContent = "Azan sound بند ہو گئی ہے۔";
-    }
-
-    async function toggleAzanSound() {
-      if (isAzanPlaying) { stopAzanSound(); return; }
-      try {
-        azanAudio.currentTime = 0;
-        await azanAudio.play();
-        isAzanPlaying = true;
-        azanButton.textContent = "Azan Band Karo";
-        statusText.textContent = "Azan sound play ہو رہی ہے۔";
-      } catch (error) {
-        console.log("Audio failed");
-        isAzanPlaying = false;
-        azanButton.textContent = "Azan Suno";
-        statusText.textContent = "Audio play نہیں ہو سکی۔ azan.mp3 فائل یا browser permission check کریں۔";
-      }
-    }
-
-    searchButton.addEventListener("click", () => loadCity(cityInput.value));
-    locationButton.addEventListener("click", useCurrentLocation);
-    azanButton.addEventListener("click", toggleAzanSound);
-    azanAudio.addEventListener("ended", stopAzanSound);
-    cityInput.addEventListener("keydown", (event) => { if (event.key === "Enter") { loadCity(cityInput.value); } });
-
-    fillCityList();
-    loadCity(cityInput.value);
-  </script>
 </body>
 </html>
