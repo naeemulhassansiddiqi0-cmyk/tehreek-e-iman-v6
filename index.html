@@ -3,93 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>کراچی نماز اوقات</title>
+<title>تحریکِ ایمان V6</title>
 <style>
-  body { font-family: 'Jameel Noori Nastaleeq', Arial; background: #e8f5e9; margin: 0; padding: 20px; text-align: center; }
- .poster {
-    max-width: 500px;
-    margin: 0 auto 20px auto;
-    background: linear-gradient(135deg, #004d40, #00695c);
-    color: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  }
- .poster h1 { margin: 0 0 10px 0; font-size: 28px; color: gold; }
- .date { font-size: 16px; margin-bottom: 20px; opacity: 0.9; }
- .loading { font-size: 16px; opacity: 0.8; }
- .times { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 20px; }
- .time-box { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 10px; }
- .time-box span { display: block; font-size: 14px; opacity: 0.8; }
- .link-box {
-    max-width: 500px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px #ccc;
-  }
- .link-box a {
-    display: block;
-    background: #c62828;
-    color: white;
-    text-decoration: none;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
-  }
- .link-box a:hover { background: #b71c1c; }
- .note { font-size: 14px; color: #555; margin-top: 10px; }
+body{font-family:'Jameel Noori Nastaleeq',Arial;background:#f0f0f0;margin:0;padding:20px}
+.container{max-width:500px;margin:0 auto}
+
+/* ========== نیا Poster کا CSS ========== */
+.poster{background:#00251a;color:white;padding:20px;border-radius:15px;margin-bottom:20px;text-align:center;box-shadow:0 6px 15px #0003}
+.poster h2{color:gold;margin:0 0 8px 0;font-size:24px}
+.poster .p-date{font-size:14px;margin-bottom:12px;opacity:0.9}
+.poster .p-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:14px}
+.poster .p-box{background:#004d40;padding:8px;border-radius:8px}
+
+/* ========== آپ کا پرانا V6 کا CSS ========== */
+.card{background:#004d40;color:white;padding:30px;border-radius:20px;box-shadow:0 8px 20px #0004;text-align:center}
+.card h1{color:gold;margin:0 0 10px 0;font-size:28px}
+.date{margin-bottom:20px;opacity:0.9}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{background:#00695c;padding:15px;border-radius:12px}
+.box .name{font-size:18px;font-weight:bold;display:block}
+.box .time{font-size:22px;margin-top:5px;display:block}
+.btn{display:block;background:#c62828;color:white;text-decoration:none;padding:14px;margin-top:20px;border-radius:10px;font-size:17px;font-weight:bold}
 </style>
 </head>
 <body>
+<div class="container">
 
-  <!-- اوپر: کراچی کا Auto Poster -->
+  <!-- ========== نیا Poster شروع ========== -->
   <div class="poster">
+    <h2>آج کے کراچی کے اوقات</h2>
+    <div class="p-date" id="p-date"></div>
+    <div class="p-grid" id="p-times">لوڈ...</div>
+  </div>
+  <!-- ========== نیا Poster ختم ========== -->
+
+  <!-- ========== آپ کا پرانا V6 شروع ========== -->
+  <div class="card">
     <h1>کراچی - نماز کے اوقات</h1>
-    <div class="date" id="today-date">لوڈ ہو رہا ہے...</div>
-    <div id="times-area"><div class="loading">اوقات لائے جا رہے ہیں...</div></div>
+    <div class="date" id="date"></div>
+    <div class="grid" id="times">لوڈ ہو رہا ہے...</div>
+    <a class="btn" href="#" target="_blank">📍 پاکستان کے تمام شہر</a>
   </div>
+  <!-- ========== آپ کا پرانا V6 ختم ========== -->
 
-  <!-- نیچے: سارے پاکستان کا Link -->
-  <div class="link-box">
-    <a href="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/" target="_blank">
-      📍 پاکستان کے تمام شہروں کے اوقات دیکھیں
-    </a>
-    <p class="note">اوپر کلک کریں اور اپنا شہر سلیکٹ کریں</p>
-  </div>
-
+</div>
 <script>
-  // 1. آج کی تاریخ اردو میں
-  const dateEl = document.getElementById('today-date');
-  const today = new Date().toLocaleDateString('ur-PK', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  dateEl.textContent = today;
+// نیا Poster کا Script
+document.getElementById('p-date').textContent=new Date().toLocaleDateString('ur-PK',{day:'numeric',month:'long'});
+function to12(t){const[h,m]=t.split(':');const H=+h;return`${H%12||12}:${m} ${H>=12?'PM':'AM'}`}
+fetch(`https://api.aladhan.com/v1/timings/${new Date().toISOString().split('T')[0]}?latitude=24.8607&longitude=67.0011&method=1`)
+.then(r=>r.json()).then(d=>{const t=d.data.timings;
+document.getElementById('p-times').innerHTML=`
+<div class="p-box"><span>فجر</span><br><b>${to12(t.Fajr)}</b></div>
+<div class="p-box"><span>ظہر</span><br><b>${to12(t.Dhuhr)}</b></div>
+<div class="p-box"><span>عصر</span><br><b>${to12(t.Asr)}</b></div>`;});
 
-  // 2. کراچی کے اوقات API سے لانا - روز خودبخود
-  const lat = 24.8607; // کراچی کا Latitude
-  const lon = 67.0011; // کراچی کا Longitude
-  const todayStr = new Date().toISOString().split('T')[0]; // 2026-04-05 فارمیٹ
-
-  fetch(`https://api.aladhan.com/v1/timings/${todayStr}?latitude=${lat}&longitude=${lon}&method=1`)
-   .then(res => res.json())
-   .then(data => {
-      const t = data.data.timings;
-      document.getElementById('times-area').innerHTML = `
-        <div class="times">
-          <div class="time-box"><span>فجر</span> <b>${t.Fajr}</b></div>
-          <div class="time-box"><span>ظہر</span> <b>${t.Dhuhr}</b></div>
-          <div class="time-box"><span>عصر</span> <b>${t.Asr}</b></div>
-          <div class="time-box"><span>مغرب</span> <b>${t.Maghrib}</b></div>
-          <div class="time-box"><span>عشاء</span> <b>${t.Isha}</b></div>
-          <div class="time-box"><span>اشراق</span> <b>${t.Sunrise}</b></div>
-        </div>
-      `;
-    })
-   .catch(err => {
-      document.getElementById('times-area').innerHTML = `<p>اوقات لوڈ نہیں ہو سکے۔ انٹرنیٹ چیک کریں۔</p>`;
-    });
+// آپ کا پرانا V6 کا Script - 1 حرف نہیں چھیڑا
+document.getElementById('date').textContent=new Date().toLocaleDateString('ur-PK',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+fetch(`https://api.aladhan.com/v1/timings/${new Date().toISOString().split('T')[0]}?latitude=24.8607&longitude=67.0011&method=1`)
+.then(r=>r.json()).then(d=>{const t=d.data.timings;
+document.getElementById('times').innerHTML=`
+<div class="box"><span class="name">فجر</span><span class="time">${to12(t.Fajr)}</span></div>
+<div class="box"><span class="name">ظہر</span><span class="time">${to12(t.Dhuhr)}</span></div>
+<div class="box"><span class="name">عصر</span><span class="time">${to12(t.Asr)}</span></div>
+<div class="box"><span class="name">مغرب</span><span class="time">${to12(t.Maghrib)}</span></div>
+<div class="box"><span class="name">عشاء</span><span class="time">${to12(t.Isha)}</span></div>
+<div class="box"><span class="name">اشراق</span><span class="time">${to12(t.Sunrise)}</span></div>`;});
 </script>
-
 </body>
 </html>
