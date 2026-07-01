@@ -5,18 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تحریکِ ایمان V6</title>
 <style>
-body{font-family:'Jameel Noori Nastaleeq',Arial;background:#f0f0f0;margin:0;padding:20px}
-.container{max-width:500px;margin:0 auto}
-
-/* ========== نیا Poster کا CSS ========== */
-.poster{background:#00251a;color:white;padding:20px;border-radius:15px;margin-bottom:20px;text-align:center;box-shadow:0 6px 15px #0003}
-.poster h2{color:gold;margin:0 0 8px 0;font-size:24px}
-.poster .p-date{font-size:14px;margin-bottom:12px;opacity:0.9}
-.poster .p-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:14px}
-.poster .p-box{background:#004d40;padding:8px;border-radius:8px}
-
-/* ========== آپ کا پرانا V6 کا CSS ========== */
-.card{background:#004d40;color:white;padding:30px;border-radius:20px;box-shadow:0 8px 20px #0004;text-align:center}
+body{font-family:'Jameel Noori Nastaleeq',Arial;background:#f0f0f0;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.card{background:#004d40;color:white;padding:30px;border-radius:20px;box-shadow:0 8px 20px #0004;text-align:center;max-width:400px;width:90%}
 .card h1{color:gold;margin:0 0 10px 0;font-size:28px}
 .date{margin-bottom:20px;opacity:0.9}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -27,39 +17,15 @@ body{font-family:'Jameel Noori Nastaleeq',Arial;background:#f0f0f0;margin:0;padd
 </style>
 </head>
 <body>
-<div class="container">
-
-  <!-- ========== نیا Poster شروع ========== -->
-  <div class="poster">
-    <h2>آج کے کراچی کے اوقات</h2>
-    <div class="p-date" id="p-date"></div>
-    <div class="p-grid" id="p-times">لوڈ...</div>
-  </div>
-  <!-- ========== نیا Poster ختم ========== -->
-
-  <!-- ========== آپ کا پرانا V6 شروع ========== -->
-  <div class="card">
-    <h1>کراچی - نماز کے اوقات</h1>
-    <div class="date" id="date"></div>
-    <div class="grid" id="times">لوڈ ہو رہا ہے...</div>
-    <a class="btn" href="#" target="_blank">📍 پاکستان کے تمام شہر</a>
-  </div>
-  <!-- ========== آپ کا پرانا V6 ختم ========== -->
-
+<div class="card">
+  <h1>کراچی - نماز کے اوقات</h1>
+  <div class="date" id="date"></div>
+  <div class="grid" id="times">لوڈ ہو رہا ہے...</div>
+  <a class="btn" href="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/cities.html" target="_blank">📍 پاکستان کے تمام شہر</a>
 </div>
 <script>
-// نیا Poster کا Script
-document.getElementById('p-date').textContent=new Date().toLocaleDateString('ur-PK',{day:'numeric',month:'long'});
-function to12(t){const[h,m]=t.split(':');const H=+h;return`${H%12||12}:${m} ${H>=12?'PM':'AM'}`}
-fetch(`https://api.aladhan.com/v1/timings/${new Date().toISOString().split('T')[0]}?latitude=24.8607&longitude=67.0011&method=1`)
-.then(r=>r.json()).then(d=>{const t=d.data.timings;
-document.getElementById('p-times').innerHTML=`
-<div class="p-box"><span>فجر</span><br><b>${to12(t.Fajr)}</b></div>
-<div class="p-box"><span>ظہر</span><br><b>${to12(t.Dhuhr)}</b></div>
-<div class="p-box"><span>عصر</span><br><b>${to12(t.Asr)}</b></div>`;});
-
-// آپ کا پرانا V6 کا Script - 1 حرف نہیں چھیڑا
 document.getElementById('date').textContent=new Date().toLocaleDateString('ur-PK',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+function to12(t){const[h,m]=t.split(':');const H=+h;return`${H%12||12}:${m} ${H>=12?'PM':'AM'}`}
 fetch(`https://api.aladhan.com/v1/timings/${new Date().toISOString().split('T')[0]}?latitude=24.8607&longitude=67.0011&method=1`)
 .then(r=>r.json()).then(d=>{const t=d.data.timings;
 document.getElementById('times').innerHTML=`
@@ -68,7 +34,8 @@ document.getElementById('times').innerHTML=`
 <div class="box"><span class="name">عصر</span><span class="time">${to12(t.Asr)}</span></div>
 <div class="box"><span class="name">مغرب</span><span class="time">${to12(t.Maghrib)}</span></div>
 <div class="box"><span class="name">عشاء</span><span class="time">${to12(t.Isha)}</span></div>
-<div class="box"><span class="name">اشراق</span><span class="time">${to12(t.Sunrise)}</span></div>`;});
+<div class="box"><span class="name">اشراق</span><span class="time">${to12(t.Sunrise)}</span></div>`;})
+.catch(()=>{document.getElementById('times').innerHTML='انٹرنیٹ چیک کریں';});
 </script>
 </body>
 </html>
