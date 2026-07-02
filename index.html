@@ -26,12 +26,43 @@ button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
 .box{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px dashed rgba(255,255,255,.1);gap:8px}
 .box:last-child{border-bottom:0}
 .name{font-weight:700;flex:1;text-align:right}
+.name.clickable{cursor:pointer;text-decoration:underline dotted var(--gold);text-underline-offset:4px}
+.name.clickable:active{opacity:.7}
 .time{opacity:.9;min-width:90px;text-align:left}
 .btns{display:flex;gap:6px}
 .alarm-btn{width:auto;padding:6px 12px;font-size:13px;background:var(--accent);border-radius:8px;margin:0;color:#000}
 .azan-btn{width:auto;padding:6px 12px;font-size:13px;background:var(--gold);color:#000;border-radius:8px;margin:0}
 .azan-btn.active{background:#ef4444;color:#fff}
 .custom{color:var(--green)}
+
+/* ===== نماز کا طریقہ پاپ اپ ===== */
+.ti-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}
+.ti-overlay.active{display:flex}
+.ti-modal{background:var(--card);border-radius:var(--r);max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--sh);font-family:inherit}
+.ti-modal-header{background:linear-gradient(135deg,var(--card),#0f172a);border-bottom:2px solid var(--gold);color:var(--gold);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:var(--r) var(--r) 0 0;position:sticky;top:0;z-index:2}
+.ti-modal-header h2{margin:0;font-size:20px}
+.ti-close{background:none;border:none;color:var(--gold);font-size:26px;cursor:pointer;line-height:1}
+.ti-modal-body{padding:14px 18px 22px}
+.ti-rakat-list{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.ti-rakat-item{background:rgba(167,139,250,.08);border:1px solid var(--accent2);border-radius:12px;padding:12px 14px;cursor:pointer;transition:background .2s}
+.ti-rakat-item:active{background:rgba(167,139,250,.2)}
+.ti-rakat-item .row2{display:flex;justify-content:space-between;align-items:center}
+.ti-rakat-item .label{font-weight:700;font-size:17px;color:var(--gold)}
+.ti-rakat-item .count{background:var(--accent2);color:#0f172a;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:700}
+.ti-rakat-item .note{color:var(--muted);font-size:13px;margin-top:4px}
+.ti-back-btn{background:none;border:none;color:var(--accent);font-size:14px;cursor:pointer;margin-bottom:12px;padding:0}
+.ti-steps{list-style:none;margin:0;padding:0;counter-reset:step}
+.ti-steps li{counter-increment:step;margin-bottom:12px;padding-right:38px;position:relative;line-height:1.7;font-size:15px}
+.ti-steps li::before{content:counter(step);position:absolute;right:0;top:0;background:var(--gold);color:#0f172a;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.ti-step-title{background:rgba(251,191,36,.12);border:1px solid var(--gold);color:var(--gold);padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:15px;font-weight:700}
+.ti-disclaimer{margin-top:16px;font-size:12px;color:var(--muted);border-top:1px dashed rgba(255,255,255,.15);padding-top:10px}
+.ti-hadith{background:rgba(52,211,153,.08);border-right:3px solid var(--green);border-radius:8px;padding:10px 12px;margin-top:8px}
+.ti-hadith .ar{font-family:'Traditional Arabic','Scheherazade New',serif;font-size:19px;color:var(--gold);line-height:2;text-align:center;direction:rtl}
+.ti-hadith .tr{font-size:13px;color:var(--text);margin-top:6px;line-height:1.6}
+.ti-hadith .ref{font-size:11px;color:var(--green);margin-top:6px;font-weight:700}
+.ti-hadith.unverified{border-right-color:#f87171;background:rgba(248,113,113,.08)}
+.ti-hadith.unverified .ref{color:#f87171}
+.ti-fiqh-note{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;background:rgba(167,139,250,.06);padding:8px 10px;border-radius:8px}
 </style>
 </head>
 <body>
@@ -79,6 +110,17 @@ button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
 </div>
 
 <audio id="azanAudio" src="azan.mp3" preload="auto" playsinline></audio>
+
+<!-- ===== نماز کا طریقہ پاپ اپ (مودل) ===== -->
+<div class="ti-overlay" id="tiOverlay">
+  <div class="ti-modal">
+    <div class="ti-modal-header">
+      <h2 id="tiModalTitle">نماز کا طریقہ</h2>
+      <button class="ti-close" id="tiCloseBtn" aria-label="بند کریں">&times;</button>
+    </div>
+    <div class="ti-modal-body" id="tiModalBody"></div>
+  </div>
+</div>
 
 <script>
 const to12=x=>{const[h,m]=x.split(':');const H=+h;return`${H%12||12}:${m} ${H>=12?'PM':'AM'}`};
@@ -148,11 +190,166 @@ setTimeout(()=>{speak(`${name} کا وقت ہو گیا ہے`); const btn=documen
 alert(`${name} کا Alarm ${to12(time)} پر سیٹ ہو گیا`);
 }
 
+/* ===================== نماز کے طریقے کا ڈیٹا اور پاپ اپ لاجک ===================== */
+const namazData = {
+  fajar: { title: "نمازِ فجر", rakats: [
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض سے پہلے — نہایت تاکیدی سنت، اسے کبھی نہ چھوڑیں",
+      hadith: { arabic: "رَكْعَتَا الْفَجْرِ خَيْرٌ مِنَ الدُّنْيَا وَمَا فِيهَا", urdu: "فجر کی دو رکعتیں (سنت) دنیا اور جو کچھ اس میں ہے، اس سے بہتر ہیں", ref: "صحیح مسلم، کتاب صلاۃ المسافرین، حدیث: 725 (نیز نبی ﷺ کی اس پر ہمیشگی: صحیح بخاری: 1169، صحیح مسلم: 724)", verified: true } },
+    { label: "فرض", count: "2 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "نماز کی فرضیت کا حکم قرآن کریم میں ہے (سورۃ البقرہ 2:43: وَأَقِيمُوا الصَّلَاةَ)، البتہ ہر نماز کی رکعات کی مخصوص تعداد کسی ایک آیت یا حدیث نمبر میں نہیں بلکہ سنتِ متواترہ اور اجماعِ امت سے ثابت ہے۔" } }
+  ]},
+  zuhar: { title: "نمازِ ظہر", rakats: [
+    { label: "سنتِ مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے",
+      hadith: { arabic: "مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ ثِنْتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا", urdu: "جو شخص دن رات میں بارہ رکعت سنتِ مؤکدہ پڑھے گا، اس کے لیے جنت میں گھر بنایا جائے گا: چار رکعتیں ظہر سے پہلے اور دو اس کے بعد...", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415، سنن ابوداود: 1250", verified: true } },
+    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے — کسی ایک مخصوص حدیث نمبر سے نہیں۔" } },
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الظُّهْرِ", urdu: "...اور ظہر کے بعد دو رکعتیں (اسی بارہ رکعت کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری، ثواب کے لیے",
+      hadith: { fiqhNote: "یہ عام نفل ہے، فرض یا سنتِ مؤکدہ کی طرح کسی مخصوص حدیث سے متعین نہیں — عمومی فضائلِ نوافل میں شامل ہے۔" } }
+  ]},
+  asar: { title: "نمازِ عصر", rakats: [
+    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — مستحب، پڑھنا بہتر ہے",
+      hadith: { arabic: "رَحِمَ اللَّهُ امْرَأً صَلَّى قَبْلَ الْعَصْرِ أَرْبَعًا", urdu: "اللہ اس شخص پر رحم فرمائے جو عصر سے پہلے چار رکعتیں پڑھے", ref: "سنن ابوداود، حدیث: 1271، سنن ترمذی، حدیث: 430 (امام ترمذی نے اسے 'حسن غریب' کہا ہے، یعنی سند قدرے کمزور مگر فضائل میں قابلِ عمل ہے)", verified: true } },
+    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } }
+  ]},
+  maghrib: { title: "نمازِ مغرب", rakats: [
+    { label: "فرض", count: "3 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد (3) سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ", urdu: "...اور مغرب کے بعد دو رکعتیں (بارہ رکعت سنتِ مؤکدہ کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری",
+      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } }
+  ]},
+  isha: { title: "نمازِ عشاء", rakats: [
+    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — اختیاری",
+      hadith: { fiqhNote: "یہ عام نفل/مستحب کے زمرے میں ہے۔ اس رکعت کے لیے یہاں کوئی مخصوص، تصدیق شدہ حدیث نمبر شامل نہیں کیا گیا — براہ کرم Islam360 یا sunnah.com سے تصدیق کریں۔", unverified: true } },
+    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ", urdu: "...اور عشاء کے بعد دو رکعتیں (بارہ رکعت سنتِ مؤکدہ کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری",
+      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } },
+    { label: "وتر", count: "3 رکعت", note: "واجب — تیسری رکعت میں دعائے قنوت پڑھی جاتی ہے",
+      hadith: { arabic: "الْوِتْرُ حَقٌّ، فَمَنْ أَحَبَّ أَنْ يُوتِرَ بِخَمْسٍ فَلْيَفْعَلْ، وَمَنْ أَحَبَّ أَنْ يُوتِرَ بِثَلَاثٍ فَلْيَفْعَلْ، وَمَنْ أَحَبَّ أَنْ يُوتِرَ بِوَاحِدَةٍ فَلْيَفْعَلْ", urdu: "وتر حق ہے، جو پانچ پڑھنا چاہے پانچ پڑھے، جو تین چاہے تین پڑھے، جو ایک چاہے ایک پڑھے", ref: "سنن ابوداود، حدیث: 1422، سنن نسائی: 1711، سنن ابن ماجہ: 1190 (صحیح)", verified: true,
+        fiqhNote: "فقہ حنفی میں امام ابوحنیفہؒ کے نزدیک وتر واجب ہے اور تین رکعت ایک سلام سے پڑھنا لازم ہے، جبکہ جمہور علماء اسے سنتِ مؤکدہ کہتے ہیں — یہ ایک معروف فقہی اختلاف ہے۔ مذکورہ حدیث خود لفظ 'وجوب' استعمال نہیں کرتی، البتہ وتر کی اہمیت اور تاکید پر واضح دلالت کرتی ہے۔" } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری، وتر کے بعد",
+      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } }
+  ]}
+};
+
+// اردو نام کو namazData کی key سے جوڑنا
+const namazKeyMap = { "فجر": "fajar", "ظہر": "zuhar", "عصر": "asar", "مغرب": "maghrib", "عشاء": "isha" };
+
+function getMethodSteps(rakatInfo){
+  const isWitr = rakatInfo.label === "وتر";
+  const rakatCount = parseInt(rakatInfo.count);
+
+  if (isWitr) return [
+    "نیت کریں: تین رکعت نماز وتر واجب کی — دل کا ارادہ کافی ہے",
+    "تکبیرِ تحریمہ کہہ کر ہاتھ باندھیں، ثناء، تعوذ، تسمیہ اور سورۃ الفاتحہ پڑھیں",
+    "سورت ملا کر رکوع، پھر دو سجدے کریں — پہلی رکعت مکمل",
+    "دوسری رکعت میں فاتحہ اور سورت ملا کر رکوع و سجدہ کریں",
+    "قعدہ (تشہد) کریں مگر سلام نہ پھیریں، تیسری رکعت کے لیے کھڑے ہو جائیں",
+    "تیسری رکعت میں فاتحہ اور سورت پڑھنے کے بعد، رکوع سے پہلے 'اللہ اکبر' کہہ کر دوبارہ ہاتھ باندھیں اور دعائے قنوت پڑھیں",
+    "دعائے قنوت کے بعد رکوع، پھر سجدہ کریں",
+    "آخری قعدہ میں تشہد، درود شریف اور دعا پڑھ کر دائیں بائیں سلام پھیر کر نماز مکمل کریں"
+  ];
+
+  if (rakatCount === 4) return [
+    "نیت کریں (دل کا ارادہ کافی ہے)",
+    "تکبیرِ تحریمہ کہہ کر ہاتھ باندھیں، ثناء، تعوذ، تسمیہ اور سورۃ الفاتحہ پڑھیں",
+    "سورت ملا کر رکوع اور دو سجدے کریں — پہلی رکعت مکمل",
+    "دوسری رکعت میں بھی فاتحہ اور سورت پڑھ کر رکوع و سجدہ کریں",
+    "قعدہ اولیٰ میں صرف تشہد پڑھیں (درود نہیں)، پھر تیسری رکعت کے لیے کھڑے ہوں",
+    "تیسری اور چوتھی رکعت میں صرف سورۃ الفاتحہ پڑھیں (سورت ملانا ضروری نہیں) اور رکوع و سجدہ کریں",
+    "چوتھی رکعت کے بعد آخری قعدہ میں تشہد، درود شریف اور دعا پڑھ کر سلام پھیریں"
+  ];
+
+  return [
+    "نیت کریں (دل کا ارادہ کافی ہے)",
+    "تکبیرِ تحریمہ کہہ کر ہاتھ باندھیں، ثناء، تعوذ، تسمیہ اور سورۃ الفاتحہ پڑھیں",
+    "سورت ملا کر رکوع کریں، پھر سیدھے کھڑے ہو جائیں",
+    "دو سجدے کریں — پہلی رکعت مکمل",
+    "دوسری رکعت میں دوبارہ فاتحہ اور سورت پڑھ کر رکوع و سجدہ کریں",
+    "آخری قعدہ میں تشہد، درود شریف اور دعا پڑھ کر دائیں بائیں سلام پھیر کر نماز مکمل کریں"
+  ];
+}
+
+const tiOverlay = document.getElementById('tiOverlay');
+const tiModalTitle = document.getElementById('tiModalTitle');
+const tiModalBody = document.getElementById('tiModalBody');
+document.getElementById('tiCloseBtn').addEventListener('click', closeTiModal);
+tiOverlay.addEventListener('click', e => { if (e.target === tiOverlay) closeTiModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTiModal(); });
+
+function closeTiModal(){ tiOverlay.classList.remove('active'); }
+
+function openNamazPopup(key){
+  const data = namazData[key];
+  if(!data) return;
+  renderRakatList(key, data);
+  tiOverlay.classList.add('active');
+}
+
+function renderHadithBlock(h){
+  if(!h) return '';
+  let html = '';
+  if(h.arabic){
+    html += `<div class="ti-hadith${h.verified ? '' : ' unverified'}">
+      <div class="ar">${h.arabic}</div>
+      <div class="tr">${h.urdu}</div>
+      <div class="ref">${h.verified ? '✓ ' : '⚠ '}${h.ref}</div>
+    </div>`;
+  }
+  if(h.fiqhNote){
+    html += `<div class="ti-fiqh-note">${h.unverified ? '⚠ ' : ''}${h.fiqhNote}</div>`;
+  }
+  return html;
+}
+
+function renderRakatList(key, data){
+  tiModalTitle.textContent = data.title;
+  let html = `<div class="ti-rakat-list">`;
+  data.rakats.forEach((r, idx) => {
+    html += `<div class="ti-rakat-item" data-idx="${idx}">
+      <div class="row2"><span class="label">${r.label}</span><span class="count">${r.count}</span></div>
+      <div class="note">${r.note}</div>
+      ${renderHadithBlock(r.hadith)}
+    </div>`;
+  });
+  html += `</div><div class="ti-disclaimer">یہ ترتیب فقہ حنفی کے مطابق ہے۔ ✓ = تصدیق شدہ حدیث حوالہ۔ ⚠ = عمومی فقہی نوٹ، جس کے لیے مخصوص حدیث نمبر یہاں تصدیق شدہ نہیں۔ کسی بھی رکعت پر کلک کر کے نماز پڑھنے کا مکمل طریقہ دیکھیں۔</div>`;
+  tiModalBody.innerHTML = html;
+  tiModalBody.querySelectorAll('.ti-rakat-item').forEach(item => {
+    item.addEventListener('click', () => renderMethod(key, data, parseInt(item.dataset.idx)));
+  });
+}
+
+function renderMethod(key, data, idx){
+  const rakatInfo = data.rakats[idx];
+  const steps = getMethodSteps(rakatInfo);
+  tiModalTitle.textContent = `${data.title} — ${rakatInfo.label}`;
+  let html = `<button class="ti-back-btn">&#8594; واپس تمام نمازیں دیکھیں</button>`;
+  html += renderHadithBlock(rakatInfo.hadith);
+  html += `<div class="ti-step-title">${rakatInfo.label} (${rakatInfo.count}) پڑھنے کا طریقہ</div>`;
+  html += `<ol class="ti-steps">`;
+  steps.forEach(s => html += `<li>${s}</li>`);
+  html += `</ol>`;
+  html += `<div class="ti-disclaimer">نوٹ: یہ عمومی مسنون طریقہ ہے۔ تفصیلی احادیث اور مکمل حوالہ جات کے لیے مستند فقہی کتب یا اپنے مقامی عالم سے رجوع کریں۔</div>`;
+  tiModalBody.innerHTML = html;
+  tiModalBody.querySelector('.ti-back-btn').addEventListener('click', () => renderRakatList(key, data));
+}
+/* ===================== نماز پاپ اپ لاجک ختم ===================== */
+
 function renderTimes(){
 let html='';
 allTimes.forEach(t=>{
+const namazKey = namazKeyMap[t.name];
+const nameClass = namazKey ? 'name clickable' : 'name';
+const nameAttr = namazKey ? `onclick="openNamazPopup('${namazKey}')"` : '';
 html+=`<div class="box">
-<span class="name ${t.custom?'custom':''}">${t.name}</span>
+<span class="${nameClass} ${t.custom?'custom':''}" ${nameAttr}>${t.name}</span>
 <span class="time">${to12(t.time)}</span>
 <div class="btns">
 <button class="azan-btn" onclick="playAzan(this)">🔈 ازان</button>
