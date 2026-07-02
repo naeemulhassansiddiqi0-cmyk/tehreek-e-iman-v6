@@ -14,8 +14,8 @@ header{background:var(--card);padding:16px 18px;border-radius:var(--r);margin-bo
 .header-top{display:flex;align-items:center;justify-content:center;gap:14px;padding-bottom:12px;border-bottom:1px dashed rgba(255,255,255,.12)}
 header img{width:70px;height:70px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0}
 .header-title{text-align:right}
-.header-title h1{font-size:clamp(22px,4vw,30px);color:var(--gold);line-height:1.3;margin:0}
-.header-title .sub{font-size:clamp(13px,2vw,16px);color:var(--muted);margin-top:8px}
+.header-title h1{font-size:clamp(20px,3.6vw,26px);color:var(--gold);line-height:1.3;margin:0}
+.header-title .sub{font-size:clamp(26px,5vw,36px);color:var(--gold);margin-top:10px;font-weight:800;line-height:1.4}
 .header-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
 .header-right{text-align:right}
 .header-right .name{font-size:clamp(12px,2vw,14px);color:var(--gold);font-weight:700;margin:0}
@@ -174,10 +174,36 @@ let isAzanPlaying=false;
 
 Notification.requestPermission();
 
+/* ===================== سنجیدہ مرد کی آواز کا انتخاب (Urdu TTS) ===================== */
+let selectedVoice = null;
+function pickSeriousMaleVoice(){
+  const voices = speechSynthesis.getVoices();
+  if(!voices.length) return null;
+  let v = voices.find(x => /ur/i.test(x.lang) && /male/i.test(x.name));
+  if(!v) v = voices.find(x => /ur-PK|ur-IN|ur_PK|ur_IN/i.test(x.lang));
+  if(!v) v = voices.find(x => /^ur/i.test(x.lang));
+  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang) && /male/i.test(x.name));
+  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang) && !/female/i.test(x.name));
+  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang));
+  if(!v) v = voices.find(x => /ar/i.test(x.lang) && /male/i.test(x.name));
+  if(!v) v = voices.find(x => /male/i.test(x.name) && !/female/i.test(x.name));
+  return v || null;
+}
+speechSynthesis.onvoiceschanged = () => { selectedVoice = pickSeriousMaleVoice(); };
+selectedVoice = pickSeriousMaleVoice();
+
+function applyVoiceSettings(u){
+  if(selectedVoice) u.voice = selectedVoice;
+  u.lang = 'ur-PK';
+  u.pitch = 0.82;   // سنجیدہ، بھاری لہجہ
+  u.rate = 0.88;    // صاف اور ٹھہر ٹھہر کر
+  u.volume = 1;
+}
+
 function speak(text){
 if('speechSynthesis' in window){
 const u=new SpeechSynthesisUtterance(text);
-u.lang='ur-PK';
+applyVoiceSettings(u);
 speechSynthesis.speak(u);
 }
 if(Notification.permission==='granted'){
@@ -449,8 +475,7 @@ function toggleListen(){
   if(speechSynthesis.speaking){ stopSpeech(); return; }
   if(!currentSpeechText){ return; }
   const u = new SpeechSynthesisUtterance(currentSpeechText);
-  u.lang = 'ur-PK';
-  u.rate = 0.92;
+  applyVoiceSettings(u);
   u.onend = ()=>{ if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; } };
   u.onerror = ()=>{ if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; } };
   speechSynthesis.speak(u);
