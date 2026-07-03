@@ -246,9 +246,17 @@ populateVoiceList();
 
 function applyVoiceSettings(u){
   if(selectedVoice) u.voice = selectedVoice;
+  u.lang = (selectedVoice && selectedVoice.lang) ? selectedVoice.lang : 'ur-PK';
   u.pitch = 0.82;   // سنجیدہ، بھاری لہجہ
   u.rate = 0.88;    // صاف اور ٹھہر ٹھہر کر
   u.volume = 1;
+}
+
+let arabicVoice = null;
+function pickArabicVoice(voices){
+  let v = voices.find(x => /^ar/i.test(x.lang) && /male/i.test(x.name));
+  if(!v) v = voices.find(x => /^ar/i.test(x.lang));
+  return v || null;
 }
 
 function speak(text){
@@ -485,7 +493,7 @@ const ARB = {
   duaMasura: { ar: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", tr: "اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے، اور ہمیں آگ کے عذاب سے بچا — (سورۃ البقرہ، آیت: 201)" },
   quNoot: { ar: "اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنُؤْمِنُ بِكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ وَنَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ، اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ نَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ", tr: "اے اللہ! ہم تجھ سے مدد چاہتے ہیں، تجھ سے بخشش مانگتے ہیں، تجھ پر ایمان رکھتے ہیں، تجھ پر بھروسہ کرتے ہیں، تیری اچھی تعریف کرتے ہیں، تیرا شکر ادا کرتے ہیں اور تیری ناشکری نہیں کرتے، اور جو تیری نافرمانی کرے اسے چھوڑ دیتے ہیں۔ اے اللہ! ہم تیری ہی عبادت کرتے ہیں، تیرے لیے ہی نماز پڑھتے اور سجدہ کرتے ہیں، تیری ہی طرف دوڑتے اور کوشش کرتے ہیں، تیری رحمت کی امید رکھتے اور تیرے عذاب سے ڈرتے ہیں، بے شک تیرا عذاب کافروں کو پہنچنے والا ہے" }
 };
-function fmt(x){ return `${x.ar} — (ترجمہ: ${x.tr})`; }
+function fmt(x){ return `«${x.ar}» — (ترجمہ: ${x.tr})`; }
 
 function getMethodSteps(rakatInfo){
   const isWitr = rakatInfo.label === "وتر";
@@ -500,26 +508,26 @@ function getMethodSteps(rakatInfo){
     `کوئی سی سورت ملائیں، مثال کے طور پر سورۃ الاخلاص: ${fmt(ARB.ikhlas)}`
   ];
   const rukuSajdaFirst = [
-    `${ARB.takbeer.ar} کہہ کر رکوع میں جائیں اور تین بار پڑھیں: ${fmt(ARB.rukuTasbeeh)}`,
+    `«${ARB.takbeer.ar}» کہہ کر رکوع میں جائیں اور تین بار پڑھیں: ${fmt(ARB.rukuTasbeeh)}`,
     `سیدھے کھڑے ہوتے ہوئے کہیں: ${fmt(ARB.samiAllah)}`,
-    `${ARB.takbeer.ar} کہہ کر سجدے میں جائیں، تین بار پڑھیں: ${fmt(ARB.sajdaTasbeeh)}، پھر ${ARB.takbeer.ar} کہہ کر تھوڑی دیر بیٹھیں، دوبارہ ${ARB.takbeer.ar} کہہ کر دوسرا سجدہ کریں — پہلی رکعت مکمل`
+    `«${ARB.takbeer.ar}» کہہ کر سجدے میں جائیں، تین بار پڑھیں: ${fmt(ARB.sajdaTasbeeh)}، پھر «${ARB.takbeer.ar}» کہہ کر تھوڑی دیر بیٹھیں، دوبارہ «${ARB.takbeer.ar}» کہہ کر دوسرا سجدہ کریں — پہلی رکعت مکمل`
   ];
   const secondRakat = [
-    `${ARB.takbeer.ar} کہہ کر کھڑے ہو جائیں، دوسری رکعت میں دوبارہ تسمیہ پڑھیں: ${fmt(ARB.tasmia)}، پھر سورۃ الفاتحہ اور کوئی سورت پڑھ کر اسی طرح رکوع و سجدہ کریں`
+    `«${ARB.takbeer.ar}» کہہ کر کھڑے ہو جائیں، دوسری رکعت میں دوبارہ تسمیہ پڑھیں: ${fmt(ARB.tasmia)}، پھر سورۃ الفاتحہ اور کوئی سورت پڑھ کر اسی طرح رکوع و سجدہ کریں`
   ];
   const closingWithSalam = [
     `آخری قعدہ میں بیٹھ کر تشہد پڑھیں: ${fmt(ARB.tashahhud)}`,
     `درودِ ابراہیمی پڑھیں: ${fmt(ARB.durood)}`,
-    `دعا پڑھیں: ${fmt(ARB.duaMasura)}، پھر دائیں طرف چہرہ پھیر کر "اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ" اور بائیں طرف بھی یہی کہہ کر سلام پھیر کر نماز مکمل کریں`
+    `دعا پڑھیں: ${fmt(ARB.duaMasura)}، پھر دائیں طرف چہرہ پھیر کر «اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ» اور بائیں طرف بھی یہی کہہ کر سلام پھیر کر نماز مکمل کریں`
   ];
 
   if (isWitr) return [
     ...opening,
     ...rukuSajdaFirst,
     ...secondRakat,
-    `دوسری رکعت کے سجدوں کے بعد قعدہ میں بیٹھ کر صرف تشہد پڑھیں ${fmt(ARB.tashahhud)} (درود نہیں)، پھر ${ARB.takbeer.ar} کہے بغیر سیدھے تیسری رکعت کے لیے کھڑے ہو جائیں`,
-    `تیسری رکعت میں تسمیہ، سورۃ الفاتحہ اور کوئی سورت پڑھنے کے بعد، رکوع سے پہلے ${ARB.takbeer.ar} کہہ کر دوبارہ ہاتھ باندھیں اور دعائے قنوت پڑھیں: ${fmt(ARB.quNoot)}`,
-    `دعائے قنوت کے بعد ${ARB.takbeer.ar} کہہ کر رکوع میں جائیں (تین بار ${ARB.rukuTasbeeh.ar})، پھر سجدہ کریں (تین بار ${ARB.sajdaTasbeeh.ar})`,
+    `دوسری رکعت کے سجدوں کے بعد قعدہ میں بیٹھ کر صرف تشہد پڑھیں ${fmt(ARB.tashahhud)} (درود نہیں)، پھر «${ARB.takbeer.ar}» کہے بغیر سیدھے تیسری رکعت کے لیے کھڑے ہو جائیں`,
+    `تیسری رکعت میں تسمیہ، سورۃ الفاتحہ اور کوئی سورت پڑھنے کے بعد، رکوع سے پہلے «${ARB.takbeer.ar}» کہہ کر دوبارہ ہاتھ باندھیں اور دعائے قنوت پڑھیں: ${fmt(ARB.quNoot)}`,
+    `دعائے قنوت کے بعد «${ARB.takbeer.ar}» کہہ کر رکوع میں جائیں (تین بار «${ARB.rukuTasbeeh.ar}»)، پھر سجدہ کریں (تین بار «${ARB.sajdaTasbeeh.ar}»)`,
     ...closingWithSalam
   ];
 
@@ -527,7 +535,7 @@ function getMethodSteps(rakatInfo){
     ...opening,
     ...rukuSajdaFirst,
     ...secondRakat,
-    `دوسری رکعت کے سجدوں کے بعد قعدہ اولیٰ میں بیٹھ کر صرف تشہد پڑھیں: ${fmt(ARB.tashahhud)} (درود نہیں پڑھنا)، پھر ${ARB.takbeer.ar} کہہ کر تیسری رکعت کے لیے کھڑے ہوں`,
+    `دوسری رکعت کے سجدوں کے بعد قعدہ اولیٰ میں بیٹھ کر صرف تشہد پڑھیں: ${fmt(ARB.tashahhud)} (درود نہیں پڑھنا)، پھر «${ARB.takbeer.ar}» کہہ کر تیسری رکعت کے لیے کھڑے ہوں`,
     `تیسری اور چوتھی رکعت میں صرف سورۃ الفاتحہ پڑھیں: ${fmt(ARB.fatiha)} (سورت ملانا ضروری نہیں) اور اسی طرح رکوع و سجدہ کریں`,
     ...closingWithSalam,
     `نوٹ: اگر یہ نماز نفل کی طرح دو دو رکعت کر کے پڑھنی ہو تو ہر دو رکعت مکمل کر کے سلام پھیر دیں اور نئی نیت سے دوبارہ اوپر سے شروع کریں`
@@ -557,17 +565,30 @@ let speechQueueIndex = 0;
 let speechWatchdog = null;
 const ttsAudioEl = document.getElementById('ttsAudio');
 
-// لمبے جملوں کو چھوٹے چھوٹے حصوں میں توڑنا (براؤزر کی TTS طویل عبارت پر رک جانے کے مسئلے سے بچاؤ)
-function splitForSpeech(text){
-  return text
-    .split(/(?<=۔)\s*|—/)
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
+// «...» میں لپٹا متن خالص عربی سمجھا جائے گا، باقی اردو — یہ طریقہ زیادہ قابلِ اعتماد ہے
+// کیونکہ اردو اور عربی رسم الخط ایک ہی یونیکوڈ رینج میں ہیں، محض حروف گن کر فرق نہیں کیا جا سکتا
+function parseSpeechSegments(text){
+  const out = [];
+  const re = /«([^»]+)»/g;
+  let lastIndex = 0, m;
+  while((m = re.exec(text)) !== null){
+    const before = text.slice(lastIndex, m.index).trim();
+    if(before) splitUrduSentences(before).forEach(s => out.push({ text:s, lang:'ur' }));
+    const arabic = m[1].trim();
+    if(arabic) out.push({ text: arabic, lang:'ar' });
+    lastIndex = re.lastIndex;
+  }
+  const rest = text.slice(lastIndex).trim();
+  if(rest) splitUrduSentences(rest).forEach(s => out.push({ text:s, lang:'ur' }));
+  return out;
+}
+function splitUrduSentences(text){
+  return text.split(/(?<=۔)\s*/).map(s => s.trim()).filter(s => s.length > 0);
 }
 
 function setSpeechText(chunks, audioUrl){
   const raw = Array.isArray(chunks) ? chunks : [chunks];
-  currentSpeechChunks = raw.flatMap(c => splitForSpeech(c));
+  currentSpeechChunks = raw.flatMap(c => parseSpeechSegments(c));
   currentAudioUrl = audioUrl || null;
   stopSpeech();
 }
@@ -603,10 +624,19 @@ function speakNextChunk(btn){
     if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
     return;
   }
-  const text = currentSpeechChunks[speechQueueIndex];
+  const chunk = currentSpeechChunks[speechQueueIndex];
   speechQueueIndex++;
-  const u = new SpeechSynthesisUtterance(text);
-  applyVoiceSettings(u);
+  const u = new SpeechSynthesisUtterance(chunk.text);
+  if(chunk.lang === 'ar'){
+    if(!arabicVoice) arabicVoice = pickArabicVoice(speechSynthesis.getVoices());
+    if(arabicVoice) u.voice = arabicVoice;
+    u.lang = 'ar-SA';
+    u.pitch = 0.85;
+    u.rate = 0.72; // عربی تلاوت جیسا ٹھہراؤ
+    u.volume = 1;
+  }else{
+    applyVoiceSettings(u);
+  }
   const advance = ()=>{
     if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
     speakNextChunk(btn);
@@ -615,7 +645,7 @@ function speakNextChunk(btn){
   u.onerror = advance;
   speechSynthesis.speak(u);
   // اگر کسی وجہ سے onend نہ چلے تو خودکار طور پر اگلے حصے پر منتقل ہو جائیں
-  const estMs = Math.max(3000, text.length * 140);
+  const estMs = Math.max(3000, chunk.text.length * 140);
   speechWatchdog = setTimeout(advance, estMs);
 }
 function playTTSFallback(btn){
@@ -675,7 +705,10 @@ function renderRakatList(key, data){
   });
 
   let speechChunks = [`${data.title}۔`];
-  if(data.fazeelat && data.fazeelat.urdu) speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  if(data.fazeelat && data.fazeelat.urdu){
+    if(data.fazeelat.arabic) speechChunks.push(`فضیلت: «${data.fazeelat.arabic}» — (ترجمہ: ${data.fazeelat.urdu})۔`);
+    else speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  }
   data.rakats.forEach(r => { speechChunks.push(`${r.label}, ${r.count}۔ ${r.note}۔`); });
   setSpeechText(speechChunks, data.audio);
 }
@@ -699,10 +732,16 @@ function renderMethod(key, data, idx){
   tiModalBody.querySelector('.ti-back-btn').addEventListener('click', () => renderRakatList(key, data));
 
   let speechChunks = [`${data.title}, ${rakatInfo.label}۔`];
-  if(rakatInfo.hadith && rakatInfo.hadith.urdu) speechChunks.push(`${rakatInfo.hadith.urdu}۔`);
+  if(rakatInfo.hadith && rakatInfo.hadith.urdu){
+    if(rakatInfo.hadith.arabic) speechChunks.push(`«${rakatInfo.hadith.arabic}» — (ترجمہ: ${rakatInfo.hadith.urdu})۔`);
+    else speechChunks.push(`${rakatInfo.hadith.urdu}۔`);
+  }
   speechChunks.push(`اب پڑھنے کا مکمل طریقہ قدم بہ قدم سنیں۔`);
   steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
-  if(data.dua && data.dua.urdu) speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  if(data.dua && data.dua.urdu){
+    if(data.dua.arabic) speechChunks.push(`دعا: «${data.dua.arabic}» — (ترجمہ: ${data.dua.urdu})۔`);
+    else speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  }
   setSpeechText(speechChunks, data.audio);
 }
 
@@ -725,10 +764,16 @@ function renderAmal(key, data){
   tiModalBody.innerHTML = html;
 
   let speechChunks = [`${data.title}۔`];
-  if(data.fazeelat && data.fazeelat.urdu) speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  if(data.fazeelat && data.fazeelat.urdu){
+    if(data.fazeelat.arabic) speechChunks.push(`فضیلت: «${data.fazeelat.arabic}» — (ترجمہ: ${data.fazeelat.urdu})۔`);
+    else speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  }
   speechChunks.push(`طریقہ سنیں۔`);
   data.steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
-  if(data.dua && data.dua.urdu) speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  if(data.dua && data.dua.urdu){
+    if(data.dua.arabic) speechChunks.push(`دعا: «${data.dua.arabic}» — (ترجمہ: ${data.dua.urdu})۔`);
+    else speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  }
   setSpeechText(speechChunks, data.audio);
 }
 /* ===================== پاپ اپ لاجک ختم ===================== */
