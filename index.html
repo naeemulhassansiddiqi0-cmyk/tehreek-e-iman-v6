@@ -551,17 +551,22 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTiModal
 function closeTiModal(){ tiOverlay.classList.remove('active'); stopSpeech(); }
 
 /* ===================== فضائل و طریقہ سننے کی سہولت (ریکارڈ شدہ آڈیو + TTS فال بیک) ===================== */
-let currentSpeechText = '';
+let currentSpeechChunks = [];
 let currentAudioUrl = null;
+let speechQueueIndex = 0;
+let resumeHackInterval = null;
 const ttsAudioEl = document.getElementById('ttsAudio');
 
-function setSpeechText(text, audioUrl){
-  currentSpeechText = text;
+function setSpeechText(chunks, audioUrl){
+  currentSpeechChunks = Array.isArray(chunks) ? chunks : [chunks];
   currentAudioUrl = audioUrl || null;
   stopSpeech();
 }
+function stopResumeHack(){ if(resumeHackInterval){ clearInterval(resumeHackInterval); resumeHackInterval = null; } }
 function stopSpeech(){
+  speechQueueIndex = currentSpeechChunks.length; // آگے سنانا روک دیں
   speechSynthesis.cancel();
+  stopResumeHack();
   if(ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.currentTime = 0; }
   const btn = document.getElementById('tiListenBtn');
   if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
@@ -584,13 +589,28 @@ function toggleListen(){
   }
   playTTSFallback(btn);
 }
-function playTTSFallback(btn){
-  if(!currentSpeechText) return;
-  const u = new SpeechSynthesisUtterance(currentSpeechText);
+function speakNextChunk(btn){
+  if(speechQueueIndex >= currentSpeechChunks.length){
+    stopResumeHack();
+    if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
+    return;
+  }
+  const text = currentSpeechChunks[speechQueueIndex];
+  speechQueueIndex++;
+  const u = new SpeechSynthesisUtterance(text);
   applyVoiceSettings(u);
-  u.onend = ()=>{ if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; } };
-  u.onerror = ()=>{ if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; } };
+  u.onend = ()=> speakNextChunk(btn);
+  u.onerror = ()=> speakNextChunk(btn);
   speechSynthesis.speak(u);
+}
+function playTTSFallback(btn){
+  if(!currentSpeechChunks.length) return;
+  speechQueueIndex = 0;
+  speechSynthesis.cancel();
+  // Chrome میں لمبی تقریر رک جانے کے مسئلے سے بچاؤ کے لیے ہر 10 سیکنڈ پر resume() کریں
+  stopResumeHack();
+  resumeHackInterval = setInterval(()=>{ if(speechSynthesis.speaking){ speechSynthesis.pause(); speechSynthesis.resume(); } }, 9000);
+  speakNextChunk(btn);
   if(btn){ btn.classList.add('active'); btn.innerHTML='⏹️ روکیں'; }
 }
 
@@ -642,10 +662,10 @@ function renderRakatList(key, data){
     item.addEventListener('click', () => renderMethod(key, data, parseInt(item.dataset.idx)));
   });
 
-  let speechText = `${data.title}۔ `;
-  if(data.fazeelat && data.fazeelat.urdu) speechText += `فضیلت: ${data.fazeelat.urdu}۔ `;
-  data.rakats.forEach(r => { speechText += `${r.label}, ${r.count}۔ ${r.note}۔ `; });
-  setSpeechText(speechText);
+  let speechChunks = [`${data.title}۔`];
+  if(data.fazeelat && data.fazeelat.urdu) speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  data.rakats.forEach(r => { speechChunks.push(`${r.label}, ${r.count}۔ ${r.note}۔`); });
+  setSpeechText(speechChunks, data.audio);
 }
 
 function renderMethod(key, data, idx){
@@ -666,12 +686,12 @@ function renderMethod(key, data, idx){
   tiModalBody.innerHTML = html;
   tiModalBody.querySelector('.ti-back-btn').addEventListener('click', () => renderRakatList(key, data));
 
-  let speechText = `${data.title}, ${rakatInfo.label}۔ `;
-  if(rakatInfo.hadith && rakatInfo.hadith.urdu) speechText += `${rakatInfo.hadith.urdu}۔ `;
-  speechText += `پڑھنے کا طریقہ: `;
-  steps.forEach((s,i) => { speechText += `مرحلہ ${i+1}: ${s}۔ `; });
-  if(data.dua && data.dua.urdu) speechText += `دعا: ${data.dua.urdu}۔ `;
-  setSpeechText(speechText);
+  let speechChunks = [`${data.title}, ${rakatInfo.label}۔`];
+  if(rakatInfo.hadith && rakatInfo.hadith.urdu) speechChunks.push(`${rakatInfo.hadith.urdu}۔`);
+  speechChunks.push(`اب پڑھنے کا مکمل طریقہ قدم بہ قدم سنیں۔`);
+  steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
+  if(data.dua && data.dua.urdu) speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  setSpeechText(speechChunks, data.audio);
 }
 
 function renderAmal(key, data){
@@ -692,12 +712,12 @@ function renderAmal(key, data){
   html += `<div class="ti-disclaimer">✓ = تصدیق شدہ حدیث حوالہ۔ ⚠ = غیر مصدقہ یا کمزور حوالہ، براہ کرم Islam360 یا sunnah.com سے مزید تصدیق کریں۔ مکمل تفصیل کے لیے مستند کتب یا اپنے مقامی عالم سے رجوع کریں۔</div>`;
   tiModalBody.innerHTML = html;
 
-  let speechText = `${data.title}۔ `;
-  if(data.fazeelat && data.fazeelat.urdu) speechText += `فضیلت: ${data.fazeelat.urdu}۔ `;
-  speechText += `طریقہ: `;
-  data.steps.forEach((s,i) => { speechText += `مرحلہ ${i+1}: ${s}۔ `; });
-  if(data.dua && data.dua.urdu) speechText += `دعا: ${data.dua.urdu}۔ `;
-  setSpeechText(speechText);
+  let speechChunks = [`${data.title}۔`];
+  if(data.fazeelat && data.fazeelat.urdu) speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
+  speechChunks.push(`طریقہ سنیں۔`);
+  data.steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
+  if(data.dua && data.dua.urdu) speechChunks.push(`دعا: ${data.dua.urdu}۔`);
+  setSpeechText(speechChunks, data.audio);
 }
 /* ===================== پاپ اپ لاجک ختم ===================== */
 
