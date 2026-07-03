@@ -48,10 +48,12 @@ button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
 .ti-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;backdrop-filter:blur(2px)}
 .ti-overlay.active{display:flex}
 .ti-modal{background:var(--card);border-radius:var(--r);max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--sh);font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif}
-.ti-modal-header{background:linear-gradient(135deg,#243247,#0f172a);border-bottom:2px solid var(--gold);color:var(--gold);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-radius:var(--r) var(--r) 0 0;position:sticky;top:0;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-.ti-modal-header h2{margin:0;font-size:20px;flex:1;line-height:1.4}
-.ti-header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.ti-listen-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#06210f;border:none;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(52,211,153,.35);transition:transform .15s,box-shadow .15s;white-space:nowrap}
+.ti-modal-header{background:linear-gradient(135deg,#243247,#0f172a);border-bottom:2px solid var(--gold);color:var(--gold);padding:14px 18px;display:flex;flex-direction:column;gap:10px;border-radius:var(--r) var(--r) 0 0;position:sticky;top:0;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.ti-header-row1{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ti-header-row1 h2{margin:0;font-size:20px;flex:1;line-height:1.4}
+.ti-header-row2{display:flex;align-items:center;gap:8px}
+.ti-voice-select{flex:1;background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;direction:ltr;text-align:left;max-width:220px}
+.ti-listen-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#06210f;border:none;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(52,211,153,.35);transition:transform .15s,box-shadow .15s;white-space:nowrap;flex-shrink:0}
 .ti-listen-btn:active{transform:scale(.95)}
 .ti-listen-btn.active{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 3px 10px rgba(239,68,68,.4)}
 .ti-close{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:var(--gold);font-size:20px;width:34px;height:34px;border-radius:50%;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
@@ -143,10 +145,13 @@ button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
 <div class="ti-overlay" id="tiOverlay">
   <div class="ti-modal">
     <div class="ti-modal-header">
-      <h2 id="tiModalTitle">نماز کا طریقہ</h2>
-      <div class="ti-header-actions">
-        <button class="ti-listen-btn" id="tiListenBtn" onclick="toggleListen()">🔊 سنیں</button>
+      <div class="ti-header-row1">
+        <h2 id="tiModalTitle">نماز کا طریقہ</h2>
         <button class="ti-close" id="tiCloseBtn" aria-label="بند کریں">&times;</button>
+      </div>
+      <div class="ti-header-row2">
+        <select id="voiceSelect" class="ti-voice-select" onchange="onVoiceSelectChange()" title="آواز منتخب کریں"></select>
+        <button class="ti-listen-btn" id="tiListenBtn" onclick="toggleListen()">🔊 سنیں</button>
       </div>
     </div>
     <div class="ti-modal-body" id="tiModalBody"></div>
@@ -174,11 +179,11 @@ let isAzanPlaying=false;
 
 Notification.requestPermission();
 
-/* ===================== سنجیدہ مرد کی آواز کا انتخاب (Urdu TTS) ===================== */
+/* ===================== آواز کا انتخاب (Urdu TTS) — خودکار + دستی ===================== */
 let selectedVoice = null;
-function pickSeriousMaleVoice(){
-  const voices = speechSynthesis.getVoices();
-  if(!voices.length) return null;
+let allVoicesList = [];
+
+function pickSeriousMaleVoice(voices){
   let v = voices.find(x => /ur/i.test(x.lang) && /male/i.test(x.name));
   if(!v) v = voices.find(x => /ur-PK|ur-IN|ur_PK|ur_IN/i.test(x.lang));
   if(!v) v = voices.find(x => /^ur/i.test(x.lang));
@@ -187,14 +192,59 @@ function pickSeriousMaleVoice(){
   if(!v) v = voices.find(x => /hi-IN/i.test(x.lang));
   if(!v) v = voices.find(x => /ar/i.test(x.lang) && /male/i.test(x.name));
   if(!v) v = voices.find(x => /male/i.test(x.name) && !/female/i.test(x.name));
-  return v || null;
+  return v || (voices.length ? voices[0] : null);
 }
-speechSynthesis.onvoiceschanged = () => { selectedVoice = pickSeriousMaleVoice(); };
-selectedVoice = pickSeriousMaleVoice();
+
+function populateVoiceList(){
+  allVoicesList = speechSynthesis.getVoices();
+  if(!allVoicesList.length) return;
+  const sel = document.getElementById('voiceSelect');
+  const savedName = localStorage.getItem('ti_voice_name');
+  let toUse = null;
+  if(sel){
+    sel.innerHTML = '';
+    // اردو/ہندی/عربی آوازیں اوپر، باقی نیچے
+    const priority = allVoicesList.filter(v=>/^ur|hi-IN|^ar/i.test(v.lang));
+    const others = allVoicesList.filter(v=>!/^ur|hi-IN|^ar/i.test(v.lang));
+    [...priority, ...others].forEach(v=>{
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      sel.appendChild(opt);
+    });
+    if(savedName && allVoicesList.some(v=>v.name===savedName)){
+      sel.value = savedName;
+      toUse = allVoicesList.find(v=>v.name===savedName);
+    }else{
+      toUse = pickSeriousMaleVoice(allVoicesList);
+      if(toUse) sel.value = toUse.name;
+    }
+  }else{
+    toUse = pickSeriousMaleVoice(allVoicesList);
+  }
+  selectedVoice = toUse;
+}
+
+function onVoiceSelectChange(){
+  const sel = document.getElementById('voiceSelect');
+  if(!sel) return;
+  const v = allVoicesList.find(x=>x.name===sel.value);
+  if(v){
+    selectedVoice = v;
+    localStorage.setItem('ti_voice_name', v.name);
+    // منتخب آواز کا فوری نمونہ سنائیں
+    speechSynthesis.cancel();
+    const test = new SpeechSynthesisUtterance('السلام علیکم، یہ آپ کی منتخب کردہ آواز ہے');
+    applyVoiceSettings(test);
+    speechSynthesis.speak(test);
+  }
+}
+
+speechSynthesis.onvoiceschanged = populateVoiceList;
+populateVoiceList();
 
 function applyVoiceSettings(u){
   if(selectedVoice) u.voice = selectedVoice;
-  u.lang = 'ur-PK';
   u.pitch = 0.82;   // سنجیدہ، بھاری لہجہ
   u.rate = 0.88;    // صاف اور ٹھہر ٹھہر کر
   u.volume = 1;
