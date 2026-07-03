@@ -554,19 +554,27 @@ function closeTiModal(){ tiOverlay.classList.remove('active'); stopSpeech(); }
 let currentSpeechChunks = [];
 let currentAudioUrl = null;
 let speechQueueIndex = 0;
-let resumeHackInterval = null;
+let speechWatchdog = null;
 const ttsAudioEl = document.getElementById('ttsAudio');
 
+// لمبے جملوں کو چھوٹے چھوٹے حصوں میں توڑنا (براؤزر کی TTS طویل عبارت پر رک جانے کے مسئلے سے بچاؤ)
+function splitForSpeech(text){
+  return text
+    .split(/(?<=۔)\s*|—/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+}
+
 function setSpeechText(chunks, audioUrl){
-  currentSpeechChunks = Array.isArray(chunks) ? chunks : [chunks];
+  const raw = Array.isArray(chunks) ? chunks : [chunks];
+  currentSpeechChunks = raw.flatMap(c => splitForSpeech(c));
   currentAudioUrl = audioUrl || null;
   stopSpeech();
 }
-function stopResumeHack(){ if(resumeHackInterval){ clearInterval(resumeHackInterval); resumeHackInterval = null; } }
 function stopSpeech(){
   speechQueueIndex = currentSpeechChunks.length; // آگے سنانا روک دیں
+  if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
   speechSynthesis.cancel();
-  stopResumeHack();
   if(ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.currentTime = 0; }
   const btn = document.getElementById('tiListenBtn');
   if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
@@ -590,8 +598,8 @@ function toggleListen(){
   playTTSFallback(btn);
 }
 function speakNextChunk(btn){
+  if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
   if(speechQueueIndex >= currentSpeechChunks.length){
-    stopResumeHack();
     if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
     return;
   }
@@ -599,17 +607,21 @@ function speakNextChunk(btn){
   speechQueueIndex++;
   const u = new SpeechSynthesisUtterance(text);
   applyVoiceSettings(u);
-  u.onend = ()=> speakNextChunk(btn);
-  u.onerror = ()=> speakNextChunk(btn);
+  const advance = ()=>{
+    if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
+    speakNextChunk(btn);
+  };
+  u.onend = advance;
+  u.onerror = advance;
   speechSynthesis.speak(u);
+  // اگر کسی وجہ سے onend نہ چلے تو خودکار طور پر اگلے حصے پر منتقل ہو جائیں
+  const estMs = Math.max(3000, text.length * 140);
+  speechWatchdog = setTimeout(advance, estMs);
 }
 function playTTSFallback(btn){
   if(!currentSpeechChunks.length) return;
   speechQueueIndex = 0;
   speechSynthesis.cancel();
-  // Chrome میں لمبی تقریر رک جانے کے مسئلے سے بچاؤ کے لیے ہر 10 سیکنڈ پر resume() کریں
-  stopResumeHack();
-  resumeHackInterval = setInterval(()=>{ if(speechSynthesis.speaking){ speechSynthesis.pause(); speechSynthesis.resume(); } }, 9000);
   speakNextChunk(btn);
   if(btn){ btn.classList.add('active'); btn.innerHTML='⏹️ روکیں'; }
 }
