@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-  <!-- واٹس ایپ اور فیس بک پر پوسٹر دکھانے کے لیے -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحریک ایمان - اوقات الصلوٰۃ</title>
+
+<!-- واٹس ایپ اور سوشل میڈیا کارڈ سپورٹ -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="تحریکِ ایمان — روزانہ نماز کے اوقات">
 <meta property="og:description" content="پاکستان کے بڑے شہروں کے لیے لائیو اوقاتِ صلوٰۃ، کاؤنٹ ڈاؤن ٹائمر اور اذان کا نظام۔">
@@ -9,98 +13,594 @@
 <meta property="og:image:width" content="600">
 <meta property="og:image:height" content="600">
 <meta property="og:url" content="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/">
-
-<!-- موبائل کارڈ ویو -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://naeemulhassansiddiqi0-cmyk.github.io/tehreek-e-iman-v6/logo.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تحریک ایمان - نماز کے اوقات</title>
-<style>
-:root{--bg:#0f172a;--card:#1e293b;--text:#f8fafc;--muted:#94a3b8;--accent:#22d3ee;--accent2:#a78bfa;--green:#34d399;--gold:#fbbf24;--r:18px;--sh:0 10px 30px rgba(0,0,0,.25)}
-@font-face{font-family:'Jameel Noori Nastaleeq';src:url('https://cdn.jsdelivr.net/gh/tariq-abdullah/urdu-web-font-CDN/JameelNooriNastaleeq.woff') format('woff');font-display:swap}
-*{box-sizing:border-box}
-body{font-family:'Noto Nastaliq Urdu',serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;direction:rtl}
-.wrap{max-width:680px;margin:0 auto;padding:16px;padding-bottom:40px}
-header{background:var(--card);padding:16px 18px;border-radius:var(--r);margin-bottom:16px}
-.header-top{display:flex;align-items:center;justify-content:center;gap:14px;padding-bottom:12px;border-bottom:1px dashed rgba(255,255,255,.12)}
-header img{width:140px;height:140px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;flex-shrink:0}
-.header-title{text-align:right}
-.header-title h1{font-size:clamp(20px,3.6vw,26px);color:var(--gold);line-height:1.3;margin:0}
-.header-title .sub{font-size:clamp(26px,5vw,36px);color:var(--gold);margin-top:10px;font-weight:800;line-height:1.4}
-.header-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;flex-wrap:wrap}
-.header-right{text-align:right}
-.header-right .name{font-size:clamp(12px,2vw,14px);color:var(--gold);font-weight:700;margin:0}
-.header-left{text-align:left;display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:150px}
-.live-clock{font-size:15px;font-weight:700;color:var(--accent);direction:ltr;letter-spacing:.5px}
-.countdown-box{background:rgba(52,211,153,.1);border:1px solid var(--green);border-radius:10px;padding:5px 10px;text-align:center;direction:rtl}
-.countdown-label{font-size:11px;color:var(--muted)}
-.countdown-timer{font-size:16px;font-weight:700;color:var(--green);direction:ltr}
-.card{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);margin-bottom:12px}
-.card-label{font-size:12px;color:var(--muted);text-align:right;margin-bottom:8px}
-#citySelect,input{width:100%;padding:12px 14px;font-size:16px;border-radius:12px;font-family:inherit;direction:rtl;background:var(--card);color:var(--text);border:1px solid var(--accent2)}
-button{padding:12px 14px;font-size:16px;border-radius:12px;font-family:inherit;border:0;cursor:pointer;font-weight:700}
-button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
-.janaza-btn{width:100%;background:linear-gradient(135deg,#334155,#1e293b);color:var(--gold);border:1px solid var(--gold);font-size:16px;font-weight:800;padding:14px;border-radius:14px;cursor:pointer;transition:background .2s}
-.janaza-btn:active{background:rgba(251,191,36,.15)}
-.row{display:flex;gap:8px}
-.row input{flex:1}
-.row button.add-btn{width:auto;flex:0 0 80px;background:var(--green);margin-top:0}
-.box{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px dashed rgba(255,255,255,.1);gap:8px}
-.box:last-child{border-bottom:0}
-.name{font-weight:700;flex:1;text-align:right}
-.name.clickable{cursor:pointer;text-decoration:underline dotted var(--gold);text-underline-offset:4px}
-.name.clickable:active{opacity:.7}
-.time{opacity:.9;min-width:90px;text-align:left}
-.btns{display:flex;gap:6px}
-.alarm-btn{width:auto;padding:6px 12px;font-size:13px;background:var(--accent);border-radius:8px;margin:0;color:#000}
-.azan-btn{width:auto;padding:6px 12px;font-size:13px;background:var(--gold);color:#000;border-radius:8px;margin:0}
-.azan-btn.active{background:#ef4444;color:#fff}
-.custom{color:var(--green)}
 
-/* ===== نماز/عمل کا طریقہ پاپ اپ ===== */
-.ti-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;backdrop-filter:blur(2px)}
-.ti-overlay.active{display:flex}
-.ti-modal{background:var(--card);border-radius:var(--r);max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--sh);font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif}
-.ti-modal-header{background:linear-gradient(135deg,#243247,#0f172a);border-bottom:2px solid var(--gold);color:var(--gold);padding:14px 18px;display:flex;flex-direction:column;gap:10px;border-radius:var(--r) var(--r) 0 0;position:sticky;top:0;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-.ti-header-row1{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.ti-header-row1 h2{margin:0;font-size:20px;flex:1;line-height:1.4}
-.ti-header-row2{display:flex;align-items:center;gap:8px}
-.ti-voice-select{flex:1;background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:7px 10px;font-size:12px;font-family:inherit;direction:ltr;text-align:left;max-width:220px}
-.ti-listen-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#06210f;border:none;font-size:13px;font-weight:800;padding:8px 14px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:5px;box-shadow:0 3px 10px rgba(52,211,153,.35);transition:transform .15s,box-shadow .15s;white-space:nowrap;flex-shrink:0}
-.ti-listen-btn:active{transform:scale(.95)}
-.ti-listen-btn.active{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 3px 10px rgba(239,68,68,.4)}
-.ti-close{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);color:var(--gold);font-size:20px;width:34px;height:34px;border-radius:50%;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
-.ti-close:active{background:rgba(251,191,36,.3)}
-.ti-modal-body{padding:16px 18px 22px;font-size:17px;line-height:2}
-.ti-rakat-list{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
-.ti-rakat-item{background:rgba(167,139,250,.1);border:1px solid var(--accent2);border-radius:12px;padding:13px 15px;cursor:pointer;transition:background .2s,transform .15s}
-.ti-rakat-item:active{background:rgba(167,139,250,.22);transform:scale(.99)}
-.ti-rakat-item .row2{display:flex;justify-content:space-between;align-items:center}
-.ti-rakat-item .label{font-weight:700;font-size:19px;color:var(--gold)}
-.ti-rakat-item .count{background:var(--accent2);color:#0f172a;padding:3px 12px;border-radius:20px;font-size:14px;font-weight:800}
-.ti-rakat-item .note{color:#cbd5e1;font-size:14.5px;margin-top:5px;line-height:1.8}
-.ti-back-btn{background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;margin-bottom:14px;padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;transition:background .15s}
-.ti-back-btn:active{background:rgba(34,211,238,.25)}
-.ti-steps{list-style:none;margin:0;padding:0;counter-reset:step}
-.ti-steps li{counter-increment:step;margin-bottom:14px;padding-right:40px;position:relative;line-height:1.9;font-size:17px;color:#f8fafc}
-.ti-steps li::before{content:counter(step);position:absolute;right:0;top:0;background:var(--gold);color:#0f172a;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;box-shadow:0 2px 6px rgba(251,191,36,.4)}
-.ti-step-title{background:rgba(251,191,36,.15);border:1px solid var(--gold);color:var(--gold);padding:11px 15px;border-radius:10px;margin-bottom:14px;font-size:17px;font-weight:800}
-.ti-disclaimer{margin-top:16px;font-size:13px;color:#cbd5e1;border-top:1px dashed rgba(255,255,255,.15);padding-top:10px;line-height:1.8}
-.ti-hadith{background:rgba(52,211,153,.1);border-right:3px solid var(--green);border-radius:8px;padding:12px 14px;margin-top:8px;margin-bottom:14px}
-.ti-hadith .ar{font-family:'Traditional Arabic','Scheherazade New',serif;font-size:21px;color:var(--gold);line-height:2.1;text-align:center;direction:rtl}
-.ti-hadith .tr{font-size:16px;color:#ffffff;margin-top:8px;line-height:1.9;font-weight:500}
-.ti-hadith .ref{font-size:13px;color:var(--green);margin-top:8px;font-weight:800}
-.ti-hadith.unverified{border-right-color:#f87171;background:rgba(248,113,113,.1)}
-.ti-hadith.unverified .ref{color:#f87171}
-.ti-fiqh-note{font-size:14px;color:#e2e8f0;margin-top:6px;line-height:1.8;background:rgba(167,139,250,.1);padding:10px 12px;border-radius:8px}
+<!-- فونٹس -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Noto+Nastaliq+Urdu:wght@500;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face{
+  font-family:'Jameel Noori Nastaleeq';
+  src:url('https://cdn.jsdelivr.net/gh/tariq-abdullah/urdu-web-font-CDN/JameelNooriNastaleeq.woff') format('woff');
+  font-display:swap;
+}
+
+:root {
+  --bg-deep: #05140d;
+  --card-bg: rgba(13, 38, 27, 0.85);
+  --card-inner: rgba(255, 255, 255, 0.04);
+  --gold: #dfb15b;
+  --gold-glow: rgba(223, 177, 91, 0.28);
+  --gold-gradient: linear-gradient(135deg, #f7d58b, #c9933b);
+  --emerald-btn: linear-gradient(135deg, #10b981, #047857);
+  --cyan-btn: linear-gradient(135deg, #38bdf8, #0284c7);
+  --purple-btn: linear-gradient(135deg, #a855f7, #7e22ce);
+  --text-main: #ffffff;
+  --text-muted: #cbd5e1;
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --shadow-lux: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+  background: radial-gradient(circle at 50% 10%, #0d3824 0%, #05140d 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  direction: rtl;
+  padding: 16px 8px 40px;
+}
+
+.wrap {
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+header {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(223, 177, 91, 0.35);
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-lux), 0 0 20px var(--gold-glow);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(223, 177, 91, 0.25);
+}
+
+header img {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gold);
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(223, 177, 91, 0.35);
+}
+
+.header-title {
+  text-align: right;
+}
+
+.header-title h1 {
+  font-size: clamp(22px, 4vw, 30px);
+  color: #fff;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.header-title .sub {
+  font-size: clamp(24px, 5vw, 34px);
+  color: var(--gold);
+  margin-top: 4px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 12px;
+  flex-wrap: wrap;
+}
+
+.header-right {
+  text-align: right;
+}
+
+.header-right .name {
+  font-size: clamp(13px, 2vw, 15px);
+  color: var(--gold);
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 155px;
+}
+
+.live-clock {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #5eead4;
+  direction: ltr;
+  letter-spacing: 0.5px;
+}
+
+.countdown-box {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 10px;
+  padding: 4px 10px;
+  text-align: center;
+  direction: rtl;
+}
+
+.countdown-label {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.countdown-timer {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #34d399;
+  direction: ltr;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-lg);
+  padding: 15px 18px;
+  box-shadow: var(--shadow-lux);
+  margin-bottom: 12px;
+}
+
+.card-label {
+  font-size: 13px;
+  color: var(--gold);
+  text-align: right;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+#citySelect, input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  direction: rtl;
+  background: rgba(5, 20, 13, 0.7);
+  color: var(--text-main);
+  border: 1px solid rgba(223, 177, 91, 0.3);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#citySelect:focus, input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+button {
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.15s, opacity 0.2s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+button.add-btn {
+  width: 100%;
+  background: var(--purple-btn);
+  color: #fff;
+  margin-top: 8px;
+}
+
+.janaza-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(223, 177, 91, 0.15), rgba(7, 30, 20, 0.6));
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  font-size: 17px;
+  font-weight: 800;
+  padding: 13px;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+.janaza-btn:hover {
+  background: var(--gold-gradient);
+  color: #061910;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row input {
+  flex: 1;
+}
+
+.row button.add-btn {
+  width: auto;
+  flex: 0 0 85px;
+  background: var(--emerald-btn);
+  margin-top: 0;
+}
+
+.box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin-bottom: 4px;
+  background: var(--card-inner);
+  gap: 8px;
+}
+
+.box:hover {
+  background: rgba(223, 177, 91, 0.06);
+}
+
+.box:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.name {
+  font-weight: 700;
+  flex: 1;
+  font-size: 18px;
+  text-align: right;
+  color: #f1f5f9;
+}
+
+.name.clickable {
+  cursor: pointer;
+  text-decoration: underline dotted var(--gold);
+  text-underline-offset: 4px;
+}
+
+.name.clickable:hover {
+  color: var(--gold);
+}
+
+.time {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fef08a;
+  min-width: 92px;
+  direction: ltr;
+  text-align: left;
+}
+
+.btns {
+  display: flex;
+  gap: 6px;
+}
+
+.alarm-btn {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: 'Poppins', 'Jameel Noori Nastaleeq', sans-serif;
+  background: var(--cyan-btn);
+  border-radius: 8px;
+  color: #042f2e;
+  font-weight: 700;
+}
+
+.azan-btn {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--gold-gradient);
+  color: #1a1202;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.azan-btn.active {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #fff;
+}
+
+.custom {
+  color: #34d399;
+}
+
+/* پاپ اپ ماڈل */
+.ti-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.ti-overlay.active {
+  display: flex;
+}
+
+.ti-modal {
+  background: #092015;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+}
+
+.ti-modal-header {
+  background: linear-gradient(135deg, #0f3624, #05160e);
+  border-bottom: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.ti-modal-header h2 {
+  margin: 0;
+  font-size: 21px;
+  color: var(--gold);
+}
+
+.ti-close {
+  background: rgba(223, 177, 91, 0.12);
+  border: 1px solid rgba(223, 177, 91, 0.4);
+  color: var(--gold);
+  font-size: 20px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ti-modal-body {
+  padding: 18px 20px 24px;
+  font-size: 17px;
+  line-height: 2.1;
+  color: #f1f5f9;
+}
+
+.ti-rakat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.ti-rakat-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(223, 177, 91, 0.25);
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ti-rakat-item:hover {
+  background: rgba(223, 177, 91, 0.08);
+  border-color: var(--gold);
+}
+
+.ti-rakat-item .row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ti-rakat-item .label {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--gold);
+}
+
+.ti-rakat-item .count {
+  background: var(--purple-btn);
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.ti-rakat-item .note {
+  color: #cbd5e1;
+  font-size: 15px;
+  margin-top: 5px;
+  line-height: 1.8;
+}
+
+.ti-back-btn {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ti-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.ti-steps li {
+  counter-increment: step;
+  margin-bottom: 14px;
+  padding-right: 42px;
+  position: relative;
+  line-height: 2;
+  font-size: 17px;
+  color: #f8fafc;
+}
+
+.ti-steps li::before {
+  content: counter(step);
+  position: absolute;
+  right: 0;
+  top: 2px;
+  background: var(--gold-gradient);
+  color: #061910;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+}
+
+.ti-step-title {
+  background: rgba(223, 177, 91, 0.12);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.ti-disclaimer {
+  margin-top: 16px;
+  font-size: 13.5px;
+  color: #94a3b8;
+  border-top: 1px dashed rgba(223, 177, 91, 0.25);
+  padding-top: 10px;
+  line-height: 1.8;
+}
+
+.ti-hadith {
+  background: rgba(16, 185, 129, 0.08);
+  border-right: 3.5px solid #10b981;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  margin-bottom: 14px;
+}
+
+.ti-hadith .ar {
+  font-family: 'Amiri', serif;
+  font-size: 21px;
+  color: #fef08a;
+  line-height: 2.2;
+  text-align: center;
+  direction: rtl;
+}
+
+.ti-hadith .tr {
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 8px;
+  line-height: 1.9;
+}
+
+.ti-hadith .ref {
+  font-size: 13px;
+  color: #34d399;
+  margin-top: 8px;
+  font-weight: 800;
+}
+
+.ti-hadith.unverified {
+  border-right-color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.ti-hadith.unverified .ref {
+  color: #f87171;
+}
+
+.ti-fiqh-note {
+  font-size: 14px;
+  color: #e2e8f0;
+  margin-top: 6px;
+  line-height: 1.8;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  padding: 10px 12px;
+  border-radius: 8px;
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
   <div class="header-top">
-    <img src="logo.png" alt="logo">
+    <img src="logo.png" alt="تحریک ایمان لوگو">
     <div class="header-title">
       <h1>تحریک ایمان</h1>
       <p class="sub">روزانہ نماز کے اوقات</p>
@@ -159,20 +659,13 @@ button.add-btn{width:100%;background:var(--accent2);margin-top:8px}
 </div>
 
 <audio id="azanAudio" src="azan.mp3" preload="auto" playsinline></audio>
-<audio id="ttsAudio" preload="none" playsinline></audio>
 
-<!-- ===== نماز/عمل کا طریقہ پاپ اپ (مودل) ===== -->
+<!-- طریقہ پاپ اپ -->
 <div class="ti-overlay" id="tiOverlay">
   <div class="ti-modal">
     <div class="ti-modal-header">
-      <div class="ti-header-row1">
-        <h2 id="tiModalTitle">نماز کا طریقہ</h2>
-        <button class="ti-close" id="tiCloseBtn" aria-label="بند کریں">&times;</button>
-      </div>
-      <div class="ti-header-row2">
-        <select id="voiceSelect" class="ti-voice-select" onchange="onVoiceSelectChange()" title="آواز منتخب کریں"></select>
-        <button class="ti-listen-btn" id="tiListenBtn" onclick="toggleListen()">🔊 سنیں</button>
-      </div>
+      <h2 id="tiModalTitle">نماز کا طریقہ</h2>
+      <button class="ti-close" id="tiCloseBtn" aria-label="بند کریں">&times;</button>
     </div>
     <div class="ti-modal-body" id="tiModalBody"></div>
   </div>
@@ -183,7 +676,7 @@ const to12=x=>{const[h,m]=x.split(':');const H=+h;return`${H%12||12}:${m} ${H>=1
 const addMins=(time,mins)=>{let[h,m]=time.split(':').map(Number);let d=new Date();d.setHours(h,m+mins);return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`};
 const timeToMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m};
 const minToTime=m=>{m=((m%1440)+1440)%1440;const h=Math.floor(m/60),mm=Math.round(m%60);return `${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}`};
-// تہجد کا وقت = رات کے آخری تہائی حصے کا آغاز (عشاء سے فجر کے درمیانی وقفے کی بنیاد پر)
+
 function computeTahajjud(ishaTime,fajrTime){
   let isha=timeToMin(ishaTime), fajr=timeToMin(fajrTime);
   if(fajr<=isha) fajr+=1440;
@@ -199,145 +692,53 @@ let isAzanPlaying=false;
 
 Notification.requestPermission();
 
-/* ===================== آواز کا انتخاب (Urdu TTS) — خودکار + دستی ===================== */
-let selectedVoice = null;
-let allVoicesList = [];
-
-function pickSeriousMaleVoice(voices){
-  let v = voices.find(x => /ur/i.test(x.lang) && /male/i.test(x.name));
-  if(!v) v = voices.find(x => /ur-PK|ur-IN|ur_PK|ur_IN/i.test(x.lang));
-  if(!v) v = voices.find(x => /^ur/i.test(x.lang));
-  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang) && /male/i.test(x.name));
-  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang) && !/female/i.test(x.name));
-  if(!v) v = voices.find(x => /hi-IN/i.test(x.lang));
-  if(!v) v = voices.find(x => /ar/i.test(x.lang) && /male/i.test(x.name));
-  if(!v) v = voices.find(x => /male/i.test(x.name) && !/female/i.test(x.name));
-  return v || (voices.length ? voices[0] : null);
-}
-
-function populateVoiceList(){
-  allVoicesList = speechSynthesis.getVoices();
-  if(!allVoicesList.length) return;
-  const sel = document.getElementById('voiceSelect');
-  const savedName = localStorage.getItem('ti_voice_name');
-  let toUse = null;
-  if(sel){
-    sel.innerHTML = '';
-    // اردو/ہندی/عربی آوازیں اوپر، باقی نیچے
-    const priority = allVoicesList.filter(v=>/^ur|hi-IN|^ar/i.test(v.lang));
-    const others = allVoicesList.filter(v=>!/^ur|hi-IN|^ar/i.test(v.lang));
-    [...priority, ...others].forEach(v=>{
-      const opt = document.createElement('option');
-      opt.value = v.name;
-      opt.textContent = `${v.name} (${v.lang})`;
-      sel.appendChild(opt);
-    });
-    if(savedName && allVoicesList.some(v=>v.name===savedName)){
-      sel.value = savedName;
-      toUse = allVoicesList.find(v=>v.name===savedName);
-    }else{
-      toUse = pickSeriousMaleVoice(allVoicesList);
-      if(toUse) sel.value = toUse.name;
-    }
-  }else{
-    toUse = pickSeriousMaleVoice(allVoicesList);
-  }
-  selectedVoice = toUse;
-}
-
-function onVoiceSelectChange(){
-  const sel = document.getElementById('voiceSelect');
-  if(!sel) return;
-  const v = allVoicesList.find(x=>x.name===sel.value);
-  if(v){
-    selectedVoice = v;
-    localStorage.setItem('ti_voice_name', v.name);
-    // منتخب آواز کا فوری نمونہ سنائیں
-    speechSynthesis.cancel();
-    const test = new SpeechSynthesisUtterance('السلام علیکم، یہ آپ کی منتخب کردہ آواز ہے');
-    applyVoiceSettings(test);
-    speechSynthesis.speak(test);
-  }
-}
-
-speechSynthesis.onvoiceschanged = populateVoiceList;
-populateVoiceList();
-
-function applyVoiceSettings(u){
-  if(selectedVoice) u.voice = selectedVoice;
-  u.lang = (selectedVoice && selectedVoice.lang) ? selectedVoice.lang : 'ur-PK';
-  u.pitch = 0.82;   // سنجیدہ، بھاری لہجہ
-  u.rate = 0.88;    // صاف اور ٹھہر ٹھہر کر
-  u.volume = 1;
-}
-
-let arabicVoice = null;
-function pickArabicVoice(voices){
-  let v = voices.find(x => /^ar/i.test(x.lang) && /male/i.test(x.name));
-  if(!v) v = voices.find(x => /^ar/i.test(x.lang));
-  return v || null;
-}
-
-function speak(text){
-if('speechSynthesis' in window){
-const u=new SpeechSynthesisUtterance(text);
-applyVoiceSettings(u);
-speechSynthesis.speak(u);
-}
-if(Notification.permission==='granted'){
-new Notification('نماز کا وقت', {body:text});
-}
-}
-
 function playAzan(btn){
-if(isAzanPlaying){
-azan.pause();
-azan.currentTime=0;
-btn.classList.remove('active');
-btn.innerHTML='🔈 ازان';
-isAzanPlaying=false;
-}else{
-azan.currentTime=0; 
-azan.play().then(()=>{
-btn.classList.add('active');
-btn.innerHTML='⏹️ بند کریں';
-isAzanPlaying=true;
-}).catch(e=>alert('پہلے سکرین کو 1 بار Touch کریں پھر ازان دبائیں'));
-}
-azan.onended=()=>{
-document.querySelectorAll('.azan-btn').forEach(b=>{
-b.classList.remove('active');
-b.innerHTML='🔈 ازان';
-});
-isAzanPlaying=false;
-}
+  if(isAzanPlaying){
+    azan.pause();
+    azan.currentTime=0;
+    btn.classList.remove('active');
+    btn.innerHTML='🔈 اذان';
+    isAzanPlaying=false;
+  }else{
+    azan.currentTime=0; 
+    azan.play().then(()=>{
+      btn.classList.add('active');
+      btn.innerHTML='⏹️ بند کریں';
+      isAzanPlaying=true;
+    }).catch(e=>alert('پہلے اسکرین کو 1 بار Touch کریں پھر اذان دبائیں'));
+  }
+  azan.onended=()=>{
+    document.querySelectorAll('.azan-btn').forEach(b=>{
+      b.classList.remove('active');
+      b.innerHTML='🔈 اذان';
+    });
+    isAzanPlaying=false;
+  }
 }
 
 function checkAlarms(){
-const now=new Date();
-const current=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-allTimes.forEach(t=>{
-if(t.time===current && !t.rang){
-speak(`${t.name} کا وقت ہو گیا ہے`);
-const btn=document.querySelector('.azan-btn');
-if(btn) playAzan(btn);
-t.rang=true;
-}
-});
+  const now=new Date();
+  const current=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  allTimes.forEach(t=>{
+    if(t.time===current && !t.rang){
+      const btn=document.querySelector('.azan-btn');
+      if(btn) playAzan(btn);
+      t.rang=true;
+    }
+  });
 }
 
 function setAlarm(name,time){
-if(Notification.permission!=='granted'){Notification.requestPermission();}
-const [h,m]=time.split(':');
-const alarmTime=new Date();
-alarmTime.setHours(+h,m,0,0);
-if(alarmTime<new Date())alarmTime.setDate(alarmTime.getDate()+1);
-const diff=alarmTime-new Date();
-setTimeout(()=>{speak(`${name} کا وقت ہو گیا ہے`); const btn=document.querySelector('.azan-btn'); if(btn) playAzan(btn);},diff);
-alert(`${name} کا Alarm ${to12(time)} پر سیٹ ہو گیا`);
+  if(Notification.permission!=='granted'){Notification.requestPermission();}
+  const [h,m]=time.split(':');
+  const alarmTime=new Date();
+  alarmTime.setHours(+h,m,0,0);
+  if(alarmTime<new Date())alarmTime.setDate(alarmTime.getDate()+1);
+  const diff=alarmTime-new Date();
+  setTimeout(()=>{ const btn=document.querySelector('.azan-btn'); if(btn) playAzan(btn);},diff);
+  alert(`${name} کا Alarm ${to12(time)} پر سیٹ ہو گیا`);
 }
 
-/* ===================== لائیو گھڑی (پاکستان اسٹینڈرڈ ٹائم) اور کاؤنٹ ڈاؤن ===================== */
 function getNextPrayerTarget(){
   const mainNames=['فجر','ظہر','عصر','مغرب','عشاء'];
   const mainPrayers=allTimes.filter(t=>mainNames.includes(t.name));
@@ -372,348 +773,185 @@ function updateClockAndCountdown(){
   if(timerEl) timerEl.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
-/* ===================== نماز/عمل کے طریقے کا ڈیٹا اور پاپ اپ لاجک ===================== */
 const namazData = {
-  fajar: { title: "نمازِ فجر", audio: "audio/fajar.mp3", rakats: [
+  fajar: { title: "نمازِ فجر", rakats: [
     { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض سے پہلے — نہایت تاکیدی سنت، اسے کبھی نہ چھوڑیں",
-      hadith: { arabic: "رَكْعَتَا الْفَجْرِ خَيْرٌ مِنَ الدُّنْيَا وَمَا فِيهَا", urdu: "فجر کی دو رکعتیں (سنت) دنیا اور جو کچھ اس میں ہے، اس سے بہتر ہیں", ref: "صحیح مسلم، کتاب صلاۃ المسافرین، حدیث: 725 (نیز نبی ﷺ کی اس پر ہمیشگی: صحیح بخاری: 1169، صحیح مسلم: 724)", verified: true } },
+      hadith: { arabic: "رَكْعَتَا الْفَجْرِ خَيْرٌ مِنَ الدُّنْيَا وَمَا فِيهَا", urdu: "فجر کی دو رکعتیں (سنت) دنیا اور جو کچھ اس میں ہے، اس سے بہتر ہیں", ref: "صحیح مسلم، کتاب صلاۃ المسافرین، حدیث: 725", verified: true } },
     { label: "فرض", count: "2 رکعت", note: "جماعت کے ساتھ ادا کریں",
-      hadith: { fiqhNote: "نماز کی فرضیت کا حکم قرآن کریم میں ہے (سورۃ البقرہ 2:43: وَأَقِيمُوا الصَّلَاةَ)، البتہ ہر نماز کی رکعات کی مخصوص تعداد کسی ایک آیت یا حدیث نمبر میں نہیں بلکہ سنتِ متواترہ اور اجماعِ امت سے ثابت ہے۔" } }
+      hadith: { fiqhNote: "نماز کی فرضیت کا حکم قرآن کریم میں ہے (سورۃ البقرہ 2:43: وَأَقِيمُوا الصَّلَاةَ)، البتہ ہر نماز کی رکعات کی مخصوص تعداد سنتِ متواترہ اور اجماعِ امت سے ثابت ہے۔" } }
   ]},
-  zuhar: { title: "نمازِ ظہر", audio: "audio/zuhar.mp3", rakats: [
+  zuhar: { title: "نمازِ ظہر", rakats: [
     { label: "سنتِ مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے",
-      hadith: { arabic: "مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ ثِنْتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا", urdu: "جو شخص دن رات میں بارہ رکعت سنتِ مؤکدہ پڑھے گا، اس کے لیے جنت میں گھر بنایا جائے گا: چار رکعتیں ظہر سے پہلے اور دو اس کے بعد...", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415، سنن ابوداود: 1250", verified: true } },
-    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
-      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے — کسی ایک مخصوص حدیث نمبر سے نہیں۔" } },
-    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
-      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الظُّهْرِ", urdu: "...اور ظہر کے بعد دو رکعتیں (اسی بارہ رکعت کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
-    { label: "نفل", count: "2 رکعت", note: "اختیاری، ثواب کے لیے",
-      hadith: { fiqhNote: "یہ عام نفل ہے، فرض یا سنتِ مؤکدہ کی طرح کسی مخصوص حدیث سے متعین نہیں — عمومی فضائلِ نوافل میں شامل ہے۔" } }
-  ]},
-  asar: { title: "نمازِ عصر", audio: "audio/asar.mp3", rakats: [
-    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — مستحب، پڑھنا بہتر ہے",
-      hadith: { arabic: "رَحِمَ اللَّهُ امْرَأً صَلَّى قَبْلَ الْعَصْرِ أَرْبَعًا", urdu: "اللہ اس شخص پر رحم فرمائے جو عصر سے پہلے چار رکعتیں پڑھے", ref: "سنن ابوداود، حدیث: 1271، سنن ترمذی، حدیث: 430 (امام ترمذی نے اسے 'حسن غریب' کہا ہے، یعنی سند قدرے کمزور مگر فضائل میں قابلِ عمل ہے)", verified: true } },
-    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
-      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } }
-  ]},
-  maghrib: { title: "نمازِ مغرب", audio: "audio/maghrib.mp3", rakats: [
-    { label: "فرض", count: "3 رکعت", note: "جماعت کے ساتھ ادا کریں",
-      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد (3) سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
-    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
-      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ", urdu: "...اور مغرب کے بعد دو رکعتیں (بارہ رکعت سنتِ مؤکدہ کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
-    { label: "نفل", count: "2 رکعت", note: "اختیاری",
-      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } }
-  ]},
-  isha: { title: "نمازِ عشاء", audio: "audio/isha.mp3", rakats: [
-    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — اختیاری",
-      hadith: { fiqhNote: "یہ عام نفل/مستحب کے زمرے میں ہے۔ اس رکعت کے لیے یہاں کوئی مخصوص، تصدیق شدہ حدیث نمبر شامل نہیں کیا گیا — براہ کرم Islam360 یا sunnah.com سے تصدیق کریں۔", unverified: true } },
+      hadith: { arabic: "مَنْ صَلَّى فِي يَوْمٍ وَلَيْلَةٍ ثِنْتَيْ عَشْرَةَ رَكْعَةً بُنِيَ لَهُ بَيْتٌ فِي الْجَنَّةِ: أَرْبَعًا قَبْلَ الظُّهْرِ وَرَكْعَتَيْنِ بَعْدَهَا", urdu: "جو شخص دن رات میں بارہ رکعت سنتِ مؤکدہ پڑھے گا، اس کے لیے جنت میں گھر بنایا جائے گا...", ref: "صحیح مسلم، حدیث: 728", verified: true } },
     { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
       hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
     { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
-      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ", urdu: "...اور عشاء کے بعد دو رکعتیں (بارہ رکعت سنتِ مؤکدہ کی حدیث کا حصہ)", ref: "صحیح مسلم، حدیث: 728، سنن ترمذی، حدیث: 414/415", verified: true } },
-    { label: "نفل", count: "2 رکعت", note: "اختیاری",
-      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } },
-    { label: "وتر", count: "3 رکعت", note: "واجب — تیسری رکعت میں دعائے قنوت پڑھی جاتی ہے",
-      hadith: { arabic: "الْوِتْرُ حَقٌّ، فَمَنْ أَحَبَّ أَنْ يُوتِرَ بِخَمْسٍ فَلْيَفْعَلْ، وَمَنْ أَحَبَّ أَنْ يُوتِرَ بِثَلَاثٍ فَلْيَفْعَلْ، وَمَنْ أَحَبَّ أَنْ يُوتِرَ بِوَاحِدَةٍ فَلْيَفْعَلْ", urdu: "وتر حق ہے، جو پانچ پڑھنا چاہے پانچ پڑھے، جو تین چاہے تین پڑھے، جو ایک چاہے ایک پڑھے", ref: "سنن ابوداود، حدیث: 1422، سنن نسائی: 1711، سنن ابن ماجہ: 1190 (صحیح)", verified: true,
-        fiqhNote: "فقہ حنفی میں امام ابوحنیفہؒ کے نزدیک وتر واجب ہے اور تین رکعت ایک سلام سے پڑھنا لازم ہے، جبکہ جمہور علماء اسے سنتِ مؤکدہ کہتے ہیں — یہ ایک معروف فقہی اختلاف ہے۔ مذکورہ حدیث خود لفظ 'وجوب' استعمال نہیں کرتی، البتہ وتر کی اہمیت اور تاکید پر واضح دلالت کرتی ہے۔" } },
-    { label: "نفل", count: "2 رکعت", note: "اختیاری، وتر کے بعد",
-      hadith: { fiqhNote: "عام نفل، مخصوص حدیث نمبر درکار نہیں۔" } }
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الظُّهْرِ", urdu: "...اور ظہر کے بعد دو رکعتیں", ref: "صحیح مسلم، حدیث: 728", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری، ثواب کے لیے",
+      hadith: { fiqhNote: "عام نفل ہے، عمومی فضائلِ نوافل میں شامل ہے۔" } }
   ]},
-
-  /* ===== نئے اضافہ شدہ اعمال/نوافل ===== */
-  sehri: { type:'amal', title: "سحری کی فضیلت و طریقہ", audio: "audio/sehri.mp3",
-    fazeelat: { arabic: "تَسَحَّرُوا فَإِنَّ فِي السَّحُورِ بَرَكَةً", urdu: "سحری کھایا کرو، کیونکہ سحری میں برکت ہے", ref: "صحیح بخاری، حدیث: 1923، صحیح مسلم، حدیث: 1095", verified: true },
+  asar: { title: "نمازِ عصر", rakats: [
+    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — مستحب، پڑھنا بہتر ہے",
+      hadith: { arabic: "رَحِمَ اللَّهُ امْرَأً صَلَّى قَبْلَ الْعَصْرِ أَرْبَعًا", urdu: "اللہ اس شخص پر رحم فرمائے جو عصر سے پہلے چار رکعتیں پڑھے", ref: "سنن ابوداود، حدیث: 1271", verified: true } },
+    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } }
+  ]},
+  maghrib: { title: "نمازِ مغرب", rakats: [
+    { label: "فرض", count: "3 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْمَغْرِبِ", urdu: "...اور مغرب کے بعد دو رکعتیں", ref: "صحیح مسلم، حدیث: 728", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری",
+      hadith: { fiqhNote: "عام نفل ہے۔" } }
+  ]},
+  isha: { title: "نمازِ عشاء", rakats: [
+    { label: "سنتِ غیر مؤکدہ", count: "4 رکعت", note: "فرض سے پہلے — اختیاری",
+      hadith: { fiqhNote: "یہ عام نفل/مستحب کے زمرے میں ہے۔", unverified: true } },
+    { label: "فرض", count: "4 رکعت", note: "جماعت کے ساتھ ادا کریں",
+      hadith: { fiqhNote: "فرضیت قرآن سے، رکعات کی تعداد سنتِ متواترہ و اجماعِ امت سے ثابت ہے۔" } },
+    { label: "سنتِ مؤکدہ", count: "2 رکعت", note: "فرض کے بعد",
+      hadith: { arabic: "...وَرَكْعَتَيْنِ بَعْدَ الْعِشَاءِ", urdu: "...اور عشاء کے بعد دو رکعتیں", ref: "صحیح مسلم، حدیث: 728", verified: true } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری",
+      hadith: { fiqhNote: "عام نفل ہے۔" } },
+    { label: "وتر", count: "3 رکعت", note: "واجب — تیسری رکعت میں دعائے قنوت پڑھی جاتی ہے",
+      hadith: { arabic: "الْوِتْرُ حَقٌّ، فَمَنْ أَحَبَّ أَنْ يُوتِرَ بِثَلَاثٍ فَلْيَفْعَلْ", urdu: "وتر حق ہے، جو تین رکعت پڑھنا چاہے تین پڑھے...", ref: "سنن ابوداود، حدیث: 1422", verified: true,
+        fiqhNote: "فقہ حنفی میں وتر واجب ہے اور تین رکعت ایک سلام سے پڑھنا لازم ہے۔" } },
+    { label: "نفل", count: "2 رکعت", note: "اختیاری، وتر کے بعد",
+      hadith: { fiqhNote: "عام نفل ہے۔" } }
+  ]},
+  sehri: { type:'amal', title: "سحری کی فضیلت و طریقہ",
+    fazeelat: { arabic: "تَسَحَّرُوا فَإِنَّ فِي السَّحُورِ بَرَكَةً", urdu: "سحری کھایا کرو، کیونکہ سحری میں برکت ہے", ref: "صحیح بخاری، حدیث: 1923", verified: true },
     steps: [
-      "روزے کی نیت دل میں کریں — نیت کے لیے کسی خاص زبانی الفاظ کی ادائیگی شرعاً ضروری نہیں، دل کا پختہ ارادہ ہی کافی ہے",
-      "صبح صادق (فجر کا وقت شروع ہونے) سے پہلے پہلے کچھ کھا پی لیں، خواہ تھوڑا ہی ہو — کھجور یا پانی سے بھی سحری کی برکت حاصل ہو جاتی ہے",
-      "سحری کو حتی الامکان فجر کے وقت کے قریب رکھیں، البتہ احتیاطاً وقت ختم ہونے سے چند منٹ پہلے کھانا پینا بند کر دیں",
-      "سحری کے وقت استغفار اور دعا کا خاص اہتمام کریں، کیونکہ یہ وقتِ سحر قبولیت کا وقت ہے"
-    ],
-    dua: { arabic: "وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ", urdu: "میں نے کل کے روزے کی نیت کی، ماہِ رمضان میں سے", ref: "⚠ یہ الفاظ کسی مرفوع صحیح حدیث سے ثابت نہیں، بلکہ محض متعارف عمل ہیں — روزے کی نیت کے لیے زبانی الفاظ کہنا شرعاً لازم نہیں، دل کا ارادہ ہی کافی ہے۔ اگر کسی مخصوص ماثور دعا کی تلاش ہو تو Islam360 یا sunnah.com سے تصدیق کریں۔", unverified: true }
+      "روزے کی نیت دل میں کریں — دل کا پختہ ارادہ ہی کافی ہے",
+      "صبح صادق سے پہلے پہلے کچھ کھا پی لیں، خواہ کھجور یا پانی ہی ہو",
+      "سحری کے وقت استغفار اور دعا کا خاص اہتمام کریں"
+    ]
   },
-  iftar: { type:'amal', title: "افطاری کی فضیلت و طریقہ", audio: "audio/iftar.mp3",
-    fazeelat: { arabic: "لَا يَزَالُ النَّاسُ بِخَيْرٍ مَا عَجَّلُوا الْفِطْرَ", urdu: "لوگ ہمیشہ خیر پر رہیں گے جب تک وہ افطار میں جلدی کرتے رہیں گے", ref: "صحیح بخاری، حدیث: 1957، صحیح مسلم، حدیث: 1098", verified: true },
+  iftar: { type:'amal', title: "افطاری کی فضیلت و طریقہ",
+    fazeelat: { arabic: "لَا يَزَالُ النَّاسُ بِخَيْرٍ مَا عَجَّلُوا الْفِطْرَ", urdu: "لوگ ہمیشہ خیر پر رہیں گے جب تک وہ افطار میں جلدی کرتے رہیں گے", ref: "صحیح بخاری، حدیث: 1957", verified: true },
     steps: [
-      "غروبِ آفتاب اور مغرب کی اذان ہوتے ہی بلا تاخیر روزہ افطار کریں",
-      "ترجیحاً کھجور سے افطار کریں، اگر کھجور میسر نہ ہو تو پانی سے، ورنہ جو کچھ میسر ہو اس سے",
-      "افطار سے پہلے بسم اللہ پڑھیں اور کھاتے وقت دائیں ہاتھ سے کھائیں",
-      "افطار کی مسنون دعا پڑھیں (نیچے ملاحظہ کریں)، پھر مغرب کی نماز کی تیاری کریں"
+      "غروبِ آفتاب ہوتے ہی بلا تاخیر روزہ افطار کریں",
+      "ترجیحاً کھجور یا پانی سے افطار کریں اور مسنون دعا پڑھیں"
     ],
-    dua: { arabic: "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ", urdu: "پیاس چلی گئی، رگیں تر ہو گئیں اور اجر ثابت ہو گیا، اگر اللہ نے چاہا", ref: "سنن ابوداود، حدیث: 2357 (حسن)", verified: true,
-      fiqhNote: "ایک اور دعا 'اللَّهُمَّ لَكَ صُمْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ' بھی عام مشہور ہے، مگر محدثین کے نزدیک اس کی سند ضعیف ہے — احتیاطاً اوپر والی مستند دعا کو ترجیح دیں۔" }
+    dua: { arabic: "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ", urdu: "پیاس چلی گئی، رگیں تر ہو گئیں اور اجر ثابت ہو گیا، اگر اللہ نے چاہا", ref: "سنن ابوداود، حدیث: 2357", verified: true }
   },
-  ishraq: { type:'salah', title: "نمازِ اشراق", audio: "audio/ishraq.mp3", rakats: [
+  ishraq: { type:'salah', title: "نمازِ اشراق", rakats: [
     { label: "نفل", count: "2 رکعت", note: "طلوعِ آفتاب کے تقریباً 15-20 منٹ بعد ادا کریں" }
   ],
-    fazeelat: { arabic: "مَنْ صَلَّى الْفَجْرَ فِي جَمَاعَةٍ ثُمَّ قَعَدَ يَذْكُرُ اللَّهَ حَتَّى تَطْلُعَ الشَّمْسُ ثُمَّ صَلَّى رَكْعَتَيْنِ كَانَتْ لَهُ كَأَجْرِ حَجَّةٍ وَعُمْرَةٍ تَامَّةٍ تَامَّةٍ تَامَّةٍ", urdu: "جس نے فجر جماعت سے پڑھی، پھر سورج طلوع ہونے تک اللہ کا ذکر کرتا بیٹھا رہا، پھر دو رکعت پڑھیں، تو اسے مکمل حج و عمرے کے برابر اجر ملے گا", ref: "سنن ترمذی، حدیث: 586 (حسن غریب)", verified: true },
-    dua: { fiqhNote: "اشراق کے بعد کوئی مخصوص ماثور دعا حدیث میں متعین نہیں — نماز کے بعد عمومی دعا، استغفار اور درود شریف پڑھا جا سکتا ہے۔" }
+    fazeelat: { arabic: "مَنْ صَلَّى الْفَجْرَ فِي جَمَاعَةٍ ثُمَّ قَعَدَ يَذْكُرُ اللَّهَ حَتَّى تَطْلُعَ الشَّمْسُ ثُمَّ صَلَّى رَكْعَتَيْنِ كَانَتْ لَهُ كَأَجْرِ حَجَّةٍ وَعُمْرَةٍ تَامَّةٍ", urdu: "جس نے فجر جماعت سے پڑھی، پھر سورج طلوع ہونے تک ذکر میں بیٹھا رہا، پھر دو رکعت پڑھیں، تو اسے مکمل حج و عمرے کا اجر ملے گا", ref: "سنن ترمذی: 586", verified: true }
   },
-  chasht: { type:'salah', title: "نمازِ چاشت", audio: "audio/chasht.mp3", rakats: [
-    { label: "نفل (کم از کم)", count: "2 رکعت", note: "چاشت کے وقت (سورج بلند ہونے سے زوال سے کچھ پہلے تک) کسی بھی وقت ادا کریں — زیادہ سے زیادہ 8 رکعت تک پڑھی جا سکتی ہے" }
+  chasht: { type:'salah', title: "نمازِ چاشت", rakats: [
+    { label: "نفل", count: "2 یا 4 رکعت", note: "سورج بلند ہونے کے بعد زوال سے پہلے تک ادا کریں" }
   ],
-    fazeelat: { arabic: "أَوْصَانِي خَلِيلِي صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ بِثَلَاثٍ: صِيَامِ ثَلَاثَةِ أَيَّامٍ مِنْ كُلِّ شَهْرٍ، وَرَكْعَتَيِ الضُّحَى، وَأَنْ أُوتِرَ قَبْلَ أَنْ أَنَامَ", urdu: "مجھے میرے خلیل ﷺ نے تین باتوں کی وصیت فرمائی: ہر ماہ تین دن کے روزے، چاشت کی دو رکعتیں، اور سونے سے پہلے وتر پڑھنا", ref: "صحیح بخاری، حدیث: 1981، صحیح مسلم، حدیث: 721", verified: true,
-      fiqhNote: "ایک اور حدیث میں ہے کہ انسان کے ہر جوڑ پر صدقہ ہے اور یہ صدقہ چاشت کی دو رکعتوں سے ادا ہو جاتا ہے (صحیح مسلم، حدیث: 720)۔" },
-    dua: { fiqhNote: "چاشت کے بعد کوئی خاص ماثور دعا مخصوص نہیں — عمومی دعا اور استغفار کا اہتمام کریں۔" }
+    fazeelat: { urdu: "چاشت کی دو رکعتیں انسان کے تمام جوڑوں کا صدقہ ادا کر دیتی ہیں", ref: "صحیح مسلم، حدیث: 720", verified: true }
   },
-  awabeen: { type:'salah', title: "نمازِ اوابین", audio: "audio/awabeen.mp3", rakats: [
-    { label: "نفل", count: "6 رکعت", note: "مغرب کی فرض و سنت کے بعد، دو دو رکعت کر کے پڑھیں" }
+  awabeen: { type:'salah', title: "نمازِ اوابین", rakats: [
+    { label: "نفل", count: "6 رکعت", note: "مغرب کے بعد دو دو رکعت کر کے پڑھیں" }
+  ]},
+  tahajjud: { type:'salah', title: "نمازِ تہجد", rakats: [
+    { label: "نفل", count: "کم از کم 2 رکعت (مسنون 8 رکعت)", note: "رات کے آخری تہائی حصے میں ادا کریں" }
   ],
-    fazeelat: { fiqhNote: "⚠ اس بارے میں روایت ملتی ہے: 'مَنْ صَلَّى بَعْدَ الْمَغْرِبِ سِتَّ رَكَعَاتٍ لَمْ يَتَكَلَّمْ فِيمَا بَيْنَهُنَّ بِسُوءٍ عُدِلْنَ لَهُ بِعِبَادَةِ ثِنْتَيْ عَشْرَةَ سَنَةً' (سنن ترمذی: 435، سنن ابن ماجہ: 1167)، لیکن اکثر محدثین کے نزدیک اس روایت کی سند ضعیف ہے۔ صلاۃ الاوابین کا عمومی استحباب نوافل کی فضیلت میں داخل ہے، البتہ یہ مخصوص حدیث بطور تصدیق شدہ پیش نہیں کی جا رہی — براہ کرم Islam360 یا sunnah.com سے مزید تصدیق کریں۔", unverified: true },
-    dua: { fiqhNote: "اوابین کے بعد کوئی خاص ماثور دعا مخصوص نہیں — عمومی دعا و استغفار کریں۔" }
+    fazeelat: { arabic: "أَفْضَلُ الصَّلَاةِ بَعْدَ الْفَرِيضَةِ صَلَاةُ اللَّيْلِ", urdu: "فرض نماز کے بعد سب سے افضل نماز رات کی نماز ہے", ref: "صحیح مسلم: 1163", verified: true }
   },
-  tahajjud: { type:'salah', title: "نمازِ تہجد", audio: "audio/tahajjud.mp3", rakats: [
-    { label: "نفل", count: "کم از کم 2 رکعت (مسنون تعداد 8 رکعت + وتر)", note: "رات کے آخری تہائی حصے میں سو کر اٹھنے کے بعد ادا کریں — دو دو رکعت کر کے پڑھیں" }
-  ],
-    fazeelat: { arabic: "وَمِنَ اللَّيْلِ فَتَهَجَّدْ بِهِ نَافِلَةً لَّكَ عَسَىٰ أَن يَبْعَثَكَ رَبُّكَ مَقَامًا مَّحْمُودًا", urdu: "اور رات کے کچھ حصے میں تہجد پڑھیں، یہ آپ کے لیے زائد (نفل) ہے، امید ہے کہ آپ کا رب آپ کو مقامِ محمود پر فائز کرے گا", ref: "سورۃ الاسراء، آیت: 79", verified: true,
-      fiqhNote: "نیز حدیث میں ہے: 'أَفْضَلُ الصَّلَاةِ بَعْدَ الْفَرِيضَةِ صَلَاةُ اللَّيْلِ' — فرض نماز کے بعد سب سے افضل نماز رات کی نماز ہے (صحیح مسلم، حدیث: 1163)۔" },
-    dua: { arabic: "اللَّهُمَّ لَكَ الْحَمْدُ أَنْتَ نُورُ السَّمَاوَاتِ وَالْأَرْضِ وَمَنْ فِيهِنَّ، وَلَكَ الْحَمْدُ أَنْتَ قَيِّمُ السَّمَاوَاتِ وَالْأَرْضِ وَمَنْ فِيهِنَّ", urdu: "اے اللہ! تیرے ہی لیے حمد ہے، تو آسمانوں اور زمین اور جو کچھ ان میں ہے سب کا نور ہے، اور تیرے ہی لیے حمد ہے، تو آسمانوں اور زمین اور جو کچھ ان میں ہے سب کا قائم رکھنے والا ہے", ref: "صحیح بخاری، حدیث: 1120، صحیح مسلم، حدیث: 769 (نبی ﷺ کی تہجد کی دعا کا ابتدائی حصہ)", verified: true }
-  },
-
-  tuloo: { type:'amal', title: "طلوعِ آفتاب کی فضیلت و ہدایات", audio: "audio/tuloo.mp3",
-    fazeelat: { arabic: "مَنْ صَلَّى الْفَجْرَ فِي جَمَاعَةٍ ثُمَّ قَعَدَ يَذْكُرُ اللَّهَ حَتَّى تَطْلُعَ الشَّمْسُ ثُمَّ صَلَّى رَكْعَتَيْنِ كَانَتْ لَهُ كَأَجْرِ حَجَّةٍ وَعُمْرَةٍ تَامَّةٍ تَامَّةٍ تَامَّةٍ", urdu: "جس نے فجر جماعت سے پڑھی، پھر سورج طلوع ہونے تک ذکرِ الٰہی میں بیٹھا رہا، پھر دو رکعت (اشراق) پڑھیں، اسے مکمل حج و عمرے کے برابر اجر ملے گا", ref: "سنن ترمذی، حدیث: 586 (حسن غریب)", verified: true },
+  tuloo: { type:'amal', title: "طلوعِ آفتاب کی ہدایات",
     steps: [
-      "فجر کی نماز کے بعد اپنی جگہ بیٹھ کر ذکرِ الٰہی، تلاوتِ قرآن یا استغفار میں مشغول رہیں",
-      "سورج مکمل طلوع ہو کر نیزے کے برابر بلند ہونے تک (تقریباً 15-20 منٹ) نفل نماز ادا نہ کریں — یہ وقتِ مکروہ ہے",
-      "سورج بلند ہونے کے بعد نمازِ اشراق کی دو رکعت ادا کریں تاکہ مکمل حج و عمرے کے برابر اجر حاصل ہو"
-    ],
-    dua: { fiqhNote: "⚠ صبح کے وقت کا عمومی ذکر 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ...' صحیح مسلم کی کتاب الذکر میں موجود ہے، تاہم عین حدیث نمبر کی 100% تصدیق یہاں نہیں کی جا رہی — براہ کرم Islam360 یا sunnah.com سے حدیث نمبر کی تصدیق کر لیں۔", unverified: true }
+      "سورج مکمل طلوع ہو کر بلند ہونے تک (15-20 منٹ) نماز نہ پڑھیں، یہ وقت مکروہ ہے",
+      "سورج بلند ہونے کے بعد نمازِ اشراق ادا کریں"
+    ]
   },
-  ghurub: { type:'amal', title: "غروبِ آفتاب کی فضیلت و ہدایات", audio: "audio/ghurub.mp3",
-    fazeelat: { arabic: "ثَلَاثُ سَاعَاتٍ كَانَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يَنْهَانَا أَنْ نُصَلِّيَ فِيهِنَّ... وَحِينَ تَضَيَّفُ الشَّمْسُ لِلْغُرُوبِ حَتَّى تَغْرُبَ", urdu: "تین اوقات ایسے تھے جن میں رسول اللہ ﷺ ہمیں نماز پڑھنے سے منع فرماتے تھے... اور جب سورج غروب ہونے کے قریب ہو یہاں تک کہ مکمل غروب ہو جائے", ref: "صحیح مسلم، حدیث: 831 (حضرت عقبہ بن عامرؓ سے مروی)", verified: true },
+  ghurub: { type:'amal', title: "غروبِ آفتاب کی ہدایات",
     steps: [
-      "غروبِ آفتاب سے متصل پہلے (تقریباً غروب سے تھوڑی دیر قبل) نفل نماز پڑھنے سے اجتناب کریں — یہ وقتِ مکروہ ہے",
-      "سورج مکمل غروب ہوتے ہی روزہ دار بلا تاخیر افطار کریں (مکمل طریقہ 'افطاری' سیکشن میں ملاحظہ کریں)",
-      "مغرب کی اذان ہوتے ہی نمازِ مغرب کی تیاری اور جماعت کا اہتمام کریں"
-    ],
-    dua: { fiqhNote: "⚠ شام کے وقت کا عمومی ذکر 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ...' صحیح مسلم کی کتاب الذکر میں موجود ہے، تاہم عین حدیث نمبر کی 100% تصدیق یہاں نہیں کی جا رہی — براہ کرم Islam360 یا sunnah.com سے حدیث نمبر کی تصدیق کر لیں۔ روزے کی حالت میں یہی وقت افطاری کی دعا کے لیے مخصوص ہے (ملاحظہ کریں 'افطاری' سیکشن)۔", unverified: true }
+      "غروب کے متصل وقت نفل پڑھنے سے اجتناب کریں",
+      "غروب ہوتے ہی روزہ افطار کریں اور نمازِ مغرب کی تیاری کریں"
+    ]
   },
-
-  /* ===== نمازِ جنازہ — سب سے آخر میں ===== */
-  janaza: { type:'amal', title: "نمازِ جنازہ کا مکمل طریقہ", audio: "audio/janaza.mp3",
-    fazeelat: { arabic: "مَنْ صَلَّى عَلَى جَنَازَةٍ فَلَهُ قِيرَاطٌ، وَمَنْ تَبِعَهَا حَتَّى تُدْفَنَ فَلَهُ قِيرَاطَانِ، الْقِيرَاطُ مِثْلُ أُحُدٍ", urdu: "جو شخص کسی جنازے کی نماز پڑھے اسے ایک قیراط اجر ملتا ہے، اور جو دفن ہونے تک ساتھ رہے اسے دو قیراط ملتے ہیں، اور ایک قیراط احد پہاڑ کے برابر ہے", ref: "صحیح بخاری، حدیث: 1325، صحیح مسلم، حدیث: 945", verified: true,
-      fiqhNote: "نمازِ جنازہ فرضِ کفایہ ہے — یعنی اگر علاقے کے کچھ لوگ ادا کر لیں تو باقی سب کے ذمے سے یہ فرض ساقط ہو جاتا ہے، اور اگر کوئی بھی نہ پڑھے تو پوری بستی گناہ گار ہوتی ہے۔" },
+  janaza: { type:'amal', title: "نمازِ جنازہ کا مکمل طریقہ",
+    fazeelat: { arabic: "مَنْ صَلَّى عَلَى جَنَازَةٍ فَلَهُ قِيرَاطٌ، وَمَنْ تَبِعَهَا حَتَّى تُدْفَنَ فَلَهُ قِيرَاطَانِ", urdu: "جو جنازے کی نماز پڑھے اسے ایک قیراط اور جو دفن تک ساتھ رہے اسے دو قیراط اجر ملتا ہے", ref: "صحیح بخاری: 1325", verified: true },
     steps: [
-      "میت کو غسل و کفن دینے کے بعد قبلہ رخ سیدھا لٹا کر رکھا جائے، نمازی کم از کم تین صفیں بنا کر میت کے پیچھے کھڑے ہوں، امام میت کے سینے کے مقابل کھڑا ہو",
-      "باوضو ہو کر دل میں نیت کریں: 'میں اس میت کی نمازِ جنازہ، چار تکبیروں کے ساتھ، امام کی اقتدا میں ادا کرتا ہوں'",
-      "پہلی تکبیر: دونوں ہاتھ کانوں تک اٹھا کر کہیں: «اللَّهُ أَكْبَرُ» — (ترجمہ: اللہ سب سے بڑا ہے)۔ پھر ہاتھ ناف کے نیچے باندھ کر ثناء پڑھیں: «سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَٰهَ غَيْرُكَ» — (ترجمہ: اے اللہ! تو پاک ہے اپنی تعریف کے ساتھ، تیرا نام بابرکت ہے، تیری شان بلند ہے، اور تیرے سوا کوئی معبود نہیں)",
-      "دوسری تکبیر: اس بار ہاتھ اٹھائے بغیر صرف زبان سے کہیں: «اللَّهُ أَكْبَرُ»۔ پھر درودِ ابراہیمی پڑھیں: «اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ» — (ترجمہ: اے اللہ! محمد ﷺ اور ان کی آل پر رحمت و برکت نازل فرما جیسے تو نے ابراہیم علیہ السلام اور ان کی آل پر نازل فرمائی، بے شک تو تعریف والا، بزرگی والا ہے)",
-      "تیسری تکبیر: «اللَّهُ أَكْبَرُ» کہیں، پھر میت کے لیے دعائے مغفرت پڑھیں (مکمل دعا نیچے 'دعا' کے حصے میں ملاحظہ کریں)",
-      "چوتھی تکبیر: «اللَّهُ أَكْبَرُ» کہیں، پھر تھوڑی دیر خاموش کھڑے رہ کر دائیں طرف چہرہ پھیر کر «اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ» اور بائیں طرف بھی یہی کہہ کر سلام پھیر دیں — نماز مکمل",
-      "اہم نوٹ: نمازِ جنازہ میں نہ رکوع ہے، نہ سجدہ، نہ قرأتِ فاتحہ — پوری نماز صرف قیام (کھڑے ہونے) کی حالت میں، چار تکبیروں پر مشتمل ہوتی ہے",
-      "اگر میت نابالغ بچہ/بچی ہو تو تیسری تکبیر کے بعد دعائے مغفرت کی بجائے یہ دعا پڑھی جاتی ہے: «اللَّهُمَّ اجْعَلْهُ لَنَا فَرَطًا وَذُخْرًا وَاجْعَلْهُ لَنَا شَافِعًا وَمُشَفَّعًا» — (ترجمہ: اے اللہ! اسے ہمارے لیے آگے بھیجا ہوا (اجر) اور ذخیرہ بنا دے، اور اسے ہمارے حق میں سفارش کرنے والا اور قبول شدہ سفارش والا بنا دے)، کیونکہ نابالغ بچہ گناہوں سے پاک ہوتا ہے، اسے مغفرت کی دعا کی حاجت نہیں"
+      "نیت کریں: اس میت کی نمازِ جنازہ، چار تکبیروں کے ساتھ، امام کے پیچھے ادا کرتا ہوں",
+      "پہلی تکبیر: «اللَّهُ أَكْبَرُ» کہہ کر ہاتھ باندھیں اور ثناء پڑھیں",
+      "دوسری تکبیر: ہاتھ اٹھائے بغیر «اللَّهُ أَكْبَرُ» کہیں اور درودِ ابراہیمی پڑھیں",
+      "تیسری تکبیر: «اللَّهُ أَكْبَرُ» کہہ کر میت کے لیے دعائے مغفرت پڑھیں",
+      "چوتھی تکبیر: «اللَّهُ أَكْبَرُ» کہہ کر دونوں طرف سلام پھیر دیں",
+      "نوٹ: نمازِ جنازہ میں نہ رکوع ہے اور نہ ہی سجدہ، یہ صرف قیام میں ادا کی جاتی ہے"
     ],
-    dua: { arabic: "اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَشَاهِدِنَا وَغَائِبِنَا، وَصَغِيرِنَا وَكَبِيرِنَا، وَذَكَرِنَا وَأُنْثَانَا، اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الْإِسْلَامِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الْإِيمَانِ", urdu: "اے اللہ! بخش دے ہمارے زندہ کو اور ہمارے مردے کو، ہمارے حاضر کو اور ہمارے غائب کو، ہمارے چھوٹے کو اور ہمارے بڑے کو، ہمارے مرد کو اور ہماری عورت کو۔ اے اللہ! ہم میں سے جسے تو زندہ رکھے اسے اسلام پر زندہ رکھ، اور جسے تو وفات دے اسے ایمان پر وفات دے", ref: "سنن ابوداود، حدیث: 3201، سنن ترمذی: 1024، سنن ابن ماجہ: 1498 (حضرت عوف بن مالکؓ سے مروی)", verified: true,
-      fiqhNote: "⚠ یہ دعا تینوں کتابوں میں مروی ہے، البتہ عین حدیث نمبر کی حتمی 100% تصدیق کے لیے sunnah.com یا Islam360 سے ایک بار ضرور دیکھ لیں۔ اگر میت مرد ہو تو دعا میں 'میت' کی جگہ ذہن میں 'اسے' (مذکر) کا تصور رکھیں، عورت ہو تو 'اسے' (مؤنث) کا — عربی الفاظ خود عمومی (جامع) ہیں اور دونوں پر لاگو ہوتے ہیں، انہیں بدلنے کی ضرورت نہیں۔" }
+    dua: { arabic: "اللَّهُمَّ اغْفِرْ لِحَيِّنَا وَمَيِّتِنَا، وَشَاهِدِنَا وَغَائِبِنَا، وَصَغِيرِنَا وَكَبِيرِنَا، وَذَكَرِنَا وَأُنْثَانَا، اللَّهُمَّ مَنْ أَحْيَيْتَهُ مِنَّا فَأَحْيِهِ عَلَى الْإِسْلَامِ، وَمَنْ تَوَفَّيْتَهُ مِنَّا فَتَوَفَّهُ عَلَى الْإِيمَانِ", urdu: "اے اللہ! بخش دے ہمارے زندہ کو اور ہمارے مردے کو، ہمارے حاضر کو اور غائب کو، چھوٹے کو اور بڑے کو، مرد کو اور عورت کو...", ref: "سنن ابوداود: 3201", verified: true }
   }
 };
 
-// اردو نام کو namazData کی key سے جوڑنا
 const namazKeyMap = {
   "فجر": "fajar", "ظہر": "zuhar", "عصر": "asar", "مغرب": "maghrib", "عشاء": "isha",
   "سحری": "sehri", "افطاری": "iftar", "اشراق": "ishraq", "چاشت": "chasht",
   "اوابین": "awabeen", "تہجد": "tahajjud", "طلوع آفتاب": "tuloo", "غروب آفتاب": "ghurub"
 };
 
-/* ===== نماز میں پڑھی جانے والی مسنون عبارتیں (عربی متن + ترجمہ) ===== */
 const ARB = {
   takbeer: { ar: "اللَّهُ أَكْبَرُ", tr: "اللہ سب سے بڑا ہے" },
-  sana: { ar: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَٰهَ غَيْرُكَ", tr: "اے اللہ! تو پاک ہے اپنی تعریف کے ساتھ، تیرا نام بابرکت ہے، تیری شان بلند ہے، اور تیرے سوا کوئی معبود نہیں" },
+  sana: { ar: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَٰهَ غَيْرُكَ", tr: "اے اللہ! تو پاک ہے اپنی تعریف کے ساتھ..." },
   taawuz: { ar: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ", tr: "میں شیطان مردود سے اللہ کی پناہ مانگتا ہوں" },
-  tasmia: { ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", tr: "اللہ کے نام سے شروع، جو نہایت مہربان، رحم فرمانے والا ہے" },
-  fatiha: { ar: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ، الرَّحْمَٰنِ الرَّحِيمِ، مَالِكِ يَوْمِ الدِّينِ، إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ، اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ، صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", tr: "سب تعریفیں اللہ کے لیے جو تمام جہانوں کا پروردگار ہے، نہایت مہربان، رحم فرمانے والا، روزِ جزا کا مالک۔ ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد مانگتے ہیں۔ ہمیں سیدھا راستہ دکھا، ان لوگوں کا راستہ جن پر تو نے انعام کیا، نہ کہ ان کا جن پر غضب ہوا اور نہ گمراہوں کا" },
-  ikhlas: { ar: "قُلْ هُوَ اللَّهُ أَحَدٌ، اللَّهُ الصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ", tr: "کہہ دیجیے: وہ اللہ ایک ہے، اللہ بےنیاز ہے، نہ اس نے کسی کو جنا اور نہ وہ کسی سے جنا گیا، اور اس کا کوئی ہمسر نہیں" },
-  rukuTasbeeh: { ar: "سُبْحَانَ رَبِّيَ الْعَظِيمِ (تین بار)", tr: "میرا عظمت والا رب پاک ہے" },
-  sajdaTasbeeh: { ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى (تین بار)", tr: "میرا سب سے بلند رب پاک ہے" },
-  samiAllah: { ar: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ، رَبَّنَا لَكَ الْحَمْدُ", tr: "اللہ نے سن لیا اس کی جس نے اس کی تعریف کی، اے ہمارے رب! تیرے ہی لیے تمام تعریفیں ہیں" },
-  tashahhud: { ar: "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ", tr: "تمام زبانی، بدنی اور مالی عبادتیں اللہ کے لیے ہیں۔ اے نبی! آپ پر سلام ہو اور اللہ کی رحمت اور برکتیں۔ ہم پر اور اللہ کے نیک بندوں پر سلام ہو۔ میں گواہی دیتا ہوں کہ اللہ کے سوا کوئی معبود نہیں اور میں گواہی دیتا ہوں کہ محمد ﷺ اس کے بندے اور رسول ہیں" },
-  durood: { ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ", tr: "اے اللہ! محمد ﷺ اور ان کی آل پر رحمت نازل فرما جیسے تو نے ابراہیم علیہ السلام اور ان کی آل پر رحمت نازل فرمائی، بے شک تو تعریف والا، بزرگی والا ہے۔ اے اللہ! محمد ﷺ اور ان کی آل پر برکت نازل فرما جیسے تو نے ابراہیم علیہ السلام اور ان کی آل پر برکت نازل فرمائی، بے شک تو تعریف والا، بزرگی والا ہے" },
-  duaMasura: { ar: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", tr: "اے ہمارے رب! ہمیں دنیا میں بھی بھلائی دے اور آخرت میں بھی بھلائی دے، اور ہمیں آگ کے عذاب سے بچا — (سورۃ البقرہ، آیت: 201)" },
-  quNoot: { ar: "اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنُؤْمِنُ بِكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ وَنَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ، اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ نَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ", tr: "اے اللہ! ہم تجھ سے مدد چاہتے ہیں، تجھ سے بخشش مانگتے ہیں، تجھ پر ایمان رکھتے ہیں، تجھ پر بھروسہ کرتے ہیں، تیری اچھی تعریف کرتے ہیں، تیرا شکر ادا کرتے ہیں اور تیری ناشکری نہیں کرتے، اور جو تیری نافرمانی کرے اسے چھوڑ دیتے ہیں۔ اے اللہ! ہم تیری ہی عبادت کرتے ہیں، تیرے لیے ہی نماز پڑھتے اور سجدہ کرتے ہیں، تیری ہی طرف دوڑتے اور کوشش کرتے ہیں، تیری رحمت کی امید رکھتے اور تیرے عذاب سے ڈرتے ہیں، بے شک تیرا عذاب کافروں کو پہنچنے والا ہے" }
+  tasmia: { ar: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", tr: "اللہ کے نام سے شروع جو نہایت مہربان ہے" },
+  fatiha: { ar: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ...", tr: "سب تعریفیں اللہ کے لیے جو جہانوں کا رب ہے..." },
+  ikhlas: { ar: "قُلْ هُوَ اللَّهُ أَحَدٌ...", tr: "کہہ دیجیے: وہ اللہ ایک ہے..." },
+  rukuTasbeeh: { ar: "سُبْحَانَ رَبِّيَ الْعَظِيمِ", tr: "میرا عظمت والا رب پاک ہے" },
+  sajdaTasbeeh: { ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى", tr: "میرا سب سے بلند رب پاک ہے" },
+  samiAllah: { ar: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ، رَبَّنَا لَكَ الْحَمْدُ", tr: "اللہ نے سن لیا جس نے اس کی تعریف کی..." },
+  tashahhud: { ar: "التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ...", tr: "تمام زبانی و بدنی عبادتیں اللہ کے لیے ہیں..." },
+  durood: { ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ...", tr: "اے اللہ! محمد ﷺ پر رحمت نازل فرما..." },
+  duaMasura: { ar: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً...", tr: "اے ہمارے رب! ہمیں دنیا و آخرت میں بھلائی دے..." },
+  quNoot: { ar: "اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ...", tr: "اے اللہ! ہم تجھ سے مدد مانگتے ہیں..." }
 };
-function fmt(x){ return `«${x.ar}» — (ترجمہ: ${x.tr})`; }
+
+function fmt(x){ return `«${x.ar}» — (${x.tr})`; }
 
 function getMethodSteps(rakatInfo){
   const isWitr = rakatInfo.label === "وتر";
   const rakatCount = parseInt(rakatInfo.count);
 
   const opening = [
-    `نیت کریں: دل میں ${rakatInfo.label} کی نیت کریں، قبلہ رخ کھڑے ہو جائیں`,
-    `تکبیرِ تحریمہ: دونوں ہاتھ کانوں تک اٹھا کر کہیں: ${fmt(ARB.takbeer)}۔ پھر ہاتھ ناف کے نیچے باندھ لیں`,
+    `نیت کریں: دل میں ${rakatInfo.label} کی نیت کریں اور قبلہ رخ کھڑے ہو جائیں`,
+    `تکبیرِ تحریمہ: ہاتھ کانوں تک اٹھا کر کہیں: ${fmt(ARB.takbeer)}، پھر ہاتھ ناف کے نیچے باندھ لیں`,
     `ثناء پڑھیں: ${fmt(ARB.sana)}`,
-    `تعوذ پڑھیں: ${fmt(ARB.taawuz)}، پھر تسمیہ پڑھیں: ${fmt(ARB.tasmia)}`,
-    `سورۃ الفاتحہ پڑھیں: ${fmt(ARB.fatiha)}، پھر آہستہ سے "آمین" کہیں`,
-    `کوئی سی سورت ملائیں، مثال کے طور پر سورۃ الاخلاص: ${fmt(ARB.ikhlas)}`
+    `تعوذ اور تسمیہ پڑھیں: ${fmt(ARB.taawuz)} — ${fmt(ARB.tasmia)}`,
+    `سورۃ الفاتحہ پڑھیں اور آمین کہیں: ${fmt(ARB.fatiha)}`,
+    `کوئی سورت ملائیں، جیسے سورۃ الاخلاص: ${fmt(ARB.ikhlas)}`
   ];
-  const rukuSajdaFirst = [
-    `«${ARB.takbeer.ar}» کہہ کر رکوع میں جائیں اور تین بار پڑھیں: ${fmt(ARB.rukuTasbeeh)}`,
+  const rukuSajda = [
+    `«${ARB.takbeer.ar}» کہہ کر رکوع میں جائیں (تین بار «${ARB.rukuTasbeeh.ar}»)`,
     `سیدھے کھڑے ہوتے ہوئے کہیں: ${fmt(ARB.samiAllah)}`,
-    `«${ARB.takbeer.ar}» کہہ کر سجدے میں جائیں، تین بار پڑھیں: ${fmt(ARB.sajdaTasbeeh)}، پھر «${ARB.takbeer.ar}» کہہ کر تھوڑی دیر بیٹھیں، دوبارہ «${ARB.takbeer.ar}» کہہ کر دوسرا سجدہ کریں — پہلی رکعت مکمل`
+    `سجدے میں جائیں (تین بار «${ARB.sajdaTasbeeh.ar}»)، دو سجدے مکمل کریں — پہلی رکعت مکمل`
   ];
   const secondRakat = [
-    `«${ARB.takbeer.ar}» کہہ کر کھڑے ہو جائیں، دوسری رکعت میں دوبارہ تسمیہ پڑھیں: ${fmt(ARB.tasmia)}، پھر سورۃ الفاتحہ اور کوئی سورت پڑھ کر اسی طرح رکوع و سجدہ کریں`
+    `دوسری رکعت کے لیے کھڑے ہوں، تسمیہ، سورۃ الفاتحہ اور سورت پڑھ کر رکوع و سجدہ کریں`
   ];
-  const closingWithSalam = [
-    `آخری قعدہ میں بیٹھ کر تشہد پڑھیں: ${fmt(ARB.tashahhud)}`,
+  const closing = [
+    `قعدہ میں تشہد پڑھیں: ${fmt(ARB.tashahhud)}`,
     `درودِ ابراہیمی پڑھیں: ${fmt(ARB.durood)}`,
-    `دعا پڑھیں: ${fmt(ARB.duaMasura)}، پھر دائیں طرف چہرہ پھیر کر «اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ» اور بائیں طرف بھی یہی کہہ کر سلام پھیر کر نماز مکمل کریں`
+    `دعا پڑھیں: ${fmt(ARB.duaMasura)} اور دونوں طرف سلام پھیر کر نماز مکمل کریں`
   ];
 
   if (isWitr) return [
-    ...opening,
-    ...rukuSajdaFirst,
-    ...secondRakat,
-    `دوسری رکعت کے سجدوں کے بعد قعدہ میں بیٹھ کر صرف تشہد پڑھیں ${fmt(ARB.tashahhud)} (درود نہیں)، پھر «${ARB.takbeer.ar}» کہے بغیر سیدھے تیسری رکعت کے لیے کھڑے ہو جائیں`,
-    `تیسری رکعت میں تسمیہ، سورۃ الفاتحہ اور کوئی سورت پڑھنے کے بعد، رکوع سے پہلے «${ARB.takbeer.ar}» کہہ کر دوبارہ ہاتھ باندھیں اور دعائے قنوت پڑھیں: ${fmt(ARB.quNoot)}`,
-    `دعائے قنوت کے بعد «${ARB.takbeer.ar}» کہہ کر رکوع میں جائیں (تین بار «${ARB.rukuTasbeeh.ar}»)، پھر سجدہ کریں (تین بار «${ARB.sajdaTasbeeh.ar}»)`,
-    ...closingWithSalam
+    ...opening, ...rukuSajda, ...secondRakat,
+    `دوسری رکعت کے بعد بیٹھ کر صرف تشہد پڑھیں، پھر تیسری رکعت کے لیے کھڑے ہوں`,
+    `تیسری رکعت میں سورۃ کے بعد تکبیر کہہ کر ہاتھ باندھیں اور دعائے قنوت پڑھیں: ${fmt(ARB.quNoot)}`,
+    `رکوع و سجود کر کے قعدہ میں سلام پھیر دیں`
   ];
 
   if (rakatCount >= 4) return [
-    ...opening,
-    ...rukuSajdaFirst,
-    ...secondRakat,
-    `دوسری رکعت کے سجدوں کے بعد قعدہ اولیٰ میں بیٹھ کر صرف تشہد پڑھیں: ${fmt(ARB.tashahhud)} (درود نہیں پڑھنا)، پھر «${ARB.takbeer.ar}» کہہ کر تیسری رکعت کے لیے کھڑے ہوں`,
-    `تیسری اور چوتھی رکعت میں صرف سورۃ الفاتحہ پڑھیں: ${fmt(ARB.fatiha)} (سورت ملانا ضروری نہیں) اور اسی طرح رکوع و سجدہ کریں`,
-    ...closingWithSalam,
-    `نوٹ: اگر یہ نماز نفل کی طرح دو دو رکعت کر کے پڑھنی ہو تو ہر دو رکعت مکمل کر کے سلام پھیر دیں اور نئی نیت سے دوبارہ اوپر سے شروع کریں`
+    ...opening, ...rukuSajda, ...secondRakat,
+    `دوسری رکعت کے بعد قعدہ اولیٰ میں صرف تشہد پڑھیں، پھر تیسری رکعت کے لیے کھڑے ہوں`,
+    `تیسری اور چوتھی رکعت میں سورۃ الفاتحہ پڑھ کر رکوع و سجود کریں`,
+    ...closing
   ];
 
-  return [
-    ...opening,
-    ...rukuSajdaFirst,
-    ...secondRakat.map(s=>s.replace('اسی طرح رکوع و سجدہ کریں','اسی طرح رکوع و سجدہ کر کے دوسری رکعت مکمل کریں')),
-    ...closingWithSalam
-  ];
+  return [...opening, ...rukuSajda, ...secondRakat, ...closing];
 }
 
 const tiOverlay = document.getElementById('tiOverlay');
 const tiModalTitle = document.getElementById('tiModalTitle');
 const tiModalBody = document.getElementById('tiModalBody');
-document.getElementById('tiCloseBtn').addEventListener('click', closeTiModal);
-tiOverlay.addEventListener('click', e => { if (e.target === tiOverlay) closeTiModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTiModal(); });
+document.getElementById('tiCloseBtn').addEventListener('click', ()=>tiOverlay.classList.remove('active'));
+tiOverlay.addEventListener('click', e=>{ if(e.target===tiOverlay) tiOverlay.classList.remove('active'); });
 
-function closeTiModal(){ tiOverlay.classList.remove('active'); stopSpeech(); }
-
-/* ===================== فضائل و طریقہ سننے کی سہولت (ریکارڈ شدہ آڈیو + TTS فال بیک) ===================== */
-let currentSpeechChunks = [];
-let currentAudioUrl = null;
-let speechQueueIndex = 0;
-let speechWatchdog = null;
-const ttsAudioEl = document.getElementById('ttsAudio');
-
-// «...» میں لپٹا متن خالص عربی سمجھا جائے گا، باقی اردو — یہ طریقہ زیادہ قابلِ اعتماد ہے
-// کیونکہ اردو اور عربی رسم الخط ایک ہی یونیکوڈ رینج میں ہیں، محض حروف گن کر فرق نہیں کیا جا سکتا
-function parseSpeechSegments(text){
-  const out = [];
-  const re = /«([^»]+)»/g;
-  let lastIndex = 0, m;
-  while((m = re.exec(text)) !== null){
-    const before = text.slice(lastIndex, m.index).trim();
-    if(before) splitUrduSentences(before).forEach(s => out.push({ text:s, lang:'ur' }));
-    const arabic = m[1].trim();
-    if(arabic) out.push({ text: arabic, lang:'ar' });
-    lastIndex = re.lastIndex;
-  }
-  const rest = text.slice(lastIndex).trim();
-  if(rest) splitUrduSentences(rest).forEach(s => out.push({ text:s, lang:'ur' }));
-  return out;
-}
-function splitUrduSentences(text){
-  return text.split(/(?<=۔)\s*/).map(s => s.trim()).filter(s => s.length > 0);
-}
-
-function setSpeechText(chunks, audioUrl){
-  const raw = Array.isArray(chunks) ? chunks : [chunks];
-  currentSpeechChunks = raw.flatMap(c => parseSpeechSegments(c));
-  currentAudioUrl = audioUrl || null;
-  stopSpeech();
-}
-function stopSpeech(){
-  speechQueueIndex = currentSpeechChunks.length; // آگے سنانا روک دیں
-  if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
-  speechSynthesis.cancel();
-  if(ttsAudioEl){ ttsAudioEl.pause(); ttsAudioEl.currentTime = 0; }
-  const btn = document.getElementById('tiListenBtn');
-  if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
-}
-/* ===== 100% آن لائن کلاؤڈ آڈیو سروس (اردو اور عربی) ===== */
-let cloudAudio = new Audio();
-let isCloudPlaying = false;
-
-function toggleListen() {
-  const btn = document.getElementById('tiListenBtn');
-
-  if (isCloudPlaying || speechSynthesis.speaking) {
-    stopAllAudio();
-    return;
-  }
-
-  if (!currentSpeechChunks.length) return;
-  speechQueueIndex = 0;
-  isCloudPlaying = true;
-
-  if (btn) {
-    btn.classList.add('active');
-    btn.innerHTML = '⏹️ روکیں';
-  }
-
-  playNextOnlineChunk();
-}
-
-function stopAllAudio() {
-  isCloudPlaying = false;
-  cloudAudio.pause();
-  cloudAudio.currentTime = 0;
-  speechSynthesis.cancel();
-
-  const btn = document.getElementById('tiListenBtn');
-  if (btn) {
-    btn.classList.remove('active');
-    btn.innerHTML = '🔊 سنیں';
-  }
-}
-
-function playNextOnlineChunk() {
-  if (!isCloudPlaying) return;
-
-  if (speechQueueIndex >= currentSpeechChunks.length) {
-    stopAllAudio();
-    return;
-  }
-
-  const chunk = currentSpeechChunks[speechQueueIndex];
-  speechQueueIndex++;
-
-  let textToPlay = (chunk.text || '').replace(/[«»—\-_()]/g, ' ').trim();
-  if (!textToPlay) {
-    playNextOnlineChunk();
-    return;
-  }
-
-  const lang = (chunk.lang === 'ar') ? 'ar' : 'ur';
-  const encodedText = encodeURIComponent(textToPlay);
-
-  const onlineAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${lang}&client=tw-ob`;
-
-  cloudAudio.src = onlineAudioUrl;
-
-  cloudAudio.onended = () => {
-    if (isCloudPlaying) playNextOnlineChunk();
-  };
-
-  cloudAudio.onerror = () => {
-    const u = new SpeechSynthesisUtterance(textToPlay);
-    u.lang = (lang === 'ar') ? 'ar-SA' : 'ur-PK';
-    u.onend = () => { if (isCloudPlaying) playNextOnlineChunk(); };
-    u.onerror = () => { if (isCloudPlaying) playNextOnlineChunk(); };
-    speechSynthesis.speak(u);
-  };
-
-  cloudAudio.play().catch(e => {
-    cloudAudio.onerror();
-  });
-}
 function openNamazPopup(key){
   const data = namazData[key];
   if(!data) return;
@@ -736,7 +974,7 @@ function renderHadithBlock(h){
     </div>`;
   }
   if(h.fiqhNote){
-    html += `<div class="ti-fiqh-note">${h.unverified ? '⚠ ' : ''}${h.fiqhNote}</div>`;
+    html += `<div class="ti-fiqh-note">${h.fiqhNote}</div>`;
   }
   return html;
 }
@@ -745,8 +983,7 @@ function renderRakatList(key, data){
   tiModalTitle.textContent = data.title;
   let html = '';
   if(data.fazeelat){
-    html += `<div class="ti-step-title">فضیلت</div>`;
-    html += renderHadithBlock(data.fazeelat);
+    html += `<div class="ti-step-title">فضیلت</div>` + renderHadithBlock(data.fazeelat);
   }
   html += `<div class="ti-rakat-list">`;
   data.rakats.forEach((r, idx) => {
@@ -756,19 +993,11 @@ function renderRakatList(key, data){
       ${renderHadithBlock(r.hadith)}
     </div>`;
   });
-  html += `</div><div class="ti-disclaimer">یہ ترتیب فقہ حنفی کے مطابق ہے۔ ✓ = تصدیق شدہ حدیث حوالہ۔ ⚠ = عمومی فقہی نوٹ یا غیر مصدقہ حوالہ، جس کی مزید تصدیق ضروری ہے۔ کسی بھی رکعت پر کلک کر کے پڑھنے کا مکمل طریقہ دیکھیں۔</div>`;
+  html += `</div><div class="ti-disclaimer">کسی بھی رکعت پر کلک کر کے پڑھنے کا مسنون طریقہ دیکھیں۔</div>`;
   tiModalBody.innerHTML = html;
   tiModalBody.querySelectorAll('.ti-rakat-item').forEach(item => {
     item.addEventListener('click', () => renderMethod(key, data, parseInt(item.dataset.idx)));
   });
-
-  let speechChunks = [`${data.title}۔`];
-  if(data.fazeelat && data.fazeelat.urdu){
-    if(data.fazeelat.arabic) speechChunks.push(`فضیلت: «${data.fazeelat.arabic}» — (ترجمہ: ${data.fazeelat.urdu})۔`);
-    else speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
-  }
-  data.rakats.forEach(r => { speechChunks.push(`${r.label}, ${r.count}۔ ${r.note}۔`); });
-  setSpeechText(speechChunks, data.audio);
 }
 
 function renderMethod(key, data, idx){
@@ -777,120 +1006,80 @@ function renderMethod(key, data, idx){
   tiModalTitle.textContent = `${data.title} — ${rakatInfo.label}`;
   let html = `<button class="ti-back-btn">&#8594; واپس تفصیل دیکھیں</button>`;
   html += renderHadithBlock(rakatInfo.hadith);
-  html += `<div class="ti-step-title">${rakatInfo.label} (${rakatInfo.count}) پڑھنے کا طریقہ</div>`;
-  html += `<ol class="ti-steps">`;
+  html += `<div class="ti-step-title">${rakatInfo.label} (${rakatInfo.count}) کا طریقہ</div><ol class="ti-steps">`;
   steps.forEach(s => html += `<li>${s}</li>`);
   html += `</ol>`;
-  if(data.dua){
-    html += `<div class="ti-step-title">دعا</div>`;
-    html += renderHadithBlock(data.dua);
-  }
-  html += `<div class="ti-disclaimer">نوٹ: یہ عمومی مسنون طریقہ ہے۔ تفصیلی احادیث اور مکمل حوالہ جات کے لیے مستند فقہی کتب یا اپنے مقامی عالم سے رجوع کریں۔</div>`;
   tiModalBody.innerHTML = html;
   tiModalBody.querySelector('.ti-back-btn').addEventListener('click', () => renderRakatList(key, data));
-
-  let speechChunks = [`${data.title}, ${rakatInfo.label}۔`];
-  if(rakatInfo.hadith && rakatInfo.hadith.urdu){
-    if(rakatInfo.hadith.arabic) speechChunks.push(`«${rakatInfo.hadith.arabic}» — (ترجمہ: ${rakatInfo.hadith.urdu})۔`);
-    else speechChunks.push(`${rakatInfo.hadith.urdu}۔`);
-  }
-  speechChunks.push(`اب پڑھنے کا مکمل طریقہ قدم بہ قدم سنیں۔`);
-  steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
-  if(data.dua && data.dua.urdu){
-    if(data.dua.arabic) speechChunks.push(`دعا: «${data.dua.arabic}» — (ترجمہ: ${data.dua.urdu})۔`);
-    else speechChunks.push(`دعا: ${data.dua.urdu}۔`);
-  }
-  setSpeechText(speechChunks, data.audio);
 }
 
 function renderAmal(key, data){
   tiModalTitle.textContent = data.title;
   let html = '';
-  if(data.fazeelat){
-    html += `<div class="ti-step-title">فضیلت</div>`;
-    html += renderHadithBlock(data.fazeelat);
-  }
-  html += `<div class="ti-step-title">طریقہ</div>`;
-  html += `<ol class="ti-steps">`;
+  if(data.fazeelat) html += `<div class="ti-step-title">فضیلت</div>` + renderHadithBlock(data.fazeelat);
+  html += `<div class="ti-step-title">طریقہ</div><ol class="ti-steps">`;
   data.steps.forEach(s => html += `<li>${s}</li>`);
   html += `</ol>`;
-  if(data.dua){
-    html += `<div class="ti-step-title">دعا</div>`;
-    html += renderHadithBlock(data.dua);
-  }
-  html += `<div class="ti-disclaimer">✓ = تصدیق شدہ حدیث حوالہ۔ ⚠ = غیر مصدقہ یا کمزور حوالہ، براہ کرم Islam360 یا sunnah.com سے مزید تصدیق کریں۔ مکمل تفصیل کے لیے مستند کتب یا اپنے مقامی عالم سے رجوع کریں۔</div>`;
+  if(data.dua) html += `<div class="ti-step-title">دعا</div>` + renderHadithBlock(data.dua);
   tiModalBody.innerHTML = html;
-
-  let speechChunks = [`${data.title}۔`];
-  if(data.fazeelat && data.fazeelat.urdu){
-    if(data.fazeelat.arabic) speechChunks.push(`فضیلت: «${data.fazeelat.arabic}» — (ترجمہ: ${data.fazeelat.urdu})۔`);
-    else speechChunks.push(`فضیلت: ${data.fazeelat.urdu}۔`);
-  }
-  speechChunks.push(`طریقہ سنیں۔`);
-  data.steps.forEach((s,i) => { speechChunks.push(`مرحلہ ${i+1}: ${s}۔`); });
-  if(data.dua && data.dua.urdu){
-    if(data.dua.arabic) speechChunks.push(`دعا: «${data.dua.arabic}» — (ترجمہ: ${data.dua.urdu})۔`);
-    else speechChunks.push(`دعا: ${data.dua.urdu}۔`);
-  }
-  setSpeechText(speechChunks, data.audio);
 }
-/* ===================== پاپ اپ لاجک ختم ===================== */
 
 function renderTimes(){
-let html='';
-allTimes.forEach(t=>{
-const namazKey = namazKeyMap[t.name];
-const nameClass = namazKey ? 'name clickable' : 'name';
-const nameAttr = namazKey ? `onclick="openNamazPopup('${namazKey}')"` : '';
-html+=`<div class="box">
-<span class="${nameClass} ${t.custom?'custom':''}" ${nameAttr}>${t.name}</span>
-<span class="time">${to12(t.time)}</span>
-<div class="btns">
-<button class="azan-btn" onclick="playAzan(this)">🔈 ازان</button>
-<button class="alarm-btn" onclick="setAlarm('${t.name}','${t.time}')">Alarm</button>
-</div>
-</div>`;
-});
-document.getElementById('times').innerHTML=html;
+  let html='';
+  allTimes.forEach(t=>{
+    const namazKey = namazKeyMap[t.name];
+    const nameClass = namazKey ? 'name clickable' : 'name';
+    const nameAttr = namazKey ? `onclick="openNamazPopup('${namazKey}')"` : '';
+    html+=`<div class="box">
+      <span class="${nameClass} ${t.custom?'custom':''}" ${nameAttr}>${t.name}</span>
+      <span class="time">${to12(t.time)}</span>
+      <div class="btns">
+        <button class="azan-btn" onclick="playAzan(this)">🔈 اذان</button>
+        <button class="alarm-btn" onclick="setAlarm('${t.name}','${t.time}')">Alarm</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('times').innerHTML=html;
 }
 
 function addCustom(){
-const name=document.getElementById('customName').value;
-const time=document.getElementById('customTime').value;
-if(!name||!time){alert('نام اور ٹائم لکھیں');return;}
-allTimes.push({name,time,custom:true,rang:false});
-renderTimes();
-document.getElementById('customName').value='';
-document.getElementById('customTime').value='';
+  const name=document.getElementById('customName').value;
+  const time=document.getElementById('customTime').value;
+  if(!name||!time){alert('نام اور ٹائم لکھیں');return;}
+  allTimes.push({name,time,custom:true,rang:false});
+  renderTimes();
+  document.getElementById('customName').value='';
+  document.getElementById('customTime').value='';
 }
 
 function showTimings(city){
-fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Pakistan&method=1`)
-.then(r=>r.json()).then(d=>{const t=d.data.timings;
-const sunrise=t.Sunrise; const dhuhr=t.Dhuhr; const maghrib=t.Maghrib;
-const ishraq=addMins(sunrise,20); const chasht=addMins(sunrise,45); const zawal=addMins(dhuhr,-10); const awabeen=addMins(maghrib,20);
-const sehri=addMins(t.Fajr,-10); const iftar=maghrib;
-const tahajjud=computeTahajjud(t.Isha,t.Fajr);
+  fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Pakistan&method=1`)
+  .then(r=>r.json()).then(d=>{
+    const t=d.data.timings;
+    const sunrise=t.Sunrise; const dhuhr=t.Dhuhr; const maghrib=t.Maghrib;
+    const ishraq=addMins(sunrise,20); const chasht=addMins(sunrise,45); const zawal=addMins(dhuhr,-10); const awabeen=addMins(maghrib,20);
+    const sehri=addMins(t.Fajr,-10); const iftar=maghrib;
+    const tahajjud=computeTahajjud(t.Isha,t.Fajr);
 
-allTimes=[
-{name:'فجر',time:t.Fajr,rang:false},
-{name:'ظہر',time:dhuhr,rang:false},
-{name:'عصر',time:t.Asr,rang:false},
-{name:'مغرب',time:maghrib,rang:false},
-{name:'عشاء',time:t.Isha,rang:false},
-{name:'سحری',time:sehri,rang:false},
-{name:'افطاری',time:iftar,rang:false},
-{name:'طلوع آفتاب',time:sunrise,rang:false},
-{name:'غروب آفتاب',time:maghrib,rang:false},
-{name:'اشراق',time:ishraq,rang:false},
-{name:'چاشت',time:chasht,rang:false},
-{name:'زوال',time:zawal,rang:false},
-{name:'اوابین',time:awabeen,rang:false},
-{name:'تہجد',time:tahajjud,rang:false}
-];
-renderTimes();
-nextPrayerCache=getNextPrayerTarget();
-});
+    allTimes=[
+      {name:'فجر',time:t.Fajr,rang:false},
+      {name:'ظہر',time:dhuhr,rang:false},
+      {name:'عصر',time:t.Asr,rang:false},
+      {name:'مغرب',time:maghrib,rang:false},
+      {name:'عشاء',time:t.Isha,rang:false},
+      {name:'سحری',time:sehri,rang:false},
+      {name:'افطاری',time:iftar,rang:false},
+      {name:'طلوع آفتاب',time:sunrise,rang:false},
+      {name:'غروب آفتاب',time:maghrib,rang:false},
+      {name:'اشراق',time:ishraq,rang:false},
+      {name:'چاشت',time:chasht,rang:false},
+      {name:'زوال',time:zawal,rang:false},
+      {name:'اوابین',time:awabeen,rang:false},
+      {name:'تہجد',time:tahajjud,rang:false}
+    ];
+    renderTimes();
+    nextPrayerCache=getNextPrayerTarget();
+  });
 }
 
 document.getElementById('citySelect').addEventListener('change',e=>showTimings(e.target.value));
