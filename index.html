@@ -637,56 +637,82 @@ function stopSpeech(){
   const btn = document.getElementById('tiListenBtn');
   if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
 }
+/* ===== 100% آن لائن کلاؤڈ آڈیو سروس (اردو اور عربی) ===== */
+let cloudAudio = new Audio();
+let isCloudPlaying = false;
+
 function toggleListen() {
   const btn = document.getElementById('tiListenBtn');
 
-  if (speechSynthesis.speaking) {
-    speechSynthesis.cancel();
-    if (btn) { btn.classList.remove('active'); btn.innerHTML = '🔊 سنیں'; }
+  if (isCloudPlaying || speechSynthesis.speaking) {
+    stopAllAudio();
     return;
   }
 
   if (!currentSpeechChunks.length) return;
   speechQueueIndex = 0;
-  speechSynthesis.cancel();
+  isCloudPlaying = true;
 
-  if (btn) { btn.classList.add('active'); btn.innerHTML = '⏹️ روکیں'; }
-  speakNextChunk(btn);
+  if (btn) {
+    btn.classList.add('active');
+    btn.innerHTML = '⏹️ روکیں';
+  }
+
+  playNextOnlineChunk();
 }
 
-function speakNextChunk(btn) {
+function stopAllAudio() {
+  isCloudPlaying = false;
+  cloudAudio.pause();
+  cloudAudio.currentTime = 0;
+  speechSynthesis.cancel();
+
+  const btn = document.getElementById('tiListenBtn');
+  if (btn) {
+    btn.classList.remove('active');
+    btn.innerHTML = '🔊 سنیں';
+  }
+}
+
+function playNextOnlineChunk() {
+  if (!isCloudPlaying) return;
+
   if (speechQueueIndex >= currentSpeechChunks.length) {
-    if (btn) { btn.classList.remove('active'); btn.innerHTML = '🔊 سنیں'; }
+    stopAllAudio();
     return;
   }
 
   const chunk = currentSpeechChunks[speechQueueIndex];
   speechQueueIndex++;
 
-  if (!chunk.text || !chunk.text.trim()) {
-    speakNextChunk(btn);
+  let textToPlay = (chunk.text || '').replace(/[«»—\-_()]/g, ' ').trim();
+  if (!textToPlay) {
+    playNextOnlineChunk();
     return;
   }
 
-  const u = new SpeechSynthesisUtterance(chunk.text);
-  const voices = speechSynthesis.getVoices();
-  let v = selectedVoice || pickSeriousMaleVoice(voices);
+  const lang = (chunk.lang === 'ar') ? 'ar' : 'ur';
+  const encodedText = encodeURIComponent(textToPlay);
 
-  if (chunk.lang === 'ar') {
-    let arV = voices.find(x => /^ar/i.test(x.lang));
-    if (arV) u.voice = arV;
-    u.lang = 'ar-SA';
-    u.rate = 0.75;
-  } else {
-    if (v) u.voice = v;
-    u.lang = (v && v.lang) ? v.lang : 'ur-PK';
-    u.rate = 0.85;
-  }
+  const onlineAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${lang}&client=tw-ob`;
 
-  u.onend = () => speakNextChunk(btn);
-  u.onerror = () => speakNextChunk(btn);
+  cloudAudio.src = onlineAudioUrl;
 
-  speechSynthesis.speak(u);
+  cloudAudio.onended = () => {
+    if (isCloudPlaying) playNextOnlineChunk();
+  };
+
+  cloudAudio.onerror = () => {
+    const u = new SpeechSynthesisUtterance(textToPlay);
+    u.lang = (lang === 'ar') ? 'ar-SA' : 'ur-PK';
+    u.onend = () => { if (isCloudPlaying) playNextOnlineChunk(); };
+    u.onerror = () => { if (isCloudPlaying) playNextOnlineChunk(); };
+    speechSynthesis.speak(u);
+  };
+
+  cloudAudio.play().catch(e => {
+    cloudAudio.onerror();
+  });
 }
 function openNamazPopup(key){
   const data = namazData[key];
