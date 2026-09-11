@@ -637,62 +637,57 @@ function stopSpeech(){
   const btn = document.getElementById('tiListenBtn');
   if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
 }
-function toggleListen(){
+function toggleListen() {
   const btn = document.getElementById('tiListenBtn');
-  const audioPlaying = ttsAudioEl && !ttsAudioEl.paused;
-  if(audioPlaying || speechSynthesis.speaking){ stopSpeech(); return; }
 
-  if(currentAudioUrl && ttsAudioEl){
-    ttsAudioEl.src = currentAudioUrl;
-    ttsAudioEl.onended = ()=>{ if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; } };
-    ttsAudioEl.onerror = ()=>{ playTTSFallback(btn); };
-    const playPromise = ttsAudioEl.play();
-    if(playPromise){
-      playPromise.then(()=>{ if(btn){ btn.classList.add('active'); btn.innerHTML='⏹️ روکیں'; } })
-                 .catch(()=>{ playTTSFallback(btn); });
-    }
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    if (btn) { btn.classList.remove('active'); btn.innerHTML = '🔊 سنیں'; }
     return;
   }
-  playTTSFallback(btn);
-}
-function speakNextChunk(btn){
-  if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
-  if(speechQueueIndex >= currentSpeechChunks.length){
-    if(btn){ btn.classList.remove('active'); btn.innerHTML='🔊 سنیں'; }
-    return;
-  }
-  const chunk = currentSpeechChunks[speechQueueIndex];
-  speechQueueIndex++;
-  const u = new SpeechSynthesisUtterance(chunk.text);
-  if(chunk.lang === 'ar'){
-    if(!arabicVoice) arabicVoice = pickArabicVoice(speechSynthesis.getVoices());
-    if(arabicVoice) u.voice = arabicVoice;
-    u.lang = 'ar-SA';
-    u.pitch = 0.85;
-    u.rate = 0.72; // عربی تلاوت جیسا ٹھہراؤ
-    u.volume = 1;
-  }else{
-    applyVoiceSettings(u);
-  }
-  const advance = ()=>{
-    if(speechWatchdog){ clearTimeout(speechWatchdog); speechWatchdog = null; }
-    speakNextChunk(btn);
-  };
-  u.onend = advance;
-  u.onerror = advance;
-  speechSynthesis.speak(u);
-  // اگر کسی وجہ سے onend نہ چلے تو خودکار طور پر اگلے حصے پر منتقل ہو جائیں
-  const estMs = Math.max(3000, chunk.text.length * 140);
-  speechWatchdog = setTimeout(advance, estMs);
-}
-function playTTSFallback(btn){
-  if(!currentSpeechChunks.length) return;
+
+  if (!currentSpeechChunks.length) return;
   speechQueueIndex = 0;
   speechSynthesis.cancel();
+
+  if (btn) { btn.classList.add('active'); btn.innerHTML = '⏹️ روکیں'; }
   speakNextChunk(btn);
-  if(btn){ btn.classList.add('active'); btn.innerHTML='⏹️ روکیں'; }
 }
 
+function speakNextChunk(btn) {
+  if (speechQueueIndex >= currentSpeechChunks.length) {
+    if (btn) { btn.classList.remove('active'); btn.innerHTML = '🔊 سنیں'; }
+    return;
+  }
+
+  const chunk = currentSpeechChunks[speechQueueIndex];
+  speechQueueIndex++;
+
+  if (!chunk.text || !chunk.text.trim()) {
+    speakNextChunk(btn);
+    return;
+  }
+
+  const u = new SpeechSynthesisUtterance(chunk.text);
+  const voices = speechSynthesis.getVoices();
+  let v = selectedVoice || pickSeriousMaleVoice(voices);
+
+  if (chunk.lang === 'ar') {
+    let arV = voices.find(x => /^ar/i.test(x.lang));
+    if (arV) u.voice = arV;
+    u.lang = 'ar-SA';
+    u.rate = 0.75;
+  } else {
+    if (v) u.voice = v;
+    u.lang = (v && v.lang) ? v.lang : 'ur-PK';
+    u.rate = 0.85;
+  }
+
+  u.onend = () => speakNextChunk(btn);
+  u.onerror = () => speakNextChunk(btn);
+
+  speechSynthesis.speak(u);
+}
 function openNamazPopup(key){
   const data = namazData[key];
   if(!data) return;
